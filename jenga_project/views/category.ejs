@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <title>Jenga Pizza</title>
+    <style>
+        @font-face {
+            font-family: Prompt;
+            src: url("fonts/Prompt-Regular.ttf");
+        }
+
+        body {
+            font-family: Prompt;
+        }
+
+        /* Background Image */
+        body::before {
+            content: "";
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-image: url("images/bg-pizza.jpg");
+            opacity: 0.1;
+            z-index: -1;
+        }
+
+        .box {
+            text-align: center;
+            width: 100%;
+        }
+
+        /* Fix Flexbox Centering */
+        .container-center {
+            margin: auto;
+            display: flex;
+            align-items: center;  /* Ensure vertical centering */
+            width: 80%;
+            min-height: calc(100vh - 60px); /* Adjust for navbar */
+            padding-top: 60px; /* Prevent overlap with navbar */
+        }
+
+        .category {
+            padding: 10px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            border-radius: 0%;
+        }
+
+        .category.active {
+            color: rgb(187,62,0);
+            border-bottom: 1px solid rgb(187,62,0);
+        }
+
+        .card {
+            background-color: rgb(245, 245, 245);
+            border: none;
+            transition: transform 0.2s;
+            cursor: pointer;
+            align-items: center;
+            text-align: center;
+            margin: 10px;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        .card a {
+            text-decoration: none;
+        }
+
+        .card img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .create-pizza {
+            color: grey;
+            width: 200px;
+            height: 200px;
+        }
+
+        /* CSS for .show class to display elements */
+        .show {
+            display: block !important;
+        }
+
+        .filterDiv {
+            display: none; /* Hide all by default */
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <%- include('header') %>
+    </header>
+
+    <!-- choose to buy -->
+    <div class="container-center">
+        <div class="box mb-3">
+            <div class="row d-flex justify-content-center text-center" id="filterButton">
+                <div class="category btn" onclick="filterSelection('flavour')">หน้าพิซซ่า</div>
+                <div class="category btn" onclick="filterSelection('ingredient')">วัตถุดิบ</div>
+                <div class="category btn" onclick="filterSelection('etc')">อื่น ๆ</div>
+            </div>
+            <div class="row">
+                <div class="filterDiv flavour ingredient col-md-4 ">
+                    <div class="card p-3">
+                        <a href="#" class="create-pizza d-block">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                            </svg>
+                        </a>
+                        <p>สร้างหน้าพิซซ่าเอง</p>
+                    </div>
+                </div>
+                
+                <div class="filterDiv flavour col-md-4 ">
+                    <div class="card p-3">
+                        <a href="/pizza-name"><img src="images/pizza.png" alt="ฮาวาเอี้ยน"></a>
+                        <p>พิซซ่าฮาวาเอี้ยน</p>
+                    </div>
+                </div>
+                
+                <div class="filterDiv ingredient col-md-4">
+                    <div class="card p-3">
+                        <a href=""><img src="images/pizza.png" alt="ผัก"></a>
+                        <p>ผัก</p>
+                    </div>
+                </div>
+                
+                <div class="filterDiv ingredient col-md-4">
+                    <div class="card p-3">
+                        <a href=""><img src="images/pizza.png" alt="เบค่อน"></a>
+                        <p>เบค่อน</p>
+                    </div>
+                </div>
+                
+                <div class="filterDiv etc col-md-4">
+                    <div class="card p-3">
+                        <a href=""><img src="images/pizza.png" alt="แฮชบราวน์"></a>
+                        <p>แฮชบราวน์</p>
+                    </div>
+                </div>
+                
+                <div class="filterDiv etc col-md-4">
+                    <div class="card p-3">
+                        <a href=""><img src="images/pizza.png" alt="ไก่ทอด"></a>
+                        <p>ไก่ทอด</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <%- include('footer') %>
+    </footer>
+
+    <script>
+        filterSelection("flavour")
+        function filterSelection(c) {
+          var x, i;
+          x = document.getElementsByClassName("filterDiv");
+          for (i = 0; i < x.length; i++) {
+            w3RemoveClass(x[i], "show");
+            if (x[i].className.indexOf(c) > -1) w3AddClass(x[i], "show");
+          }
+        }
+        
+        function w3AddClass(element, name) {
+          var i, arr1, arr2;
+          arr1 = element.className.split(" ");
+          arr2 = name.split(" ");
+          for (i = 0; i < arr2.length; i++) {
+            if (arr1.indexOf(arr2[i]) == -1) {element.className += " " + arr2[i];}
+          }
+        }
+        
+        function w3RemoveClass(element, name) {
+          var i, arr1, arr2;
+          arr1 = element.className.split(" ");
+          arr2 = name.split(" ");
+          for (i = 0; i < arr2.length; i++) {
+            while (arr1.indexOf(arr2[i]) > -1) {
+              arr1.splice(arr1.indexOf(arr2[i]), 1);     
+            }
+          }
+          element.className = arr1.join(" ");
+        }
+        
+        // Add active class to the current button (highlight it)
+        var filterButton = document.getElementById("filterButton");
+        var category = filterButton.getElementsByClassName("category");
+        for (var i = 0; i < category.length; i++) {
+            category[i].addEventListener("click", function(){
+                var current = document.getElementsByClassName("active");
+                if (current.length > 0) {
+                    current[0].classList.remove("active");
+                }
+                this.classList.add("active");
+            });
+        }
+    </script>
+
+</body>
+</html>

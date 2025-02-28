@@ -7,6 +7,7 @@ const app = express();
 
 // static resourse & template engine
 app.use(express.static("views"));
+
 // Set EJS as templating engine
 app.set("view engine", "ejs");
 
@@ -16,6 +17,18 @@ app.get("/", (req, res) => {
 
 app.get("/home", (req, res) => {
   res.render('home');
+});
+
+app.get("/choose", (req, res) => {
+  res.render('choose');
+});
+
+app.get("/category", (req, res) => {
+  res.render('category');
+});
+
+app.get("/pizza-name", (req, res) => {
+  res.render('pizza-name');
 });
 
 app.listen(port, () => {

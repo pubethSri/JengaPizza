@@ -1,47 +1,59 @@
 
 <style>
     @font-face {
-        font-family: Poppins;
-        src: url("fonts/Poppins-Regular.ttf");
+        font-family: Prompt;
+        src: url("fonts/Prompt-Regular.ttf");
     }
     body {
-        font-family: Poppins, sans-serif;
+        font-family: Prompt, sans-serif;
         overflow-x: hidden;
     }
-    .navbar-custom {
+    /* Navbar */
+    .navbar {
         background-color: rgb(187,62,0);
-        padding-left: 5%;
-        padding-right: 5%;
-        font-family: Poppins;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 60px;
+        z-index: 1000;
     }
-    .nav-item-custom {
-        font-size: 24px;
-        font-weight: normal;
-        color: white;
-        margin: 0 15px;
-        text-decoration: none;
-    }
-    .order-button {
-        color: rgb(187,62,0);
-        background-color: white;
-        font-size: 20px;
-        font-weight: bold;
-        padding: 8px 20px;
-        border: none;
-        border-radius: 5px;
-    }
+
+    /* Center the logo */
     .logo {
-        height: 40px; /* Adjust size as needed */
-        margin-right: 10%;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
     }
+
+    /* Navbar links */
+    .navbar a {
+        color: white;
+        text-decoration: none;
+        padding: 5px 10px;
+    }
+
+    /* Order button */
+    .navbar .order {
+        background-color: white;
+        border: none;
+        font-weight: bold;
+        color: rgb(187,62,0);
+        padding: 5px 15px;
+    }
+
+    .navbar .menu-icon {
+        width: 45px;
+        height: 45px;
+    }
+
     .cart-icon {
-        height: 30px;
-        margin-right: 10px;
-    }
-    .menu-icon {
-        height: 30px;
-        margin-right: 15px;
-        cursor: pointer;
+        width: 45px;
+        height: 45px;
     }
 
     /* Sidebar Modal Styles */
@@ -358,31 +370,40 @@
   .register-cancel-btn:hover {
     background-color: #d0d0d0;
   }
+
+  @media (max-width: 768px) {
+      .logo {
+          display: none;
+      }
+  }
 </style>
 
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-custom">
-    <div class="container-fluid d-flex align-items-center">
-        <!-- Left Section -->
-        <div class="d-flex align-items-center">
-            <img src="images/menu-bar.png" class="menu-icon" alt="Menu" id="menuToggle">
-            <a class="nav-item-custom" href="/">หน้าหลัก</a>
-            <a class="nav-item-custom" href="/">เกี่ยวกับเรา</a>
-            <a class="nav-item-custom" href="/">ติดต่อสอบถาม</a>
-        </div>
+<!-- navbar -->
+<div class="navbar">
+  <div class="logo">
+      <img src="images\Logo.png" alt="Logo" style="height: 40px;">
+  </div>
 
-        <!-- Center Logo -->
-        <div class="text-center" style="margin-right: 20%;">
-            <img src="images/Logo.png" class="logo" alt="Jenga Logo">
-        </div>
+  <div class="d-flex">
+      <a href="#" class="menu-icon d-block" alt="Menu" id="menuToggle">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg>
+      </a>
+      <a href="#">หน้าหลัก</a>
+      <a href="#">เกี่ยวกับเรา</a>
+      <a href="/home#footer-custom">ติดต่อสอบถาม</a> <!-- ใส่ link เชื่อมไป footer ตรงนี้ให้หน่อย -->
+  </div>
 
-        <!-- Right Section -->
-        <div class="d-flex align-items-center">
-            <img src="images/fontisto_shopping-basket-add.png" class="cart-icon" alt="Cart">
-            <button class="order-button">สั่งเลย</button>
-        </div>
-    </div>
-</nav>
+  <div class="d-flex">
+      <a href="#" class="cart-icon d-block" alt="Menu" id="cartToggle">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+        </svg>
+      </a>
+      <a href="/choose"><button class="order btn btn-light">สั่งซื้อเลย</button></a>
+  </div>
+</div>
 
 <!-- Sidebar Modal -->
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
