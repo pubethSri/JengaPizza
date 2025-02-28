@@ -1,0 +1,641 @@
+
+<style>
+    @font-face {
+        font-family: Poppins;
+        src: url("fonts/Poppins-Regular.ttf");
+    }
+    body {
+        font-family: Poppins, sans-serif;
+        overflow-x: hidden;
+    }
+    .navbar-custom {
+        background-color: rgb(187,62,0);
+        padding-left: 5%;
+        padding-right: 5%;
+        font-family: Poppins;
+    }
+    .nav-item-custom {
+        font-size: 24px;
+        font-weight: normal;
+        color: white;
+        margin: 0 15px;
+        text-decoration: none;
+    }
+    .order-button {
+        color: rgb(187,62,0);
+        background-color: white;
+        font-size: 20px;
+        font-weight: bold;
+        padding: 8px 20px;
+        border: none;
+        border-radius: 5px;
+    }
+    .logo {
+        height: 40px; /* Adjust size as needed */
+        margin-right: 10%;
+    }
+    .cart-icon {
+        height: 30px;
+        margin-right: 10px;
+    }
+    .menu-icon {
+        height: 30px;
+        margin-right: 15px;
+        cursor: pointer;
+    }
+
+    /* Sidebar Modal Styles */
+    .sidebar-modal {
+        position: fixed;
+        top: 0;
+        left: -300px;
+        width: 300px;
+        height: 100%;
+        background-color: white;
+        transition: all 0.3s;
+        z-index: 1050;
+        box-shadow: 2px 0 5px rgba(0,0,0,0.2);
+    }
+    .sidebar-modal.show {
+        left: 0;
+    }
+    .sidebar-header {
+        padding: 20px;
+        display: flex;
+        justify-content: flex-end;
+    }
+    .close-sidebar {
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: #333;
+    }
+    .sidebar-body {
+        padding: 0;
+    }
+    .sidebar-menu-item {
+        padding: 15px 20px;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #eee;
+    }
+    .sidebar-menu-item img {
+        width: 24px;
+        height: 24px;
+        margin-right: 15px;
+    }
+    .sidebar-menu-item a {
+        color: #333;
+        text-decoration: none;
+        font-size: 18px;
+    }
+    /* Custom Login Button Styling */
+    .login-button {
+        margin: 15px;
+    }
+    .login-button a {
+        display: block;
+        background-color: rgb(187,62,0);
+        color: white;
+        text-decoration: none;
+        padding: 15px;
+        border-radius: 8px;
+        font-size: 18px;
+        font-weight: 500;
+        text-align: center;
+    }
+    .login-icon {
+        width: 24px;
+        height: 24px;
+        margin-right: 10px;
+        filter: brightness(0) invert(1); /* Makes the icon white */
+    }
+    .sidebar-divider {
+        margin: 10px 0;
+        opacity: 0.2;
+    }
+    .sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.5);
+        z-index: 1040;
+        display: none;
+    }
+    .sidebar-overlay.show {
+        display: block;
+    }
+
+  /* Login Modal Styles */
+  .login-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s linear 0.25s, opacity 0.25s;
+  }
+  
+  .login-modal-overlay.active {
+    visibility: visible;
+    opacity: 1;
+    transition-delay: 0s;
+  }
+  
+  .login-modal {
+    background-color: white;
+    width: 100%;
+    max-width: 450px;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .login-modal-header {
+    /* padding: 15px; */
+    padding: 1px;
+    display: flex;
+    justify-content: flex-end;
+    /* border-bottom: 1px solid #f0f0f0; */
+  }
+  
+  .login-modal-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+  }
+  
+  .login-modal-body {
+    padding: 20px;
+  }
+  
+  .login-modal-title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    color: #333;
+  }
+  
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .login-input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+  }
+  
+  .login-submit-btn {
+    background-color: rgb(187, 62, 0);
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 18px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .login-submit-btn:hover {
+    background-color: rgb(160, 50, 0);
+  }
+  
+  .login-register-link {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .register-link {
+    color: rgb(187, 62, 0);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  
+  .register-link:hover {
+    text-decoration: underline;
+  }
+
+  .register-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s linear 0.25s, opacity 0.25s;
+  }
+  
+  .register-modal-overlay.active {
+    visibility: visible;
+    opacity: 1;
+    transition-delay: 0s;
+  }
+  
+  .register-modal {
+    background-color: white;
+    width: 100%;
+    max-width: 450px;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .register-modal-header {
+    padding: 1px;
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .register-modal-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+  }
+  
+  .register-modal-body {
+    padding: 20px;
+  }
+  
+  .register-modal-title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    color: #333;
+  }
+  
+  .register-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .register-input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+  }
+  
+  .register-date-phone {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .register-date, .register-phone {
+    flex: 1;
+  }
+  
+  .register-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
+  .register-submit-btn {
+    flex: 1;
+    background-color: rgb(187, 62, 0);
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 18px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .register-submit-btn:hover {
+    background-color: rgb(160, 50, 0);
+  }
+  
+  .register-cancel-btn {
+    flex: 1;
+    background-color: #e2e2e2;
+    color: #333;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 18px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .register-cancel-btn:hover {
+    background-color: #d0d0d0;
+  }
+</style>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-custom">
+    <div class="container-fluid d-flex align-items-center">
+        <!-- Left Section -->
+        <div class="d-flex align-items-center">
+            <img src="images/menu-bar.png" class="menu-icon" alt="Menu" id="menuToggle">
+            <a class="nav-item-custom" href="/">หน้าหลัก</a>
+            <a class="nav-item-custom" href="/">เกี่ยวกับเรา</a>
+            <a class="nav-item-custom" href="/">ติดต่อสอบถาม</a>
+        </div>
+
+        <!-- Center Logo -->
+        <div class="text-center" style="margin-right: 20%;">
+            <img src="images/Logo.png" class="logo" alt="Jenga Logo">
+        </div>
+
+        <!-- Right Section -->
+        <div class="d-flex align-items-center">
+            <img src="images/fontisto_shopping-basket-add.png" class="cart-icon" alt="Cart">
+            <button class="order-button">สั่งเลย</button>
+        </div>
+    </div>
+</nav>
+
+<!-- Sidebar Modal -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<div class="sidebar-modal" id="sidebarModal">
+    <div class="sidebar-header">
+        <button class="close-sidebar" id="closeSidebar">×</button>
+    </div>
+    <div class="sidebar-body">
+        <!-- Styled Login Button -->
+        <div class="login-button">
+            <a href="/login">
+                <div class="d-flex align-items-center justify-content-center">
+                    <img src="images/user-icon.png" alt="User icon" class="login-icon">
+                    <span>เข้าสู่ระบบ/ลงทะเบียน</span>
+                </div>
+            </a>
+        </div>
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+        <div class="sidebar-menu-item">
+            <img src="images/home-icon.png" alt="Home icon">
+            <a href="/home">หน้าหลัก</a>
+        </div>
+        <div class="sidebar-menu-item">
+            <img src="images/delivery-icon.png" alt="Delivery icon">
+            <a href="/tracking">ติดตามสินค้า</a>
+        </div>
+        <div class="sidebar-menu-item">
+            <img src="images/faq-icon.png" alt="FAQ icon">
+            <a href="/faq">วิธีสั่งซื้อ</a>
+        </div>
+        <div class="sidebar-menu-item">
+            <img src="images/pizza-icon.png" alt="Pizza icon">
+            <a href="/about">เกี่ยวกับเรา</a>
+        </div>
+        <div class="sidebar-menu-item">
+            <img src="images/contact-icon.png" alt="Contact icon">
+            <a href="/contact">ติดต่อสอบถาม</a>
+        </div>
+    </div>
+</div>
+
+<!-- Login Modal -->
+<div class="login-modal-overlay" id="loginModalOverlay">
+    <div class="login-modal">
+      <div class="login-modal-header">
+        <button type="button" class="login-modal-close" id="closeLoginModal">×</button>
+      </div>
+      <div class="login-modal-body">
+        <h2 class="login-modal-title">ล็อกอิน</h2>
+        
+        <form id="loginForm" class="login-form">
+          <div class="form-group">
+            <input type="text" class="form-control login-input" id="username" placeholder="ชื่อผู้ใช้ (อีเมล)" required>
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control login-input" id="password" placeholder="รหัสผ่าน" required>
+          </div>
+          <button type="submit" class="login-submit-btn">ตกลง</button>
+        </form>
+        
+        <div class="login-register-link">
+          ยังไม่มีบัญชี? <a href="/register" class="register-link">ลงทะเบียน</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<!-- Registration Modal -->
+<div class="register-modal-overlay" id="registerModalOverlay">
+    <div class="register-modal">
+      <div class="register-modal-header">
+        <button type="button" class="register-modal-close" id="closeRegisterModal">×</button>
+      </div>
+      <div class="register-modal-body">
+        <h2 class="register-modal-title">ลงทะเบียน</h2>
+        
+        <form id="registerForm" class="register-form">
+          <div class="form-group">
+            <input type="text" class="form-control register-input" id="registerUsername" placeholder="ชื่อผู้ใช้ (อีเมล)" required>
+          </div>
+          <div class="form-group register-date-phone">
+            <div class="register-date">
+              <input type="date" class="form-control register-input" id="registerBirthdate" placeholder="วัน/เดือน/ปีเกิด" required>
+            </div>
+            <div class="register-phone">
+              <input type="tel" class="form-control register-input" id="registerPhone" placeholder="เบอร์โทรศัพท์" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control register-input" id="registerPassword" placeholder="รหัสผ่าน" required>
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control register-input" id="confirmPassword" placeholder="ยืนยันรหัสผ่าน" required>
+          </div>
+          <div class="register-actions">
+            <button type="submit" class="register-submit-btn">ตกลง</button>
+            <button type="button" class="register-cancel-btn" id="cancelRegistration">ยกเลิก</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+<!-- Bootstrap JS and dependencies -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Custom JavaScript for sidebar functionality -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const menuToggle = document.getElementById('menuToggle');
+        const closeSidebar = document.getElementById('closeSidebar');
+        const sidebarModal = document.getElementById('sidebarModal');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        // Open sidebar when menu icon is clicked
+        menuToggle.addEventListener('click', function() {
+            sidebarModal.classList.add('show');
+            sidebarOverlay.classList.add('show');
+            document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
+        });
+
+        // Close sidebar when X button is clicked
+        closeSidebar.addEventListener('click', closeSidebarModal);
+
+        // Close sidebar when clicking on the overlay
+        sidebarOverlay.addEventListener('click', closeSidebarModal);
+
+        function closeSidebarModal() {
+            sidebarModal.classList.remove('show');
+            sidebarOverlay.classList.remove('show');
+            document.body.style.overflow = ''; // Restore scrolling
+        }
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Get the login button from the sidebar
+      const loginButton = document.querySelector('.login-button a');
+      const loginModalOverlay = document.getElementById('loginModalOverlay');
+      const closeLoginModal = document.getElementById('closeLoginModal');
+      const loginForm = document.getElementById('loginForm');
+      
+      // Open login modal when login button is clicked
+      loginButton.addEventListener('click', function(e) {
+        e.preventDefault(); // Prevent default link behavior
+        
+        // Close the sidebar first
+        const sidebarModal = document.getElementById('sidebarModal');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        sidebarModal.classList.remove('show');
+        sidebarOverlay.classList.remove('show');
+        
+        // Then show the login modal
+        loginModalOverlay.classList.add('active');
+      });
+      
+      // Close login modal when X button is clicked
+      closeLoginModal.addEventListener('click', function() {
+        loginModalOverlay.classList.remove('active');
+      });
+      
+      // Close login modal when clicking outside the modal
+      loginModalOverlay.addEventListener('click', function(e) {
+        if (e.target === loginModalOverlay) {
+          loginModalOverlay.classList.remove('active');
+        }
+      });
+      
+      // Handle form submission
+      loginForm.addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevent default form submission
+        
+        // Get form values
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        
+        // Here you would normally handle the login with a fetch request to your backend
+        console.log('Login attempt:', username, password);
+        
+        // For demo purposes, just close the modal after "submission"
+        // In a real app, you'd handle the response from your backend
+        alert('Login functionality would be implemented here');
+        loginModalOverlay.classList.remove('active');
+      });
+    });
+  </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Get elements from both login and register modals
+      const registerLink = document.querySelector('.register-link');
+      const loginModalOverlay = document.getElementById('loginModalOverlay');
+      const registerModalOverlay = document.getElementById('registerModalOverlay');
+      const closeRegisterModal = document.getElementById('closeRegisterModal');
+      const cancelRegistration = document.getElementById('cancelRegistration');
+      const registerForm = document.getElementById('registerForm');
+      
+      // Show register modal when register link is clicked
+      registerLink.addEventListener('click', function(e) {
+        e.preventDefault(); // Prevent default link behavior
+        
+        // Hide login modal
+        loginModalOverlay.classList.remove('active');
+        
+        // Show register modal
+        registerModalOverlay.classList.add('active');
+      });
+      
+      // Close register modal when X button is clicked
+      closeRegisterModal.addEventListener('click', function() {
+        registerModalOverlay.classList.remove('active');
+      });
+      
+      // Close register modal when Cancel button is clicked
+      cancelRegistration.addEventListener('click', function() {
+        registerModalOverlay.classList.remove('active');
+        // Optionally show login modal again
+        loginModalOverlay.classList.add('active');
+      });
+      
+      // Close register modal when clicking outside the modal
+      registerModalOverlay.addEventListener('click', function(e) {
+        if (e.target === registerModalOverlay) {
+          registerModalOverlay.classList.remove('active');
+        }
+      });
+      
+      // Handle registration form submission
+      registerForm.addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevent default form submission
+        
+        // Get form values
+        const username = document.getElementById('registerUsername').value;
+        const birthdate = document.getElementById('registerBirthdate').value;
+        const phone = document.getElementById('registerPhone').value;
+        const password = document.getElementById('registerPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        
+        // Validate passwords match
+        if (password !== confirmPassword) {
+          alert('รหัสผ่านไม่ตรงกัน กรุณาตรวจสอบอีกครั้ง');
+          return;
+        }
+        
+        // Here you would normally handle the registration with a fetch request to your backend
+        console.log('Registration attempt:', { username, birthdate, phone, password });
+        
+        // For demo purposes, just close the modal after "submission"
+        // In a real app, you'd handle the response from your backend
+        alert('Registration functionality would be implemented here');
+        registerModalOverlay.classList.remove('active');
+      });
+    });
+  </script>
+  
