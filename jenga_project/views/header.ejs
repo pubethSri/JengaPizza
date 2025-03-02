@@ -103,6 +103,21 @@
         font-size: 18px;
     }
     /* Custom Login Button Styling */
+    .logout-button {
+        margin: 15px;
+    }
+    .logout-button a{
+        display: block;
+        background-color: rgb(187,62,0);
+        color: white;
+        text-decoration: none;
+        padding: 15px;
+        border-radius: 8px;
+        font-size: 18px;
+        font-weight: 500;
+        text-align: center;
+    }
+    /* Custom Logout Button Styling */
     .login-button {
         margin: 15px;
     }
@@ -117,6 +132,7 @@
         font-weight: 500;
         text-align: center;
     }
+
     .login-icon {
         width: 24px;
         height: 24px;
@@ -413,14 +429,28 @@
     </div>
     <div class="sidebar-body">
         <!-- Styled Login Button -->
-        <div class="login-button">
+
+        <% if(loggedin){ %>
+          <div class="logout-button">
+            <a href="/logout">
+                <div class="d-flex align-items-center justify-content-center">
+                    <img src="images/user-icon.png" alt="User icon" class="login-icon">
+                    <span>ออกจากระบบ</span>
+                </div>
+            </a>
+          </div>
+        <% } else{ %>  
+          <div class="login-button">
             <a href="/login">
                 <div class="d-flex align-items-center justify-content-center">
                     <img src="images/user-icon.png" alt="User icon" class="login-icon">
                     <span>เข้าสู่ระบบ/ลงทะเบียน</span>
                 </div>
             </a>
-        </div>
+          </div>
+        <% } %>
+
+        
         <!-- Divider -->
         <hr class="sidebar-divider">
         <div class="sidebar-menu-item">
@@ -455,12 +485,12 @@
       <div class="login-modal-body">
         <h2 class="login-modal-title">ล็อกอิน</h2>
         
-        <form id="loginForm" class="login-form">
+        <form action="/authen" method="post" id="loginForm" class="login-form">
           <div class="form-group">
-            <input type="text" class="form-control login-input" id="username" placeholder="ชื่อผู้ใช้ (อีเมล)" required>
+            <input type="text" class="form-control login-input" id="username" name="username" placeholder="ชื่อผู้ใช้ (อีเมล)" required>
           </div>
           <div class="form-group">
-            <input type="password" class="form-control login-input" id="password" placeholder="รหัสผ่าน" required>
+            <input type="password" class="form-control login-input" id="password" name="password" placeholder="รหัสผ่าน" required>
           </div>
           <button type="submit" class="login-submit-btn">ตกลง</button>
         </form>
@@ -574,21 +604,22 @@
       });
       
       // Handle form submission
-      loginForm.addEventListener('submit', function(e) {
-        e.preventDefault(); // Prevent default form submission
+      // loginForm.addEventListener('submit', function(e) {
+      //   e.preventDefault(); // Prevent default form submission
         
-        // Get form values
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
+      //   // Get form values
+      //   const username = document.getElementById('username').value;
+      //   const password = document.getElementById('password').value;
         
-        // Here you would normally handle the login with a fetch request to your backend
-        console.log('Login attempt:', username, password);
+      //   // Here you would normally handle the login with a fetch request to your backend
+      //   console.log('Login attempt:', username, password);
         
-        // For demo purposes, just close the modal after "submission"
-        // In a real app, you'd handle the response from your backend
-        alert('Login functionality would be implemented here');
-        loginModalOverlay.classList.remove('active');
-      });
+      //   // For demo purposes, just close the modal after "submission"
+      //   // In a real app, you'd handle the response from your backend
+      //   alert('Login functionality would be implemented here');
+      //   loginModalOverlay.classList.remove('active');
+      // });
+
     });
   </script>
 
