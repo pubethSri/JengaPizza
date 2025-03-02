@@ -39,7 +39,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/home", (req, res) => {
-  res.render('home', { loggedin: req.session.loggedin });
+  res.render('home', { loggedin: req.session.loggedin});
 });
 
 app.get("/choose", (req, res) => {

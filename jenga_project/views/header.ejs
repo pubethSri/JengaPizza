@@ -417,7 +417,12 @@
         <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
         </svg>
       </a>
-      <a href="/choose"><button class="order btn btn-light">สั่งซื้อเลย</button></a>
+
+      <% if(loggedin){ %>
+        <a href="/choose"><button class="order btn btn-light">สั่งซื้อเลย</button></a>
+      <% } else{ %>  
+        <a onclick="document.getElementById('login-trigger').click();"><button class="order btn btn-light">สั่งซื้อเลย</button></a>
+      <% } %>
   </div>
 </div>
 
@@ -441,7 +446,7 @@
           </div>
         <% } else{ %>  
           <div class="login-button">
-            <a href="/login">
+            <a href="/login" id="login-trigger">
                 <div class="d-flex align-items-center justify-content-center">
                     <img src="images/user-icon.png" alt="User icon" class="login-icon">
                     <span>เข้าสู่ระบบ/ลงทะเบียน</span>
@@ -689,5 +694,4 @@
         registerModalOverlay.classList.remove('active');
       });
     });
-  </script>
-  
+</script>
