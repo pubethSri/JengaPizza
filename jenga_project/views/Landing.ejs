@@ -9,40 +9,41 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <style>
-        @font-face {
-            font-family: Mochi;
-            /* font-style: NORMAL_OR_ITALIC; */
-            /* font-weight: NUMERIC_WEIGHT_VALUE; */
-            src: url("fonts/MochiyPopOne-Regular.ttf");
-        }
         body {
             background-color: rgb(187, 62, 0);
             text-align: center;
-            justify-content: center;
-            justify-items: center;
             font-size: 100px;
             color: white;
-            font-family: Mochi;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
         }
+        
         .custom-link {
             color: white;
             text-decoration: none;
         }
 
         .custom-link:hover {
-            color: white;
+            opacity: 0.5;
             text-decoration: none;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <div style="padding-top: 15%;">
-            <img src="images/mdi_chef-hat.png" style="padding-left: 13%; margin-bottom: -12%;" alt="">
-            <p><a href="/home" class="custom-link">Jenga</a></p>
-        </div>
+        <a href="/home" class="custom-link">
+            <img src="images/Logo.png" alt="Logo">
+        </a>
     </div>
-
 </body>
 </html>

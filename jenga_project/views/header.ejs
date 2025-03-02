@@ -83,6 +83,12 @@
         cursor: pointer;
         color: #333;
     }
+
+    .close-sidebar svg {
+        width: 24px;
+        height: 24px;
+        display: block;
+    }
     .sidebar-body {
         padding: 0;
     }
@@ -465,7 +471,10 @@
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 <div class="sidebar-modal" id="sidebarModal">
     <div class="sidebar-header">
-        <button class="close-sidebar" id="closeSidebar">×</button>
+        <button class="close-sidebar" id="closeSidebar"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+        </svg>
+        </button>
     </div>
     <div class="sidebar-body">
         <!-- Styled Login Button -->
@@ -533,7 +542,11 @@
 <div class="register-modal-overlay" id="registerModalOverlay">
     <div class="register-modal">
       <div class="register-modal-header">
-        <button type="button" class="register-modal-close" id="closeRegisterModal">×</button>
+        <button type="button" class="register-modal-close" id="closeRegisterModal">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+        </svg>
+        </button>
       </div>
       <div class="register-modal-body">
         <h2 class="register-modal-title">ลงทะเบียน</h2>

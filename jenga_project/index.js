@@ -31,6 +31,10 @@ app.get("/pizza-name", (req, res) => {
   res.render('pizza-name');
 });
 
+app.get("/orderform", (req, res) => {
+  res.render('orderform');
+});
+
 app.listen(port, () => {
   console.log(`This Web Server is running on port ${port}`);
 });
