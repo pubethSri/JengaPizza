@@ -26,18 +26,21 @@
         }
         
         /* Banner carousel styling */
+        /* Banner carousel styling - updated for better image fit */
         .banner-carousel {
             position: relative;
             width: 100%;
             overflow: hidden;
+            margin-bottom: 20px;
         }
         
         .banner-container {
             width: 100%;
-            height: calc(90vh); /* Adjust to show full banner minus header and some space */
-            max-height: 800px; /* Maximum height */
             position: relative;
             overflow: hidden;
+            /* Remove fixed height to prevent cropping */
+            height: auto;
+            max-height: none;
         }
         
         .banner-slides {
@@ -53,15 +56,15 @@
         
         .banner-image {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center;
+            height: auto; /* This is key - let height adjust naturally */
+            display: block;
+            object-fit: contain; /* Changed from cover to contain */
         }
         
-        /* Navigation dots */
+        /* Navigation dots - position relative to image bottom */
         .banner-dots {
             position: absolute;
-            bottom: 20px;
+            bottom: 150px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;

@@ -433,7 +433,7 @@
           </svg>
       </a>
       <a href="/home">หน้าหลัก</a>
-      <a href="#">เกี่ยวกับเรา</a>
+      <a href="">เกี่ยวกับเรา</a>
       <a href="#footer-custom">ติดต่อสอบถาม</a> <!-- ใส่ link เชื่อมไป footer ตรงนี้ให้หน่อย -->
   </div>
 
@@ -620,12 +620,14 @@
       // Close login modal when X button is clicked
       closeLoginModal.addEventListener('click', function() {
         loginModalOverlay.classList.remove('active');
+        document.body.style.overflow = '';
       });
       
       // Close login modal when clicking outside the modal
       loginModalOverlay.addEventListener('click', function(e) {
         if (e.target === loginModalOverlay) {
           loginModalOverlay.classList.remove('active');
+          document.body.style.overflow = '';
         }
       });
       
@@ -644,6 +646,7 @@
         // In a real app, you'd handle the response from your backend
         alert('Login functionality would be implemented here');
         loginModalOverlay.classList.remove('active');
+        document.body.style.overflow = '';
       });
     });
   </script>
@@ -672,6 +675,7 @@
       // Close register modal when X button is clicked
       closeRegisterModal.addEventListener('click', function() {
         registerModalOverlay.classList.remove('active');
+        document.body.style.overflow = '';
       });
       
       // Close register modal when Cancel button is clicked
@@ -685,6 +689,7 @@
       registerModalOverlay.addEventListener('click', function(e) {
         if (e.target === registerModalOverlay) {
           registerModalOverlay.classList.remove('active');
+          document.body.style.overflow = '';
         }
       });
       
@@ -712,6 +717,7 @@
         // In a real app, you'd handle the response from your backend
         alert('Registration functionality would be implemented here');
         registerModalOverlay.classList.remove('active');
+        document.body.style.overflow = '';
       });
     });
   </script>
