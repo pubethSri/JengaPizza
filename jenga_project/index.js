@@ -39,6 +39,10 @@ app.get("/createform", (req, res) => {
   res.render('createform');
 });
 
+app.get("/orderlist", (req, res) => {
+  res.render('orderlist');
+});
+
 app.listen(port, () => {
   console.log(`This Web Server is running on port ${port}`);
 });

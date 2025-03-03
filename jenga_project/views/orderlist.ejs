@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <title>Jenga Pizza</title>
+    <style>
+        @font-face {
+            font-family: Prompt;
+            src: url("fonts/Prompt-Regular.ttf");
+        }
+
+        body {
+            font-family: "Prompt";
+        }
+
+        /* Background Image */
+        body::before {
+            content: "";
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-image: url("https://t3.ftcdn.net/jpg/04/08/51/78/360_F_408517872_u7m4me8l83eenmUcsJ1ArSZymm5Unz4X.jpg");
+            opacity: 0.1;
+            z-index: -1;
+        }
+
+        /* Fix Flexbox Centering */
+        .container-center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - 60px); /* Adjust for navbar */
+            padding-top: 60px; /* Ensure content is not hidden behind navbar */
+        }
+
+        .box {
+            width: 80vw;
+            padding: 30px;
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        .box .row {
+            display: flex;
+            align-items: center; /* Center items vertically */
+        }
+
+        .card {
+            background-color: rgb(245, 245, 245);
+            border: none;
+            transition: transform 0.2s;
+            cursor: pointer;
+            align-items: center;
+            margin: 10px;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        .card a {
+            text-decoration: none;
+        }
+
+        .card img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .btn-remove {
+            background-color: rgb(187, 62, 0);
+            color: white;
+        }
+
+        .btn-remove:hover {
+            background-color: rgb(160, 50, 0);
+            color: white;
+        }
+
+        .btn-red {
+            background-color: rgb(187, 62, 0);
+            color: white;
+        }
+
+        .btn-red:hover {
+            background-color: rgb(160, 50, 0);
+            color: white;
+        }
+
+        .btn-grey {
+            background-color: #e2e2e2;
+            color: white;
+        }
+
+        .btn-grey:hover {
+            background-color: #d0d0d0;
+            color: white;
+        }
+
+        .quantity-field {
+            width: 70px;
+            text-align: center;
+        }
+
+        .btn-minus svg {
+            color: grey;
+            width: 24px;
+            height: 24px;
+            display: block;
+        }
+
+        .btn-plus svg {
+            color: grey;
+            width: 24px;
+            height: 24px;
+            display: block;
+        }
+
+        input[type="number"] {
+            appearance: none;
+            padding-right: 0;
+            border: 2px solid grey;
+            border-radius: 5px;
+        }
+
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <%- include('header') %>
+    </header>
+
+    <div class="container-center">
+        <div class="box mb-3">
+            <h2><b>รายการอาหาร</b></h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card p-3">
+                        <img src="images/pizza.png" alt="ฮาวาเอี้ยน">
+                        <p style="font-size: 26px; color: rgb(187, 62, 0);">พิซซ่าฮาวาเอี้ยน</p>
+                        <p style="font-size: 14px; color: grey;">รายละเอียด: หนานุ่ม, XL, บาร์บีคิวซอส, เห็ด, สัปปะรด, แฮม</p>
+                        <div class="quantity-wrapper d-flex mb-3"  style="justify-content: center;">
+                            <div class="quantity-group-append">
+                                <button type="button" class="btn btn-minus add-quantity d-flex align-items-center justify-content-center" data-field="quantity">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                    </svg>
+                                </button>
+                            </div>
+                            <input type="number" step="1" max="" value="1" maxlength="4" size="4" name="quantity" class="quantity-field">
+                            <div class="quantity-group-append">
+                                <button type="button" class="btn btn-plus add-quantity d-flex align-items-center justify-content-center" data-field="quantity">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <p style="text-align: center; font-size: 20px; font-weight: bolder; color: rgb(187, 62, 0);">399.00 บาท</p>
+                        <a href="#"><button class="btn btn-remove mb-3">นำออกจากรายการ</button></a>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card p-3">
+                        <img src="images/pizza.png" alt="ฮาวาน่า">
+                        <p style="font-size: 26px; color: rgb(187, 62, 0);">พิซซ่าฮาวาน่า</p>
+                        <p style="font-size: 14px; color: grey;">รายละเอียด: หนานุ่ม, XL, บาร์บีคิวซอส, เห็ด, สัปปะรด, แฮม</p>
+                        <div class="quantity-wrapper d-flex mb-3"  style="justify-content: center;">
+                            <div class="quantity-group-append">
+                                <button type="button" class="btn btn-minus add-quantity d-flex align-items-center justify-content-center" data-field="quantity">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                    </svg>
+                                </button>
+                            </div>
+                            <input type="number" step="1" max="" value="1" maxlength="4" size="4" name="quantity" class="quantity-field">
+                            <div class="quantity-group-append">
+                                <button type="button" class="btn btn-plus add-quantity d-flex align-items-center justify-content-center" data-field="quantity">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <p style="text-align: center; font-size: 20px; font-weight: bolder; color: rgb(187, 62, 0);">399.00 บาท</p>
+                        <a href="#"><button class="btn btn-remove mb-3">นำออกจากรายการ</button></a>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card p-3">
+                        <img src="images/pizza.png" alt="ฮาวาโน่">
+                        <p style="font-size: 26px; color: rgb(187, 62, 0);">พิซซ่าฮาวาโน่</p>
+                        <p style="font-size: 14px; color: grey;">รายละเอียด: หนานุ่ม, XL, บาร์บีคิวซอส, เห็ด, สัปปะรด, แฮม</p>
+                        <div class="quantity-wrapper d-flex mb-3"  style="justify-content: center;">
+                            <div class="quantity-group-append">
+                                <button type="button" class="btn btn-minus add-quantity d-flex align-items-center justify-content-center" data-field="quantity">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                    </svg>
+                                </button>
+                            </div>
+                            <input type="number" step="1" max="" value="1" maxlength="4" size="4" name="quantity" class="quantity-field">
+                            <div class="quantity-group-append">
+                                <button type="button" class="btn btn-plus add-quantity d-flex align-items-center justify-content-center" data-field="quantity">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <p style="text-align: center; font-size: 20px; font-weight: bolder; color: rgb(187, 62, 0);">399.00 บาท</p>
+                        <a href="#"><button class="btn btn-remove mb-3">นำออกจากรายการ</button></a>
+                    </div>
+                </div>
+            </div>
+            <div class="button-wrapper d-flex" style="justify-content: center;">
+                <div class="mt-3 mb-3">
+                    <a href="#"><button class="btn btn-red">ชำระเงิน</button></a>
+                    <a href="/category"><button class="btn btn-grey">เลือกซื้อสินค้า</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <%- include('footer') %>
+    </footer>
+
+    <script>
+        $(document).ready(function() {
+            // Plus, minus button
+            $(".btn-plus").on("click", function(e) {
+                e.preventDefault();
+                var $input = $(this).closest('.quantity-wrapper').find('input[name="quantity"]');
+                var currentVal = parseInt($input.val(), 10);
+                if (!isNaN(currentVal)) {
+                    $input.val(currentVal + 1);
+                } else {
+                    $input.val(0);
+                }
+            });
+
+            $(".btn-minus").on("click", function(e) {
+                e.preventDefault();
+                var $input = $(this).closest('.quantity-wrapper').find('input[name="quantity"]');
+                var currentVal = parseInt($input.val(), 10);
+                if (!isNaN(currentVal) && currentVal > 1) {
+                    $input.val(currentVal - 1);
+                } else {
+                    $input.val(1);
+                }
+            });
+
+            $(".btn-remove").on("click", function(e) {
+                e.preventDefault();
+                $(this).closest(".col-md-6").remove();
+            });
+
+        });
+
+    </script>
+
+</body>
+</html>
