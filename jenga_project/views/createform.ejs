@@ -143,7 +143,9 @@
             display: block;
         }
 
-        input[type="number"] {
+        select, input[type="number"] {
+            width: 100%;
+            height: 45px;
             appearance: none;
             padding-right: 0;
             border: 2px solid grey;
@@ -181,20 +183,44 @@
                         </div>
 
                         <div class="mb-3">
-                            <input type="text" class="form-control" id="validationTextarea" placeholder="ชนิดแป้ง" required>
+                            <select id="flour-based" class="form-control" placeholder="ชนิดแป้ง" required>
+                                <option value="">ชนิดแป้ง</option>
+                                <option value="original">หนานุ่ม</option>
+                                <option value="crispy">บางกรอบ</option>
+                                <option value="cheese">ขอบชีส</option>
+                                <option value="audi">ขอบไส้กรอก</option>
+                            </select>
                         </div>
 
                         <div class="mb-3">
-                            <input type="text" class="form-control" id="validationTextarea" placeholder="ขนาดถาด" required>
+                            <select id="size" class="form-control" placeholder="ขนาดถาด" required>
+                                <option value="">ขนาดถาด</option>
+                                <option value="s">S</option>
+                                <option value="m">M</option>
+                                <option value="l">L</option>
+                                <option value="xl">XL</option>
+                            </select>
                         </div>
 
                         <div class="mb-3">
-                            <input type="text" class="form-control" id="validationTextarea" placeholder="ซอส" required>
+                            <select id="size" class="form-control" placeholder="ซอส" required>
+                                <option value="">ซอส</option>
+                                <option value="signature">ซอสลับ</option>
+                                <option value="marinara">ซอสมารินารา</option>
+                                <option value="bbq">ซอสบาร์บีคิว</option>
+                                <option value="spicy">ซอสเผ็ด</option>
+                            </select>
                         </div>
 
                         <div class="textbox-wrapper">
                             <div class="input-group mb-3">
-                                <input type="text" name="text_arr[]" class="form-control" placeholder="ท็อปปิ้ง">
+                                <select id="size" name="text_arr[]" class="form-control" placeholder="ท็อปปิ้ง" required>
+                                    <option value="">ท็อปปิ้ง</option>
+                                    <option value="ham">แฮม</option>
+                                    <option value="cheese">ชีส</option>
+                                    <option value="shrimp">กุ้ง</option>
+                                    <option value="veggie">ผัก</option>
+                                </select>
                                 <div class="input-group-append">
                                     <button type="button" class="btn btn-add add-textbox d-flex align-items-center justify-content-center">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -233,7 +259,13 @@
                     cnt++;
                     $(".textbox-wrapper").append(
                         `<div class="input-group mb-3">
-                            <input type="text" name="text_arr[]" class="form-control" placeholder="ท็อปปิ้ง">
+                            <select id="size" name="text_arr[]" class="form-control" placeholder="ท็อปปิ้ง" required>
+                                <option value="">ท็อปปิ้ง</option>
+                                <option value="ham">แฮม</option>
+                                <option value="cheese">ชีส</option>
+                                <option value="shrimp">กุ้ง</option>
+                                <option value="veggie">ผัก</option>
+                            </select>
                             <div class="input-group-append">
                                 <button type="button" class="btn btn-remove remove-textbox d-flex align-items-center justify-content-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
