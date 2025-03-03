@@ -83,6 +83,12 @@
         cursor: pointer;
         color: #333;
     }
+
+    .close-sidebar svg {
+        width: 24px;
+        height: 24px;
+        display: block;
+    }
     .sidebar-body {
         padding: 0;
     }
@@ -392,6 +398,48 @@
           display: none;
       }
   }
+
+
+      /* Cart Dropdown Styles */
+  /* Simplified Cart Dropdown Styles */
+  .cart-dropdown {
+    position: absolute;
+    top: 60px; /* Position below the navbar */
+    right: 20px; /* Align with cart icon */
+    width: 250px;
+    background-color: white;
+    border-radius: 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 1001;
+    display: none;
+    overflow: hidden;
+  }
+  
+  .cart-dropdown.show {
+    display: block;
+  }
+  
+  .cart-content {
+    padding: 0;
+  }
+  
+  .cart-item {
+    padding: 0;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .cart-item a {
+    display: block;
+    padding: 15px;
+    color: #333;
+    text-decoration: none;
+    font-size: 16px;
+    transition: background-color 0.2s;
+  }
+  
+  .cart-item a:hover {
+    background-color: #f5f5f5;
+  }
 </style>
 
 <!-- navbar -->
@@ -406,9 +454,9 @@
           <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
           </svg>
       </a>
-      <a href="#">หน้าหลัก</a>
-      <a href="#">เกี่ยวกับเรา</a>
-      <a href="/home#footer-custom">ติดต่อสอบถาม</a> <!-- ใส่ link เชื่อมไป footer ตรงนี้ให้หน่อย -->
+      <a href="/home">หน้าหลัก</a>
+      <a href="">เกี่ยวกับเรา</a>
+      <a href="#footer-custom">ติดต่อสอบถาม</a> <!-- ใส่ link เชื่อมไป footer ตรงนี้ให้หน่อย -->
   </div>
 
   <div class="d-flex">
@@ -426,11 +474,28 @@
   </div>
 </div>
 
+
+<!-- Cart Dropdown -->
+<div class="cart-dropdown" id="cartDropdown">
+  <div class="cart-content">
+    <div class="cart-item">
+      <a href="/orderlist">รายการสินค้า</a>
+    </div>
+    <div class="cart-item">
+      <a href="#">ติดตามสถานะสินค้า</a>
+    </div>
+  </div>
+</div>
+
+
 <!-- Sidebar Modal -->
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 <div class="sidebar-modal" id="sidebarModal">
     <div class="sidebar-header">
-        <button class="close-sidebar" id="closeSidebar">×</button>
+        <button class="close-sidebar" id="closeSidebar"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+        </svg>
+        </button>
     </div>
     <div class="sidebar-body">
         <!-- Styled Login Button -->
@@ -512,7 +577,11 @@
 <div class="register-modal-overlay" id="registerModalOverlay">
     <div class="register-modal">
       <div class="register-modal-header">
-        <button type="button" class="register-modal-close" id="closeRegisterModal">×</button>
+        <button type="button" class="register-modal-close" id="closeRegisterModal">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+        </svg>
+        </button>
       </div>
       <div class="register-modal-body">
         <h2 class="register-modal-title">ลงทะเบียน</h2>
@@ -599,12 +668,14 @@
       // Close login modal when X button is clicked
       closeLoginModal.addEventListener('click', function() {
         loginModalOverlay.classList.remove('active');
+        document.body.style.overflow = '';
       });
       
       // Close login modal when clicking outside the modal
       loginModalOverlay.addEventListener('click', function(e) {
         if (e.target === loginModalOverlay) {
           loginModalOverlay.classList.remove('active');
+          document.body.style.overflow = '';
         }
       });
       
@@ -652,6 +723,7 @@
       // Close register modal when X button is clicked
       closeRegisterModal.addEventListener('click', function() {
         registerModalOverlay.classList.remove('active');
+        document.body.style.overflow = '';
       });
       
       // Close register modal when Cancel button is clicked
@@ -665,6 +737,7 @@
       registerModalOverlay.addEventListener('click', function(e) {
         if (e.target === registerModalOverlay) {
           registerModalOverlay.classList.remove('active');
+          document.body.style.overflow = '';
         }
       });
       
@@ -692,6 +765,76 @@
         // In a real app, you'd handle the response from your backend
         alert('Registration functionality would be implemented here');
         registerModalOverlay.classList.remove('active');
+        document.body.style.overflow = '';
       });
     });
+  </script>
+  
+<!-- The JavaScript for cart Dropdown -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      const cartToggle = document.getElementById('cartToggle');
+      const cartDropdown = document.getElementById('cartDropdown');
+      
+      // Toggle cart dropdown when cart icon is clicked
+      cartToggle.addEventListener('click', function(e) {
+          e.preventDefault();
+          cartDropdown.classList.toggle('show');
+          
+          // Close sidebar if it's open
+          const sidebarModal = document.getElementById('sidebarModal');
+          const sidebarOverlay = document.getElementById('sidebarOverlay');
+          if (sidebarModal && sidebarModal.classList.contains('show')) {
+              sidebarModal.classList.remove('show');
+              sidebarOverlay.classList.remove('show');
+          }
+          
+          // Close login/register modals if they're open
+          const loginModalOverlay = document.getElementById('loginModalOverlay');
+          const registerModalOverlay = document.getElementById('registerModalOverlay');
+          if (loginModalOverlay && loginModalOverlay.classList.contains('active')) {
+              loginModalOverlay.classList.remove('active');
+          }
+          if (registerModalOverlay && registerModalOverlay.classList.contains('active')) {
+              registerModalOverlay.classList.remove('active');
+          }
+      });
+      
+      // Close cart dropdown when clicking outside
+      document.addEventListener('click', function(e) {
+          // If click is outside cart dropdown and not on the cart icon
+          if (cartDropdown && !cartDropdown.contains(e.target) && e.target !== cartToggle && !cartToggle.contains(e.target)) {
+              cartDropdown.classList.remove('show');
+          }
+      });
+  });
+  </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Get the footer contact link - update the selector to match your updated link
+    const contactLink = document.querySelector('a[href="#footer-custom"]');
+    
+    if (contactLink) {
+        // Add click event listener
+        contactLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Get the footer element
+            const footer = document.getElementById('footer-custom');
+            
+            if (footer) {
+                // Scroll to the footer smoothly
+                footer.scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start' 
+                });
+            } else {
+                console.log('Footer element not found');
+            }
+        });
+    } else {
+        console.log('Contact link not found');
+    }
+});
 </script>

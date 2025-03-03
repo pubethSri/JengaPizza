@@ -51,11 +51,11 @@ app.get("/choose", (req, res) => {
 });
 
 app.get("/category", (req, res) => {
-  res.render('category');
+  res.render('category', { loggedin: req.session.loggedin });
 });
 
 app.get("/pizza-name", (req, res) => {
-  res.render('pizza-name');
+  res.render('pizza-name', { loggedin: req.session.loggedin });
 });
 
 app.post("/authen", async (req, res) => {
@@ -84,6 +84,17 @@ app.get("/logout", (req, res) => {
   console.log("logged out!");
   res.redirect('/home');
 })
+app.get("/orderform", (req, res) => {
+  res.render('orderform', { loggedin: req.session.loggedin });
+});
+
+app.get("/createform", (req, res) => {
+  res.render('createform', { loggedin: req.session.loggedin });
+});
+
+app.get("/orderlist", (req, res) => {
+  res.render('orderlist', { loggedin: req.session.loggedin });
+});
 
 app.listen(port, () => {
   console.log(`This Web Server is running on port ${port}`);
