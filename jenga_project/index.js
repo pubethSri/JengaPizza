@@ -96,6 +96,10 @@ app.get("/orderlist", (req, res) => {
   res.render('orderlist', { loggedin: req.session.loggedin });
 });
 
+app.all('*', (req, res) => {
+  res.send("You should not be here 404 not found");
+});
+
 app.listen(port, () => {
   console.log(`This Web Server is running on port ${port}`);
 });
