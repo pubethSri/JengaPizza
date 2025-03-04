@@ -92,6 +92,13 @@ app.get("/createform", (req, res) => {
   res.render('createform', { loggedin: req.session.loggedin });
 });
 
+app.post("/create", async (req, res) =>{
+  const { pizza_name, dough, size, sauce, topping } = req.body;
+  console.log(`${pizza_name} ${dough} ${size} ${sauce} ${topping}`);
+  res.send({pizza_data:{pizza_name:pizza_name, dough:dough, size:size, sauce:sauce, topping:topping}});
+  //res.redirect("/createform");
+});
+
 app.get("/orderlist", (req, res) => {
   res.render('orderlist', { loggedin: req.session.loggedin });
 });
