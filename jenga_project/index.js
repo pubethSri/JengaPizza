@@ -107,6 +107,10 @@ app.get("/tracking_seller", (req, res) => {
   res.render('tracking_seller', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
 });
 
+app.get("/customerinfo", (req, res) => {
+  res.render('customerinfo', { loggedin: req.session.loggedin });
+});
+
 app.listen(port, () => {
   console.log(`This Web Server is running on port ${port}`);
 });
