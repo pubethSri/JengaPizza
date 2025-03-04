@@ -39,23 +39,25 @@ app.get("/", (req, res) => {
 });
 
 app.get("/home", (req, res) => {
-  res.render('home', { loggedin: req.session.loggedin});
+  res.render('home', { loggedin: req.session.loggedin, username: req.session.username});
 });
+
+
 
 app.get("/choose", (req, res) => {
   if (req.session.loggedin) {
-    res.render('choose', { loggedin: req.session.loggedin });
+    res.render('choose', { loggedin: req.session.loggedin, username: req.session.username });
   } else {
     res.redirect('/home');
   }
 });
 
 app.get("/category", (req, res) => {
-  res.render('category', { loggedin: req.session.loggedin });
+  res.render('category', { loggedin: req.session.loggedin, username: req.session.username || ""});
 });
 
 app.get("/pizza-name", (req, res) => {
-  res.render('pizza-name', { loggedin: req.session.loggedin });
+  res.render('pizza-name', { loggedin: req.session.loggedin, username: req.session.username || "" });
 });
 
 app.post("/authen", async (req, res) => {
@@ -85,15 +87,23 @@ app.get("/logout", (req, res) => {
   res.redirect('/home');
 })
 app.get("/orderform", (req, res) => {
-  res.render('orderform', { loggedin: req.session.loggedin });
+  res.render('orderform', { loggedin: req.session.loggedin, username: req.session.username || "" });
 });
 
 app.get("/createform", (req, res) => {
-  res.render('createform', { loggedin: req.session.loggedin });
+  res.render('createform', { loggedin: req.session.loggedin, username: req.session.username || "" });
 });
 
 app.get("/orderlist", (req, res) => {
-  res.render('orderlist', { loggedin: req.session.loggedin });
+  res.render('orderlist', { loggedin: req.session.loggedin, username: req.session.username || "" });
+});
+
+app.get("/tracking", (req, res) => {
+  res.render('tracking', { loggedin: req.session.loggedin, username: req.session.username || "" });
+});
+
+app.get("/tracking_seller", (req, res) => {
+  res.render('tracking_seller', { loggedin: req.session.loggedin, username: req.session.username || "" });
 });
 
 app.listen(port, () => {
