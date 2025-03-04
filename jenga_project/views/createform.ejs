@@ -176,24 +176,24 @@
                     </div>
                 </div>
                 <div class="col-md-6" style="text-align: left;">
-                    <form>
+                    <form action="/create" method="post">
                         <h2><b>สร้างพิซซ่าของคุณเอง</b></h2>
                         <div class="mb-3">
-                            <input type="text" class="form-control" id="validationTextarea" placeholder="ชื่อพิซซ่า" required>
+                            <input type="text" class="form-control" id="validationTextarea" placeholder="ชื่อพิซซ่า" required name="pizza_name">
                         </div>
 
                         <div class="mb-3">
-                            <select id="flour-based" class="form-control" placeholder="ชนิดแป้ง" required>
+                            <select id="flour-based" name="dough" class="form-control" placeholder="ชนิดแป้ง" required>
                                 <option value="" disabled selected>ชนิดแป้ง</option>
                                 <option value="original">หนานุ่ม</option>
                                 <option value="crispy">บางกรอบ</option>
-                                <option value="cheese">ขอบชีส</option>
-                                <option value="audi">ขอบไส้กรอก</option>
+                                <option value="cheese_crust">ขอบชีส</option>
+                                <option value="sausage_crust">ขอบไส้กรอก</option>
                             </select>
                         </div>
 
                         <div class="mb-3">
-                            <select id="size" class="form-control" placeholder="ขนาดถาด" required>
+                            <select id="size" name="size" class="form-control" placeholder="ขนาดถาด" required>
                                 <option value="" disabled selected>ขนาดถาด</option>
                                 <option value="s">S</option>
                                 <option value="m">M</option>
@@ -203,7 +203,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <select id="size" class="form-control" placeholder="ซอส" required>
+                            <select id="sauce" name="sauce" class="form-control" placeholder="ซอส" required>
                                 <option value="" disabled selected>ซอส</option>
                                 <option value="signature">ซอสลับ</option>
                                 <option value="marinara">ซอสมารินารา</option>
@@ -214,7 +214,7 @@
 
                         <div class="textbox-wrapper">
                             <div class="input-group mb-3">
-                                <select id="size" name="text_arr[]" class="form-control" placeholder="ท็อปปิ้ง" required>
+                                <select id="topping" name="topping" class="form-control" placeholder="ท็อปปิ้ง" required>
                                     <option value="" disabled selected>เลือกท็อปปิ้ง</option>
                                     <option value="ham">แฮม</option>
                                     <option value="cheese">ชีส</option>
@@ -233,10 +233,8 @@
 
                         <div class="button-wrapper d-flex" style="justify-content: center;">
                             <div class="mb-3">
-                                <a href="#"><button class="btn btn-red" type="submit" onclick="window.location.href='/category';">เสร็จสิ้น</button></a>
-                                <a href="/category">
-                                    <button class="btn btn-grey" type="button" onclick="window.location.href='/category';">ยกเลิก</button>
-                                </a>
+                                <button class="btn btn-red" type="submit"">เสร็จสิ้น</button>
+                                <button class="btn btn-grey" type="button" onclick="window.location.href='/category';">ยกเลิก</button>
                             </div>
                         </div>
                     </form>
@@ -259,7 +257,7 @@
                     cnt++;
                     $(".textbox-wrapper").append(
                         `<div class="input-group mb-3">
-                            <select id="size" name="text_arr[]" class="form-control" placeholder="ท็อปปิ้ง" required>
+                            <select id="topping" name="topping" class="form-control" placeholder="ท็อปปิ้ง" required>
                                 <option value="" disabled selected>เลือกท็อปปิ้ง</option>
                                 <option value="ham">แฮม</option>
                                 <option value="cheese">ชีส</option>
