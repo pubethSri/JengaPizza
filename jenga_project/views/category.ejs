@@ -130,7 +130,16 @@
                         <p>พิซซ่าฮาวาเอี้ยน</p>
                     </div>
                 </div>
-                
+
+                <% for(var i = 0; i < item.length; i++) { %>
+                    <div class="filterDiv flavour col-md-4 ">
+                        <div class="card p-3">
+                            <a href="/pizza-name"><img src="images/zai.png" alt=<%= item[i].pizza_name %>></a>
+                            <p><%= item[i].pizza_name %></p>
+                        </div>
+                    </div>
+                <% } %>
+
                 <div class="filterDiv ingredient col-md-4">
                     <div class="card p-3">
                         <a href=""><img src="images/pizza.png" alt="ผัก"></a>
