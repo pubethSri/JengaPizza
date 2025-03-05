@@ -50,27 +50,6 @@
 
         }
 
-        /* .status {
-            font-weight: bold;
-            font-size: 1.1em;
-        }
-
-        .preparing {
-            color: orange;
-        }
-
-        .pending {
-            color: orangered;
-        }
-
-        .delivering {
-            color: darkorange;
-        }
-
-        .success {
-            color: green;
-        } */
-
         .status-dropdown {
             width: 100%;
             cursor: pointer;
@@ -99,7 +78,7 @@
                             <div class="col-6">
                                 <h5>Order No. 100</h5>
                                 <p class="text-muted">รายละเอียดสินค้า :</p>
-                                <p class="text-muted">อัพเดทเมื่อ : DD/MM/YYYY hh:mm</p>
+                                <p class="text-muted timestamp">อัพเดทเมื่อ : </p>
                             </div>
                             <div class="col-4 text-right">
                                 <select class="form-control status-dropdown" data-order-id="100">
@@ -118,7 +97,7 @@
                             <div class="col-6">
                                 <h5>Order No. 200</h5>
                                 <p class="text-muted">รายละเอียดสินค้า :</p>
-                                <p class="text-muted">อัพเดทเมื่อ : DD/MM/YYYY hh:mm</p>
+                                <p class="text-muted timestamp">อัพเดทเมื่อ : </p>
                             </div>
                             <div class="col-4 text-right">
                                 <select class="form-control status-dropdown" data-order-id="200">
@@ -137,7 +116,7 @@
                             <div class="col-6">
                                 <h5>Order No. 300</h5>
                                 <p class="text-muted">รายละเอียดสินค้า :</p>
-                                <p class="text-muted">อัพเดทเมื่อ : DD/MM/YYYY hh:mm</p>
+                                <p class="text-muted timestamp">อัพเดทเมื่อ : </p>
                             </div>
                             <div class="col-4 text-right">
                                 <select class="form-control status-dropdown" data-order-id="300">
@@ -156,7 +135,7 @@
                             <div class="col-6">
                                 <h5>Order No. 400</h5>
                                 <p class="text-muted">รายละเอียดสินค้า :</p>
-                                <p class="text-muted">อัพเดทเมื่อ : DD/MM/YYYY hh:mm</p>
+                                <p class="text-muted timestamp">อัพเดทเมื่อ : </p>
                             </div>
                             <div class="col-4 text-right">
                                 <select class="form-control status-dropdown" data-order-id="400">
@@ -176,7 +155,27 @@
         const dic = {'preparing': 'images/prepare-icon.png', 'pending': 'images/waiting-icon.png',
                     'delivering': 'images/deliver-icon.png', 'success': 'images/success-icon.png'
         }
+        function getCurrentDateTime() {
+            const now = new Date();
+            
+            // Format date as DD/MM/YYYY
+            const day = String(now.getDate()).padStart(2, '0');
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const year = now.getFullYear();
+            
+            // Format time as hh:mm
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            
+            // Return formatted date and time
+            return `${day}/${month}/${year} ${hours}:${minutes}`;
+        }
+
         $(document).ready(function () {
+            $('.timestamp').each(function() {
+                $(this).text('อัพเดทเมื่อ : ' + getCurrentDateTime());
+            });
+
             $('.status-dropdown').on('change', function () {
                 let orderId = $(this).data('order-id');
                 let newStatus = $(this).val();
@@ -187,6 +186,8 @@
     
                 // เปลี่ยนรูปภาพที่เกี่ยวข้องกับ Order ID นั้น ๆ
                 $(`select[data-order-id="${orderId}"]`).closest('.row').find('img.order-icon').attr('src', iconSrc);
+                // อัพเดทเวลา
+                $(`select[data-order-id="${orderId}"]`).closest('.row').find('p.text-muted:last').text('อัพเดทเมื่อ : ' + getCurrentDateTime());
                 
                 // อัพเดทพวกสถานะไปที่ order ของลูกค้าคนนั้น ๆ
                 // พวกราชรี TODO: ส่งข้อมูลไปยัง Backend เพื่ออัปเดตสถานะใน Database
