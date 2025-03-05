@@ -85,29 +85,65 @@
           </div>
         <% } %>
 
+        <% if(loggedin && (user_privilege === 'admin' || user_privilege === 'employee')){ %>
+          <hr class="sidebar-divider">
+          <div class="sidebar-menu-item">
+              <img src="images/dashboard-icon.png" alt="Home icon">
+              <a href="/Dashboard">Dashboard</a>
+          </div>
+          <div class="sidebar-menu-item">
+              <img src="images/manage_food-icon.png" alt="Delivery icon">
+              <a href="/order_ingrediant">จัดการคลังสินค้า</a>
+          </div>
+          <div class="sidebar-menu-item">
+              <img src="images/manage_order-icon.png" alt="FAQ icon">
+              <a href="/order_manage">จัดการคำสั่งซื้อ</a>
+          </div>
+
+        <% } else if(loggedin && user_privilege == "customer"){ %>  
+          <hr class="sidebar-divider">
+          <div class="sidebar-menu-item">
+              <img src="images/home-icon.png" alt="Home icon">
+              <a href="/home">หน้าหลัก</a>
+          </div>
+          <div class="sidebar-menu-item">
+              <img src="images/delivery-icon.png" alt="Delivery icon">
+              <a href="/tracking">ติดตามสินค้า</a>
+          </div>
+          <div class="sidebar-menu-item">
+              <img src="images/faq-icon.png" alt="FAQ icon">
+              <a href="/faq">วิธีสั่งซื้อ</a>
+          </div>
+          <div class="sidebar-menu-item">
+              <img src="images/pizza-icon.png" alt="Pizza icon">
+              <a href="/about">เกี่ยวกับเรา</a>
+          </div>
+          <div class="sidebar-menu-item">
+              <img src="images/contact-icon.png" alt="Contact icon">
+              <a href="/contact">ติดต่อสอบถาม</a>
+          </div>
+
+        <% } else{ %>  
+          <hr class="sidebar-divider">
+          <div class="sidebar-menu-item">
+              <img src="images/home-icon.png" alt="Home icon">
+              <a href="/home">หน้าหลัก</a>
+          </div>
+          <div class="sidebar-menu-item">
+              <img src="images/faq-icon.png" alt="FAQ icon">
+              <a href="/faq">วิธีสั่งซื้อ</a>
+          </div>
+          <div class="sidebar-menu-item">
+              <img src="images/pizza-icon.png" alt="Pizza icon">
+              <a href="/about">เกี่ยวกับเรา</a>
+          </div>
+          <div class="sidebar-menu-item">
+              <img src="images/contact-icon.png" alt="Contact icon">
+              <a href="/contact">ติดต่อสอบถาม</a>
+          </div>
+
+        <% } %>
         
-        <!-- Divider -->
-        <hr class="sidebar-divider">
-        <div class="sidebar-menu-item">
-            <img src="images/home-icon.png" alt="Home icon">
-            <a href="/home">หน้าหลัก</a>
-        </div>
-        <div class="sidebar-menu-item">
-            <img src="images/delivery-icon.png" alt="Delivery icon">
-            <a href="/tracking">ติดตามสินค้า</a>
-        </div>
-        <div class="sidebar-menu-item">
-            <img src="images/faq-icon.png" alt="FAQ icon">
-            <a href="/faq">วิธีสั่งซื้อ</a>
-        </div>
-        <div class="sidebar-menu-item">
-            <img src="images/pizza-icon.png" alt="Pizza icon">
-            <a href="/about">เกี่ยวกับเรา</a>
-        </div>
-        <div class="sidebar-menu-item">
-            <img src="images/contact-icon.png" alt="Contact icon">
-            <a href="/contact">ติดต่อสอบถาม</a>
-        </div>
     </div>
 </div>
 

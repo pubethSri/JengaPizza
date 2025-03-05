@@ -13,7 +13,6 @@ let db = new sqlite3.Database("data/pizzeria.db", (err) => {
   console.log('Connected to the Pizzeria database.');
 });
 
-
 // Creating the Express server
 const app = express();
 
@@ -39,25 +38,26 @@ app.get("/", (req, res) => {
 });
 
 app.get("/home", (req, res) => {
-  res.render('home', { loggedin: req.session.loggedin, username: req.session.username});
+  res.render('home', { loggedin: req.session.loggedin, username: req.session.username, user_privilege: req.session.user_privilege || ""});
+  // console.log(req.session.user_privilege);
 });
 
 
 
 app.get("/choose", (req, res) => {
   if (req.session.loggedin) {
-    res.render('choose', { loggedin: req.session.loggedin, username: req.session.username });
+    res.render('choose', { loggedin: req.session.loggedin, username: req.session.username, user_privilege: req.session.user_privilege || "" });
   } else {
     res.redirect('/home');
   }
 });
 
 app.get("/category", (req, res) => {
-  res.render('category', { loggedin: req.session.loggedin, username: req.session.username || ""});
+  res.render('category', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
 });
 
 app.get("/pizza-name", (req, res) => {
-  res.render('pizza-name', { loggedin: req.session.loggedin, username: req.session.username || "" });
+  res.render('pizza-name', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
 });
 
 app.post("/authen", async (req, res) => {
@@ -70,6 +70,7 @@ app.post("/authen", async (req, res) => {
     if (results.length > 0) {
       req.session.loggedin = true;
       req.session.username = username;
+      req.session.user_privilege = results[0].user_privilege;
       console.log("logged in!");
       res.redirect('/home');
     } else {
@@ -87,23 +88,23 @@ app.get("/logout", (req, res) => {
   res.redirect('/home');
 })
 app.get("/orderform", (req, res) => {
-  res.render('orderform', { loggedin: req.session.loggedin, username: req.session.username || "" });
+  res.render('orderform', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
 });
 
 app.get("/createform", (req, res) => {
-  res.render('createform', { loggedin: req.session.loggedin, username: req.session.username || "" });
+  res.render('createform', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
 });
 
 app.get("/orderlist", (req, res) => {
-  res.render('orderlist', { loggedin: req.session.loggedin, username: req.session.username || "" });
+  res.render('orderlist', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
 });
 
 app.get("/tracking", (req, res) => {
-  res.render('tracking', { loggedin: req.session.loggedin, username: req.session.username || "" });
+  res.render('tracking', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
 });
 
 app.get("/tracking_seller", (req, res) => {
-  res.render('tracking_seller', { loggedin: req.session.loggedin, username: req.session.username || "" });
+  res.render('tracking_seller', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
 });
 
 app.listen(port, () => {
