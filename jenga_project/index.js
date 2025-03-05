@@ -108,7 +108,15 @@ app.get("/tracking_seller", (req, res) => {
 });
 
 app.get("/customerinfo", (req, res) => {
-  res.render('customerinfo', { loggedin: req.session.loggedin });
+  res.render('customerinfo', { loggedin: req.session.loggedin, username: req.session.username || "" });
+});
+
+app.get("/qrpayment", (req, res) => {
+  res.render('qrpayment', { loggedin: req.session.loggedin, username: req.session.username || "" });
+});
+
+app.get("/ingredients_seller", (req, res) => {
+  res.render('ingredients_seller', { loggedin: req.session.loggedin, username: req.session.username || "" });
 });
 
 app.listen(port, () => {

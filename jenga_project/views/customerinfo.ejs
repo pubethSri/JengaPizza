@@ -50,18 +50,24 @@
             align-items: center; /* Center items vertically */
         }
 
-        .pizza-card {
-            border: none;
-            transition: transform 0.2s;
-            cursor: pointer;
-            align-items: center;
+        .invoice-group {
+            background-color: white;
+            text-align: left;
+            box-shadow: 2px 2px 5px rgb(0, 0, 0, 0.25);
         }
 
-        .pizza-card img {
-            width: 400px;
-            height: 400px;
-            object-fit: cover;
-            border-radius: 8px;
+        .invoice-header {
+            background-color: rgb(187, 62, 0);
+            color: white;
+            padding: 10px;
+        }
+
+        .invoice-total {
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid grey;
+            color: rgb(187, 62, 0);
+            font-weight: bolder;
         }
 
         .btn-red {
@@ -84,77 +90,6 @@
             color: white;
         }
 
-        .register-cancel-btn {
-            flex: 1;
-            background-color: #e2e2e2;
-            color: #333;
-            padding: 12px;
-            border: none;
-            border-radius: 6px;
-            font-size: 18px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-
-        .input-groupappend {
-            display: flex;
-            justify-content: flex-end;
-        }
-
-        .textbox-wrapper .btn-add {
-            border: 1px solid rgb(206, 212, 218);
-            color: grey;
-        }
-
-        .btn-add svg {
-            width: 24px;
-            height: 24px;
-            display: block;
-        }
-
-        .textbox-wrapper .btn-remove {
-            border: 1px solid rgb(206, 212, 218);
-            color: grey;
-        }
-
-        .btn-remove svg {
-            width: 24px;
-            height: 24px;
-            display: block;
-        }
-
-        .quantity-field {
-            width: 70px;
-            text-align: center;
-        }
-
-        .btn-minus svg {
-            color: grey;
-            width: 24px;
-            height: 24px;
-            display: block;
-        }
-
-        .btn-plus svg {
-            color: grey;
-            width: 24px;
-            height: 24px;
-            display: block;
-        }
-
-        select, input[type="number"] {
-            appearance: none;
-            padding-right: 0;
-            border: 2px solid grey;
-            border-radius: 5px;
-        }
-
-        input[type="number"]::-webkit-outer-spin-button,
-        input[type="number"]::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
     </style>
 </head>
 <body>
@@ -168,26 +103,39 @@
         <div class="box">
             <div class="row">
                 <div class="col-md-6">
-                    <div class="pizza-card p-3">
-                        <img src="images\pizza.png" alt="พิซซ่า">
-                        <div class="quantity-wrapper d-flex mb-3"  style="justify-content: center;">
-                            <div class="quantity-group-append">
-                                <button type="button" class="btn btn-minus add-quantity d-flex align-items-center justify-content-center" data-field="quantity">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                    </svg>
-                                </button>
-                            </div>
-                            <input type="number" step="1" max="" value="1" maxlength="4" size="4" name="quantity" class="quantity-field">
-                            <div class="quantity-group-append">
-                                <button type="button" class="btn btn-plus add-quantity d-flex align-items-center justify-content-center" data-field="quantity">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                        <p style="text-align: center; font-size: 20px; font-weight: bolder; color: rgb(187, 62, 0);">399.00 บาท</p>
+                    <div class="invoice-group mr-3">
+                        <div class="invoice-header">รายการอาหาร</div>
+                        <table class="table">
+                            <thead class="thead">
+                              <tr>
+                                <th scope="col">QTY</th>
+                                <th scope="col">สินค้า</th>
+                                <th scope="col">ราคา</th>
+                                <th scope="col">ราคาสุทธิ</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <th scope="row">1</th>
+                                <td>พิซซ่าฮาวาเอี้ยน</td>
+                                <td>330.00</td>
+                                <td>330.00</td>
+                              </tr>
+                              <tr>
+                                <th scope="row">3</th>
+                                <td>MY VERY OWN PIZZA</td>
+                                <td>339.00</td>
+                                <td>798.00</td>
+                              </tr>
+                              <tr>
+                                <th scope="row">3</th>
+                                <td>MY VERY OWN PIZZA</td>
+                                <td>339.00</td>
+                                <td>798.00</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                          <div class="invoice-total">ยอดรวม: 1926 บาท</div>
                     </div>
                 </div>
                 <div class="col-md-6" style="text-align: left;">
@@ -231,9 +179,9 @@
 
                         <div class="button-wrapper d-flex" style="justify-content: center;">
                             <div class="mb-3">
-                                <a href="/orderlist"><button class="btn btn-red" type="submit" onclick="window.location.href='/orderlist';">เสร็จสิ้น</button></a>
-                                <a href="/category">
-                                    <button class="btn btn-grey" type="button" onclick="window.location.href='/category';">ยกเลิก</button>
+                                <a href="/qrpayment"><button class="btn btn-red" type="submit" onclick="window.location.href='/qrpayment';">ตกลง</button></a>
+                                <a href="/orderlist">
+                                    <button class="btn btn-grey" type="button" onclick="window.location.href='/orderlist';">ยกเลิก</button>
                                 </a>
                             </div>
                         </div>
@@ -247,65 +195,5 @@
         <%- include('footer') %>
     </footer>
 
-    <script>
-        $(document).ready(function() {
-            var max = 10;
-            var cnt = 1;
-            $(".add-textbox").on("click", function(e){
-                e.preventDefault();
-                if(cnt < max){
-                    cnt++;
-                    $(".textbox-wrapper").append(
-                        `<div class="input-group mb-3">
-                            <select id="size" name="text_arr[]" class="form-control" placeholder="ท็อปปิ้ง" required>
-                                <option value="">ท็อปปิ้ง</option>
-                                <option value="ham">แฮม</option>
-                                <option value="cheese">ชีส</option>
-                                <option value="shrimp">กุ้ง</option>
-                                <option value="veggie">ผัก</option>
-                            </select>
-                            <div class="input-group-append">
-                                <button type="button" class="btn btn-remove remove-textbox d-flex align-items-center justify-content-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>`
-                    );
-                }
-            });
-            
-            $(".textbox-wrapper").on("click", ".remove-textbox", function(e){
-                e.preventDefault();
-                $(this).parents(".input-group").remove();
-                cnt--;
-            });
-
-            // Plus, minus button
-            $(".btn-plus").on("click", function(e) {
-                e.preventDefault();
-                var $input = $(this).closest('.quantity-wrapper').find('input[name="quantity"]');
-                var currentVal = parseInt($input.val(), 10);
-                if (!isNaN(currentVal)) {
-                    $input.val(currentVal + 1);
-                } else {
-                    $input.val(0);
-                }
-            });
-
-            $(".btn-minus").on("click", function(e) {
-                e.preventDefault();
-                var $input = $(this).closest('.quantity-wrapper').find('input[name="quantity"]');
-                var currentVal = parseInt($input.val(), 10);
-                if (!isNaN(currentVal) && currentVal > 1) {
-                    $input.val(currentVal - 1);
-                } else {
-                    $input.val(1);
-                }
-            });
-        });
-
-    </script>
 </body>
 </html>
