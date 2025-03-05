@@ -22,7 +22,10 @@ const app = express();
 app.use(session({
   secret: 'secret',
   resave: true,
-  saveUninitialized: true
+  saveUninitialized: true,
+  cookie: {
+    expires: 7200000
+  }
 }));
 
 app.use(express.json());
