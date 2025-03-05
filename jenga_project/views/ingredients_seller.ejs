@@ -185,7 +185,7 @@
                         <a href=""><img src="images/pizza.png" alt="ผัก"></a>
                         <p>ผัก</p>
                         <p>คงเหลือ: 300</p>
-                        <button type="button" class="btn btn-red" onclick="on()"><b>เติมสินค้า</b></button>
+                        <button type="button" class="btn btn-red" onclick="on(this)"><b>เติมสินค้า</b></button>
                     </div>
                 </div>
                 
@@ -194,7 +194,7 @@
                         <a href=""><img src="images/pizza.png" alt="เบค่อน"></a>
                         <p>เบค่อน</p>
                         <p>คงเหลือ: 300</p>
-                        <button type="button" class="btn btn-red" onclick="on()"><b>เติมสินค้า</b></button>
+                        <button type="button" class="btn btn-red" onclick="on(this)"><b>เติมสินค้า</b></button>
                     </div>
                 </div>
 
@@ -203,7 +203,7 @@
                         <a href=""><img src="images/pizza.png" alt="สับปะรด"></a>
                         <p>สับปะรด</p>
                         <p>คงเหลือ: 300</p>
-                        <button type="button" class="btn btn-red" onclick="on()"><b>เติมสินค้า</b></button>
+                        <button type="button" class="btn btn-red" onclick="on(this)"><b>เติมสินค้า</b></button>
                     </div>
                 </div>
                 
@@ -212,7 +212,7 @@
                         <a href=""><img src="images/pizza.png" alt="แฮชบราวน์"></a>
                         <p>แฮชบราวน์</p>
                         <p>คงเหลือ: 300</p>
-                        <button type="button" class="btn btn-red" onclick="on()"><b>เติมสินค้า</b></button>
+                        <button type="button" class="btn btn-red" onclick="on(this)"><b>เติมสินค้า</b></button>
                     </div>
                 </div>
                 
@@ -221,7 +221,7 @@
                         <a href=""><img src="images/pizza.png" alt="ไก่ทอด"></a>
                         <p>ไก่ทอด</p>
                         <p>คงเหลือ: 300</p>
-                        <button type="button" class="btn btn-red" onclick="on()"><b>เติมสินค้า</b></button>
+                        <button type="button" class="btn btn-red" onclick="on(this)"><b>เติมสินค้า</b></button>
                     </div>
                 </div>
 
@@ -230,7 +230,7 @@
                         <a href=""><img src="images/pizza.png" alt="ลาซานญ่า"></a>
                         <p>ลาซานญ่า</p>
                         <p>คงเหลือ: 300</p>
-                        <button type="button" class="btn btn-red" onclick="on()"><b>เติมสินค้า</b></button>
+                        <button type="button" class="btn btn-red" onclick="on(this)"><b>เติมสินค้า</b></button>
                     </div>
                 </div>
 
@@ -312,7 +312,13 @@
             });
         }
 
-        function on() {
+        function on(element) {
+            document.querySelector(".quantity-field").value = 1;
+
+            let itemName = element.closest(".card").querySelector("p").innerText;
+            
+            document.getElementById("stock-modal").setAttribute("data-item", itemName);
+
             document.getElementById("stock-modal").style.display = "block";
         }
 
