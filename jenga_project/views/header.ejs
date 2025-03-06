@@ -14,7 +14,7 @@
           </svg>
       </a>
       <a href="/home">หน้าหลัก</a>
-      <a href="">เกี่ยวกับเรา</a>
+      <a href="#aboutus">เกี่ยวกับเรา</a>
       <a href="#footer-custom">ติดต่อสอบถาม</a> <!-- ใส่ link เชื่อมไป footer ตรงนี้ให้หน่อย -->
   </div>
 
@@ -158,7 +158,7 @@
         
         <form action="/authen" method="post" id="loginForm" class="login-form">
           <div class="form-group">
-            <input type="text" class="form-control login-input" id="username" name="username" placeholder="ชื่อผู้ใช้ (อีเมล)" required>
+            <input type="text" class="form-control login-input" id="username" name="username" placeholder="ชื่อผู้ใช้ หรือ อีเมล" required>
           </div>
           <div class="form-group">
             <input type="password" class="form-control login-input" id="password" name="password" placeholder="รหัสผ่าน" required>
@@ -185,10 +185,10 @@
         
         <form id="registerForm" class="register-form">
           <div class="form-group mb-2">
-            <input type="text" class="form-control register-input" id="registerUsername" placeholder="ชื่อผู้ใช้ (อีเมล)" required>
+            <input type="text" class="form-control register-input" id="registerUsername" placeholder="ชื่อผู้ใช้" required>
           </div>
           <div class="register-phone mb-2">
-              <input type="tel" class="form-control register-input" id="registerPhone" placeholder="เบอร์โทรศัพท์" required>
+              <input type="tel" class="form-control register-input" id="registerEmail" placeholder="อีเมล" required>
           </div>
           <div class="form-group mb-2">
             <input type="password" class="form-control register-input" id="registerPassword" placeholder="รหัสผ่าน" required>
@@ -340,7 +340,7 @@
         // Get form values
         const username = document.getElementById('registerUsername').value;
         const birthdate = document.getElementById('registerBirthdate').value;
-        const phone = document.getElementById('registerPhone').value;
+        const phone = document.getElementById('registerEmail').value;
         const password = document.getElementById('registerPassword').value;
         const confirmPassword = document.getElementById('confirmPassword').value;
         

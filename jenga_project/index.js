@@ -119,6 +119,10 @@ app.get("/ingredients_seller", (req, res) => {
   res.render('ingredients_seller', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
 });
 
+app.get("/aboutus", (req, res) => {
+  res.render('aboutus', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
+});
+
 app.listen(port, () => {
   console.log(`This Web Server is running on port ${port}`);
 });
