@@ -19,11 +19,18 @@
   </div>
 
   <div class="d-flex">
+    <% if(loggedin && user_privilege == "customer"){ %>
       <a href="#" class="cart-icon d-block" alt="Menu" id="cartToggle">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
         <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
         </svg>
       </a>
+    <% } else{ %>
+      <a href="" class="cart-icon d-block" style="cursor: auto;">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+        </svg>
+      <% } %>
 
       <% if(loggedin){ %>
 
@@ -156,6 +163,9 @@
       <div class="login-modal-body">
         <h2 class="login-modal-title">ล็อกอิน</h2>
         
+        <div id="loginErrorMessage" class="error-message" ></div>
+
+
         <form action="/authen" method="post" id="loginForm" class="login-form">
           <div class="form-group">
             <input type="text" class="form-control login-input" id="username" name="username" placeholder="ชื่อผู้ใช้ หรือ อีเมล" required>
@@ -242,10 +252,14 @@
       const loginModalOverlay = document.getElementById('loginModalOverlay');
       const closeLoginModal = document.getElementById('closeLoginModal');
       const loginForm = document.getElementById('loginForm');
+      const errorMessageDiv = document.getElementById('loginErrorMessage');
       
       // Open login modal when login button is clicked
       loginButton.addEventListener('click', function(e) {
         e.preventDefault(); // Prevent default link behavior
+        
+        // Hide error message when opening the modal fresh
+        errorMessageDiv.style.display = 'none';
         
         // Close the sidebar first
         const sidebarModal = document.getElementById('sidebarModal');
@@ -271,23 +285,38 @@
         }
       });
       
-      // Handle form submission
-      // loginForm.addEventListener('submit', function(e) {
-      //   e.preventDefault(); // Prevent default form submission
+      // Handle login form submission
+      loginForm.addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevent default form submission
         
-      //   // Get form values
-      //   const username = document.getElementById('username').value;
-      //   const password = document.getElementById('password').value;
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
         
-      //   // Here you would normally handle the login with a fetch request to your backend
-      //   console.log('Login attempt:', username, password);
-        
-      //   // For demo purposes, just close the modal after "submission"
-      //   // In a real app, you'd handle the response from your backend
-      //   alert('Login functionality would be implemented here');
-      //   loginModalOverlay.classList.remove('active');
-      // });
-
+        // Send AJAX request
+        fetch('/authen', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ username, password }),
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            // Redirect on success
+            window.location.href = data.redirect;
+          } else {
+            // Display error message
+            errorMessageDiv.textContent = data.message || 'ล็อกอินไม่ถูกต้องกรุณาตรวจสอบ';
+            errorMessageDiv.style.display = 'block';
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          errorMessageDiv.textContent = 'เกิดข้อผิดพลาดในการเชื่อมต่อ';
+          errorMessageDiv.style.display = 'block';
+        });
+      });
     });
   </script>
 
