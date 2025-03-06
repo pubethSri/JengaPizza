@@ -57,7 +57,7 @@ app.get("/choose", (req, res) => {
 });
 
 app.get("/category", (req, res) => {
-  const sql = `SELECT pizza_name FROM pizzas WHERE user_id = ${req.session.user_id}`
+  const sql = `SELECT pizza_name, pizza_id FROM pizzas WHERE user_id = ${req.session.user_id}`
   console.log(`${req.session.user_id}`);
   db.all(sql, (error, results) => {
     if (error) {
@@ -70,7 +70,7 @@ app.get("/category", (req, res) => {
   })
 });
 
-app.get("/pizza-name", (req, res) => {
+app.get("/pizza-:pizza_id", (req, res) => {
   res.render('pizza-name', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
 });
 
