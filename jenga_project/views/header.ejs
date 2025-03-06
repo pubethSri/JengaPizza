@@ -339,11 +339,14 @@
         
         // Get form values
         const username = document.getElementById('registerUsername').value;
-        const birthdate = document.getElementById('registerBirthdate').value;
         const phone = document.getElementById('registerEmail').value;
         const password = document.getElementById('registerPassword').value;
         const confirmPassword = document.getElementById('confirmPassword').value;
         
+        if (!username || !phone){
+          alert('กรุณากรอกข้อมูลให้ครบ');
+          return;
+        }
         // Validate passwords match
         if (password !== confirmPassword) {
           alert('รหัสผ่านไม่ตรงกัน กรุณาตรวจสอบอีกครั้ง');
