@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <title>Jenga Pizza</title>
+    <style>
+        @font-face {
+            font-family: Prompt;
+            src: url("fonts/Prompt-Regular.ttf");
+        }
+
+        body {
+            font-family: Prompt;
+        }
+
+        /* Background Image */
+        body::before {
+            content: "";
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-image: url("images/bg-pizza.jpg");
+            opacity: 0.1;
+            z-index: -1;
+        }
+
+        .main-content {
+            padding: 100px; /* Same as header height */
+        }
+
+        .faq-container {
+            padding-top: 20px;
+            padding-left: 50px;
+        }
+        .faq-item {
+            margin-bottom: 20px;
+        }
+
+        .question {
+            font-weight: bold;
+            cursor: pointer;
+            color: #d35400;
+        }
+
+        .answer {
+            display: none;
+            padding-top: 5px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <%- include('header') %>
+    </header>
+
+    <div class="main-content">
+        <div class="faq-header" style="text-align: center;">
+            <h1 style="font-weight: 900;">FAQ คำถามที่พบบ่อย</h1>
+        </div>
+        <div class="faq-container">
+            <h3>Q. ร้านพิซซ่าของคุณเปิด-ปิดกี่โมง?</h3>
+            <p>A. ร้านของเราเปิดให้บริการทุกวันตั้งแต่ 11:00 - 22:00 น.</p>
+        </div>
+
+        <div class="faq-container">
+            <h3>Q. จะสั่งพิซซ่าได้ยังไง?</h3>
+            <p>A. คุณสามารถคลิกที่ปุ่ม 'สั่งซื้อเลย' ด้านบนขวา แล้วเลือกพิซซ่า จากนั้นคุณสามารถดูรายการวัตถุดิบที่เรามีให้เพื่อสร้างพิซซ่าขึ้นมาเอง หรือจะเลือกหน้าพิซซ่าที่มีอยู่แล้วก็ได้</p>
+        </div>
+
+        <div class="faq-container">
+            <h3>Q. สามารถปรับแต่งหน้าพิซซ่าได้หรือไม่?</h3>
+            <p>A. คุณสามารถสั่งพิซซ่าแบบปรับแต่งได้เมื่อสั่งที่เว็บไซต์ของร้าน โดยสามารถปรับแต่งได้เองตั้งแต่การเลือกแป้ง ขนาด ซอส และท็อปปิ้งเพื่อให้ได้รสชาติที่คุณชื่นชอบ</p>
+        </div>
+
+        <div class="faq-container">
+            <h3>Q. หากมีอาการแพ้อาหาร Jenga Pizza ใช้วัตถุดิบอะไรบ้าง?</h3>
+            <p>A. เราให้ความสำคัญกับอาการแพ้อาหารอย่างจริงจัง และขอแจ้งว่า:</p>
+                <br>
+            <li>ไม่มีการใช้ถั่วลิสง (peanuts) ในผลิตภัณฑ์ของเรา</li>
+            <li>แป้งพิซซ่ามีส่วนประกอบของนม ยกเว้นแป้งพิซซ่าแบบวีแกนที่ถูกพัฒนาขึ้นโดยไม่มีชีสหรือผลิตภัณฑ์นม</li>
+            <li>พิซซ่าทุกถาดถูกผลิตในสถานที่ที่มีการใช้แป้งสาลีและส่วนประกอบที่มีกลูเตน หากคุณมีอาการแพ้กลูเตนอย่างรุนแรง ผลิตภัณฑ์ของเราอาจไม่เหมาะสม</li>
+        </div>
+
+        <div class="faq-container">
+            <h3>Q. อิสลามสามารถทานได้หรือไม่?</h3>
+            <p>A. โปรดทราบว่ารายการวัตถุดิบของเรามีผลิตภัณฑ์ที่ทำจากหมูรวมอยู่ด้วย เราขอแนะนำให้ตรวจสอบวัตถุดิบที่ท่านเลือกอย่างละเอียดและเลือกพิซซ่าที่เป็นวีแกน</p>
+        </div>
+
+        <div class="faq-container">
+            <h3>Q. พิซซ่าของร้านสามารถเก็บไว้ได้กี่วัน?</h3>
+            <p>A. อาหารของร้านเราสามารถเก็บได้ 4-5 วันหากเก็บในตู้เย็น สามารถนำออกมาอุ่นได้ที่ไมโครเวฟไฟ 800 วัตต์ 3-5 นาที แต่จะอร่อยที่สุดถ้าทานทันที!</p>
+        </div>
+
+        <div class="faq-container">
+            <h3>Q. หากอาศัยอยู่นอกพื้นที่จัดส่ง สามารถมารับเองได้หรือไม่?</h3>
+            <p>A. คุณสามารถสั่งซื้อล่วงหน้าและรับสินค้าในวันพฤหัสบดีและศุกร์ระหว่างเวลา 16.00-18.00 น. โดยโทรนัดหมายกับทางร้าน และมารับที่ 123 ซอยเกกีงาม 1 ถนนฉลองกรุง 1 แขวงลาดกระบัง เขตลาดกระบัง กรุงเทพมหานคร 10520</p>
+        </div>
+    </div>
+
+    <footer>
+        <%- include('footer') %>
+    </footer>
+
+</body>
+</html>

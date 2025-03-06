@@ -14,7 +14,6 @@ let db = new sqlite3.Database("data/pizzeria.db", (err) => {
   console.log('Connected to the Pizzeria database.');
 });
 
-
 // Creating the Express server
 const app = express();
 
@@ -43,12 +42,15 @@ app.get("/", (req, res) => {
 });
 
 app.get("/home", (req, res) => {
-  res.render('home', { loggedin: req.session.loggedin });
+  res.render('home', { loggedin: req.session.loggedin, username: req.session.username, user_privilege: req.session.user_privilege || ""});
+  // console.log(req.session.user_privilege);
 });
+
+
 
 app.get("/choose", (req, res) => {
   if (req.session.loggedin) {
-    res.render('choose', { loggedin: req.session.loggedin });
+    res.render('choose', { loggedin: req.session.loggedin, username: req.session.username, user_privilege: req.session.user_privilege || "" });
   } else {
     res.redirect('/home');
   }
@@ -68,7 +70,7 @@ app.get("/category", (req, res) => {
 });
 
 app.get("/pizza-name", (req, res) => {
-  res.render('pizza-name', { loggedin: req.session.loggedin });
+  res.render('pizza-name', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
 });
 
 app.post("/authen", async (req, res) => {
@@ -81,8 +83,8 @@ app.post("/authen", async (req, res) => {
     if (results.length > 0) {
       req.session.loggedin = true;
       req.session.username = username;
-      req.session.user_id = results[0].user_id;
-      console.log(`logged in!`);
+      req.session.user_privilege = results[0].user_privilege;
+      console.log("logged in!");
       res.redirect('/home');
     } else {
       res.send("incorrect password and/or password!");
@@ -99,11 +101,37 @@ app.get("/logout", (req, res) => {
   res.redirect('/home');
 })
 app.get("/orderform", (req, res) => {
-  res.render('orderform', { loggedin: req.session.loggedin });
+  res.render('orderform', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
 });
 
 app.get("/createform", (req, res) => {
-  res.render('createform', { loggedin: req.session.loggedin });
+  res.render('createform', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
+});
+
+app.post("/create", async (req, res) => {
+  const { pizza_name, dough, size, sauce, topping } = req.body;
+  const price = price_calc(dough, size, topping);
+  const sql = `INSERT INTO pizzas (pizza_name, price, user_id) VALUES ("${pizza_name}", ${price}, ${req.session.user_id})`
+  db.all(sql, (error, results) => {
+    if (error) {
+      console.log(error.message);
+    }else{
+      console.log("Pizza Created!");
+    }
+    res.end();
+  })
+  topping_adder(`${dough}_${size}`, pizza_name);
+  topping_adder(sauce, pizza_name);
+  if(typeof(topping) == "string"){
+    topping_adder(topping, pizza_name);
+  }else{
+    topping.forEach((item)=>{
+      topping_adder(item, pizza_name);
+    });
+  }
+
+  // res.send({ pizza_data: { pizza_name: pizza_name, dough: dough, size: size, sauce: sauce, topping: topping } });
+  res.redirect("/category");
 });
 
 app.post("/create", async (req, res) => {
@@ -133,7 +161,35 @@ app.post("/create", async (req, res) => {
 });
 
 app.get("/orderlist", (req, res) => {
-  res.render('orderlist', { loggedin: req.session.loggedin });
+  res.render('orderlist', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
+});
+
+app.get("/tracking", (req, res) => {
+  res.render('tracking', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
+});
+
+app.get("/tracking_seller", (req, res) => {
+  res.render('tracking_seller', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
+});
+
+app.get("/customerinfo", (req, res) => {
+  res.render('customerinfo', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
+});
+
+app.get("/qrpayment", (req, res) => {
+  res.render('qrpayment', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
+});
+
+app.get("/ingredients_seller", (req, res) => {
+  res.render('ingredients_seller', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
+});
+
+app.get("/aboutus", (req, res) => {
+  res.render('aboutus', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
+});
+
+app.get("/faq", (req, res) => {
+  res.render('faq', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
 });
 
 app.all('*', (req, res) => {

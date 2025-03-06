@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <title>Jenga Pizza</title>
+    <style>
+        @font-face {
+            font-family: Prompt;
+            src: url("fonts/Prompt-Regular.ttf");
+        }
+
+        body {
+            font-family: Prompt;
+        }
+
+        /* Background Image */
+        body::before {
+            content: "";
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-image: url("images/bg-pizza.jpg");
+            opacity: 0.1;
+            z-index: -1;
+        }
+
+        .box {
+            text-align: center;
+            width: 100%;
+        }
+
+        /* Fix Flexbox Centering */
+        .container-center {
+            margin: auto;
+            display: flex;
+            align-items: center;  /* Ensure vertical centering */
+            width: 80%;
+            min-height: calc(100vh - 60px); /* Adjust for navbar */
+            padding-top: 60px; /* Prevent overlap with navbar */
+            padding-bottom: 60px;
+        }
+        .order-icon {
+            width: 80px;
+            height: 80px;
+
+        }
+
+        .status-dropdown {
+            width: 100%;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <%- include('header') %>
+    </header>
+
+    <!-- choose to buy -->
+    <div class="container-center">
+        <div class="container mt-4">
+            <h2 class="font-weight-bold">ติดตามสถานะสินค้า</h2>
+            <div class="row">
+                <!-- Order List -->
+                <div class="col-md-12">
+                    <div class="order-card">
+                        <div class="row align-items-center p-3 border rounded bg-white shadow-sm mb-3">
+                            <div class="col-2">
+                                <img src="images/prepare-icon.png" class="order-icon">
+                            </div>
+                            <div class="col-6">
+                                <h5>Order No. 100</h5>
+                                <p class="text-muted">รายละเอียดสินค้า :</p>
+                                <p class="text-muted timestamp">อัพเดทเมื่อ : </p>
+                            </div>
+                            <div class="col-4 text-right">
+                                <select class="form-control status-dropdown" data-order-id="100">
+                                    <option value="preparing">เตรียมสินค้า</option>
+                                    <option value="pending">สินค้ารอจัดส่ง</option>
+                                    <option value="delivering">อยู่ระหว่างการจัดส่ง</option>
+                                    <option value="success">จัดส่งสำเร็จ</option>
+                                </select>
+                            </div>
+                        </div>
+        
+                        <div class="row align-items-center p-3 border rounded bg-white shadow-sm mb-3">
+                            <div class="col-2">
+                                <img src="images/waiting-icon.png" class="order-icon">
+                            </div>
+                            <div class="col-6">
+                                <h5>Order No. 200</h5>
+                                <p class="text-muted">รายละเอียดสินค้า :</p>
+                                <p class="text-muted timestamp">อัพเดทเมื่อ : </p>
+                            </div>
+                            <div class="col-4 text-right">
+                                <select class="form-control status-dropdown" data-order-id="200">
+                                    <option value="preparing">เตรียมสินค้า</option>
+                                    <option value="pending">สินค้ารอจัดส่ง</option>
+                                    <option value="delivering">อยู่ระหว่างการจัดส่ง</option>
+                                    <option value="success">จัดส่งสำเร็จ</option>
+                                </select>
+                            </div>
+                        </div>
+        
+                        <div class="row align-items-center p-3 border rounded bg-white shadow-sm mb-3">
+                            <div class="col-2">
+                                <img src="images/deliver-icon.png" class="order-icon">
+                            </div>
+                            <div class="col-6">
+                                <h5>Order No. 300</h5>
+                                <p class="text-muted">รายละเอียดสินค้า :</p>
+                                <p class="text-muted timestamp">อัพเดทเมื่อ : </p>
+                            </div>
+                            <div class="col-4 text-right">
+                                <select class="form-control status-dropdown" data-order-id="300">
+                                    <option value="preparing">เตรียมสินค้า</option>
+                                    <option value="pending">สินค้ารอจัดส่ง</option>
+                                    <option value="delivering">อยู่ระหว่างการจัดส่ง</option>
+                                    <option value="success">จัดส่งสำเร็จ</option>
+                                </select>
+                            </div>
+                        </div>
+        
+                        <div class="row align-items-center p-3 border rounded bg-white shadow-sm">
+                            <div class="col-2">
+                                <img src="images/success-icon.png" class="order-icon">
+                            </div>
+                            <div class="col-6">
+                                <h5>Order No. 400</h5>
+                                <p class="text-muted">รายละเอียดสินค้า :</p>
+                                <p class="text-muted timestamp">อัพเดทเมื่อ : </p>
+                            </div>
+                            <div class="col-4 text-right">
+                                <select class="form-control status-dropdown" data-order-id="400">
+                                    <option value="preparing">เตรียมสินค้า</option>
+                                    <option value="pending">สินค้ารอจัดส่ง</option>
+                                    <option value="delivering">อยู่ระหว่างการจัดส่ง</option>
+                                    <option value="success">จัดส่งสำเร็จ</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const dic = {'preparing': 'images/prepare-icon.png', 'pending': 'images/waiting-icon.png',
+                    'delivering': 'images/deliver-icon.png', 'success': 'images/success-icon.png'
+        }
+        function getCurrentDateTime() {
+            const now = new Date();
+            
+            // Format date as DD/MM/YYYY
+            const day = String(now.getDate()).padStart(2, '0');
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const year = now.getFullYear();
+            
+            // Format time as hh:mm
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            
+            // Return formatted date and time
+            return `${day}/${month}/${year} ${hours}:${minutes}`;
+        }
+
+        $(document).ready(function () {
+            $('.timestamp').each(function() {
+                $(this).text('อัพเดทเมื่อ : ' + getCurrentDateTime());
+            });
+
+            $('.status-dropdown').on('change', function () {
+                let orderId = $(this).data('order-id');
+                let newStatus = $(this).val();
+                // console.log(`Order ${orderId} changed to: ${newStatus}`);
+                
+
+                let iconSrc = dic[newStatus];
+    
+                // เปลี่ยนรูปภาพที่เกี่ยวข้องกับ Order ID นั้น ๆ
+                $(`select[data-order-id="${orderId}"]`).closest('.row').find('img.order-icon').attr('src', iconSrc);
+                // อัพเดทเวลา
+                $(`select[data-order-id="${orderId}"]`).closest('.row').find('p.text-muted:last').text('อัพเดทเมื่อ : ' + getCurrentDateTime());
+                
+                // อัพเดทพวกสถานะไปที่ order ของลูกค้าคนนั้น ๆ
+                // พวกราชรี TODO: ส่งข้อมูลไปยัง Backend เพื่ออัปเดตสถานะใน Database
+                // $.ajax({
+                //     url: '/update-order-status', // กำหนด Endpoint ที่ Backend จะรองรับ
+                //     type: 'POST',
+                //     data: { orderId: orderId, status: newStatus },
+                //     success: function(response) {
+                //         alert('สถานะอัปเดตเรียบร้อย!');
+                //     },
+                //     error: function(error) {
+                //         alert('เกิดข้อผิดพลาดในการอัปเดตสถานะ');
+                //     }
+                // });
+            });
+        });
+    </script>
+
+    <footer>
+        <%- include('footer') %>
+    </footer>
+
+
+</body>
+</html>
