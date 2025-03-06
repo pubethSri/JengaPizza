@@ -58,12 +58,13 @@ app.get("/choose", (req, res) => {
 
 app.get("/category", (req, res) => {
   const sql = `SELECT pizza_name FROM pizzas WHERE user_id = ${req.session.user_id}`
+  console.log(`${req.session.user_id}`);
   db.all(sql, (error, results) => {
     if (error) {
       console.log(error.message);
-      res.render('category', { loggedin: req.session.loggedin, item: [] });
+      res.render('category', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "", item: [] });
     }else{
-      res.render('category', { loggedin: req.session.loggedin, item: results });
+      res.render('category', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "", item: results });
     }
     res.end();
   })
@@ -83,6 +84,7 @@ app.post("/authen", async (req, res) => {
     if (results.length > 0) {
       req.session.loggedin = true;
       req.session.username = username;
+      req.session.user_id = results[0].user_id;
       req.session.user_privilege = results[0].user_privilege;
       console.log("logged in!");
       res.redirect('/home');
