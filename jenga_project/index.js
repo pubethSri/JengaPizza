@@ -108,15 +108,15 @@ app.get("/tracking_seller", (req, res) => {
 });
 
 app.get("/customerinfo", (req, res) => {
-  res.render('customerinfo', { loggedin: req.session.loggedin, username: req.session.username || "" });
+  res.render('customerinfo', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
 });
 
 app.get("/qrpayment", (req, res) => {
-  res.render('qrpayment', { loggedin: req.session.loggedin, username: req.session.username || "" });
+  res.render('qrpayment', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
 });
 
 app.get("/ingredients_seller", (req, res) => {
-  res.render('ingredients_seller', { loggedin: req.session.loggedin, username: req.session.username || "" });
+  res.render('ingredients_seller', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
 });
 
 app.listen(port, () => {
