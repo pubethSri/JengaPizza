@@ -198,7 +198,23 @@ app.get("/qrpayment", (req, res) => {
 });
 
 app.get("/ingredients_seller", (req, res) => {
-  res.render('ingredients_seller', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
+  if(req.session.user_privilege == "admin" || req.session.user_privilege == "employee"){
+    const sql = `SELECT ingredient_name, stock_quantity, thai_name, unit FROM ingredients\
+                  WHERE ingredient_name NOT LIKE "%\\_%" ESCAPE "\\";`
+  db.all(sql, (error, results) => {
+    if (error) {
+      console.log(error.message);
+      console.log(sql);
+      res.render('ingredients_seller', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
+    }else{
+      console.log(results);
+      res.render('ingredients_seller', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "", ingredient:results});
+    }
+    res.end();
+  })
+  }else{
+    res.redirect("/home");
+  }
 });
 
 app.get("/aboutus", (req, res) => {
