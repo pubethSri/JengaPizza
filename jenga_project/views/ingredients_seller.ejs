@@ -135,17 +135,26 @@
             text-align: center;
         }
 
+        .btn-minus, .btn-plus {
+            /* width: 45px; 
+            height: 45px; */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 5px;
+        }
+
         .btn-minus svg {
             color: grey;
-            width: 24px;
-            height: 24px;
+            width: 30px;
+            height: 30px;
             display: block;
         }
 
         .btn-plus svg {
             color: grey;
-            width: 24px;
-            height: 24px;
+            width: 30px;
+            height: 30px;
             display: block;
         }
 
@@ -179,23 +188,40 @@
                 <div class="category btn" onclick="filterSelection('etc')">อื่น ๆ</div>
             </div>
             <div class="row">
-                <% for(var i = 0; i < ingredient.length; i++) { %>
+                
                 <div class="filterDiv ingredient col-md-4">
                     <div class="card p-3">
-                        <a href=""><img src="images/<%= ingredient[i].ingredient_name %>.png" alt=<%= ingredient[i].ingredient_name %>></a>
-                        <p><%= ingredient[i].thai_name %></p>
-                        <p>คงเหลือ: <%= ingredient[i].stock_quantity %> <%= ingredient[i].unit %></p>
-                        <button type="button" class="btn btn-red" onclick="on(this)"><b>เติมสินค้า</b></button>
+                        <a href=""><img src="images/pizza.png" alt="ผัก"></a>
+                        <p>ผัก</p>
+                        <p>คงเหลือ: 300</p>
+                        <button type="button" class="btn btn-red" onclick="on(this)"><b>จัดการคลัง</b></button>
                     </div>
                 </div>
-                <% } %>
+                
+                <div class="filterDiv ingredient col-md-4">
+                    <div class="card p-3">
+                        <a href=""><img src="images/pizza.png" alt="เบค่อน"></a>
+                        <p>เบค่อน</p>
+                        <p>คงเหลือ: 300</p>
+                        <button type="button" class="btn btn-red" onclick="on(this)"><b>จัดการคลัง</b></button>
+                    </div>
+                </div>
 
+                <div class="filterDiv ingredient col-md-4">
+                    <div class="card p-3">
+                        <a href=""><img src="images/pizza.png" alt="สับปะรด"></a>
+                        <p>สับปะรด</p>
+                        <p>คงเหลือ: 300</p>
+                        <button type="button" class="btn btn-red" onclick="on(this)"><b>จัดการคลัง</b></button>
+                    </div>
+                </div>
+                
                 <div class="filterDiv etc col-md-4">
                     <div class="card p-3">
                         <a href=""><img src="images/pizza.png" alt="แฮชบราวน์"></a>
                         <p>แฮชบราวน์</p>
                         <p>คงเหลือ: 300</p>
-                        <button type="button" class="btn btn-red" onclick="on(this)"><b>เติมสินค้า</b></button>
+                        <button type="button" class="btn btn-red" onclick="on(this)"><b>จัดการคลัง</b></button>
                     </div>
                 </div>
                 
@@ -204,7 +230,7 @@
                         <a href=""><img src="images/pizza.png" alt="ไก่ทอด"></a>
                         <p>ไก่ทอด</p>
                         <p>คงเหลือ: 300</p>
-                        <button type="button" class="btn btn-red" onclick="on(this)"><b>เติมสินค้า</b></button>
+                        <button type="button" class="btn btn-red" onclick="on(this)"><b>จัดการคลัง</b></button>
                     </div>
                 </div>
 
@@ -213,14 +239,14 @@
                         <a href=""><img src="images/pizza.png" alt="ลาซานญ่า"></a>
                         <p>ลาซานญ่า</p>
                         <p>คงเหลือ: 300</p>
-                        <button type="button" class="btn btn-red" onclick="on(this)"><b>เติมสินค้า</b></button>
+                        <button type="button" class="btn btn-red" onclick="on(this)"><b>จัดการคลัง</b></button>
                     </div>
                 </div>
 
             </div>
             <div id="stock-modal">
                 <div id="text">
-                    <p style="color: black; font-size: large;"><b>ระบุจำนวน</b></p>
+                    <p style="color: black; font-size: large;"><b>คงเหลือ: 300</b></p>
                     <div class="quantity-wrapper d-flex mb-3"  style="justify-content: center;">
                         <div class="quantity-group-append">
                             <button type="button" class="btn btn-minus add-quantity d-flex align-items-center justify-content-center" data-field="quantity">
@@ -239,7 +265,8 @@
                         </div>
                     </div>
                     <div class="button-wrapper d-flex" style="justify-content: center;">
-                        <button class="btn btn-red" type="submit" onclick="off()">ตกลง</button>
+                        <button class="btn btn-red m-2" type="submit" onclick="updateStock('decrease')">ลด</button>
+                        <button class="btn btn-success m-2" type="submit" onclick="updateStock('increase')">เพิ่ม</button>
                     </div>
                 </div>
             </div>
@@ -296,41 +323,78 @@
         }
 
         function on(element) {
-            document.querySelector(".quantity-field").value = 1;
+            let card = element.closest(".card"); 
+            let stockText = card.querySelectorAll("p")[1]; 
+            let stockAmount = parseInt(stockText.innerText.match(/\d+/)[0]);
 
-            let itemName = element.closest(".card").querySelector("p").innerText;
-            
-            document.getElementById("stock-modal").setAttribute("data-item", itemName);
+            // update remains
+            document.querySelector("#text p").innerText = `คงเหลือ: ${stockAmount}`;
 
+            // set default to 1
+            let inputField = document.querySelector(".quantity-field");
+            inputField.value = 1;  
+
+            // add stock in modal
+            document.getElementById("stock-modal").setAttribute("data-stock", stockAmount);
+            document.getElementById("stock-modal").setAttribute("data-card", JSON.stringify(card.innerHTML));
+
+            // show modal
             document.getElementById("stock-modal").style.display = "block";
         }
 
-        function off() {
-            document.getElementById("stock-modal").style.display = "none";
+        function updateStock(operation) {
+            let modal = document.getElementById("stock-modal");
+            let stockAmount = parseInt(modal.getAttribute("data-stock")); 
+            let inputField = document.querySelector(".quantity-field");
+            let changeAmount = parseInt(inputField.value);
+
+            if (isNaN(changeAmount) || changeAmount <= 0) return;
+
+            let newStock = operation === "increase" ? stockAmount + changeAmount : stockAmount - changeAmount;
+            if (newStock < 0) newStock = 0;
+
+            // Get the product name from modal's stored card
+            let cardHTML = modal.getAttribute("data-card");
+            let tempDiv = document.createElement("div");
+            tempDiv.innerHTML = cardHTML;
+            let productName = tempDiv.querySelector("p").innerText;
+
+            // Find the matching card by product name and update stock
+            let cards = document.getElementsByClassName("card");
+            for (let i = 0; i < cards.length; i++) {
+                let cardTitle = cards[i].querySelector("p").innerText;
+                if (cardTitle === productName) {
+                    cards[i].querySelectorAll("p")[1].innerText = `คงเหลือ: ${newStock}`;
+                    break;
+                }
+            }
+
+            modal.setAttribute("data-stock", newStock);
+            modal.style.display = "none";
         }
 
-        // Plus, minus button
         $(".btn-plus").on("click", function(e) {
-                e.preventDefault();
-                var $input = $(this).closest('.quantity-wrapper').find('input[name="quantity"]');
-                var currentVal = parseInt($input.val(), 10);
-                if (!isNaN(currentVal)) {
-                    $input.val(currentVal + 1);
-                } else {
-                    $input.val(0);
-                }
-            });
+            e.preventDefault();
+            let inputField = $(this).closest('.quantity-wrapper').find('input[name="quantity"]');
+            let currentVal = parseInt(inputField.val(), 10);
+            let modal = document.getElementById("stock-modal");
+            let stockAmount = parseInt(modal.getAttribute("data-stock"));
 
-            $(".btn-minus").on("click", function(e) {
-                e.preventDefault();
-                var $input = $(this).closest('.quantity-wrapper').find('input[name="quantity"]');
-                var currentVal = parseInt($input.val(), 10);
-                if (!isNaN(currentVal) && currentVal > 1) {
-                    $input.val(currentVal - 1);
-                } else {
-                    $input.val(1);
-                }
-            });
+            if (!isNaN(currentVal)) {
+                inputField.val(currentVal + 1);
+            }
+        });
+
+        $(".btn-minus").on("click", function(e) {
+            e.preventDefault();
+            let inputField = $(this).closest('.quantity-wrapper').find('input[name="quantity"]');
+            let currentVal = parseInt(inputField.val(), 10);
+
+            if (!isNaN(currentVal) && currentVal > 1) {
+                inputField.val(currentVal - 1);
+            }
+        });
+
     </script>
 
 </body>
