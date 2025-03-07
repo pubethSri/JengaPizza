@@ -76,14 +76,14 @@ app.get("/pizza-:pizza_id", (req, res) => {
 
 app.post("/authen", async (req, res) => {
   const { username, password } = req.body;
-  const sql = `SELECT * FROM users WHERE username = "${username}" AND user_password = "${password}"`
+  const sql = `SELECT * FROM users WHERE (username = "${username}" OR user_email = "${username}") AND user_password = "${password}"`
   db.all(sql, (error, results) => {
     if (error) {
       console.log(error.message);
     }
     if (results.length > 0) {
       req.session.loggedin = true;
-      req.session.username = username;
+      req.session.username = results[0].username;
       req.session.user_id = results[0].user_id;
       req.session.user_privilege = results[0].user_privilege;
       console.log("logged in!");
