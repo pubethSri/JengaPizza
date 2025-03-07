@@ -1,48 +1,55 @@
-
 <link rel="stylesheet" href="header_style.css">
 
 <!-- navbar -->
 <div class="navbar">
   <div class="logo">
-      <img src="images\Logo.png" alt="Logo" style="height: 40px;">
+    <img src="images\Logo.png" alt="Logo" style="height: 40px;">
   </div>
 
   <div class="d-flex">
-      <a href="#" class="menu-icon d-block" alt="Menu" id="menuToggle">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-          </svg>
-      </a>
-      <a href="/home">หน้าหลัก</a>
-      <a href="/faq">เกี่ยวกับเรา</a>
-      <a href="#footer-custom">ติดต่อสอบถาม</a>
+    <a href="#" class="menu-icon d-block" alt="Menu" id="menuToggle">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+        class="size-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+      </svg>
+    </a>
+    <a href="/home">หน้าหลัก</a>
+    <a href="/faq">เกี่ยวกับเรา</a>
+    <a href="#footer-custom">ติดต่อสอบถาม</a>
   </div>
 
   <div class="d-flex">
     <% if(loggedin){ %>
       <a href="#" class="cart-icon d-block" alt="Menu" id="cartToggle">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+          class="size-6">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
         </svg>
       </a>
-    <% } else{ %>
-      <a href="" class="cart-icon d-block" style="cursor: auto;">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
-        </svg>
-      <% } %>
-
-      <% if(loggedin){ %>
-
-        <a href="" style="cursor: default;">สวัสดีอ้าย <%= username %>!</a>
-        <a href="/choose"><button class="order btn btn-light">สั่งซื้อเลย</button></a>
-        
-
       <% } else{ %>
-        
-        <a onclick="document.getElementById('login-trigger').click();"><button class="order btn btn-light">สั่งซื้อเลย</button></a>
+        <a onclick="document.getElementById('login-trigger').click();" class="cart-icon d-block"
+          style="cursor: auto; color:white;">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+          </svg>
+        </a>
+        <% } %>
 
-      <% } %>
+          <% if(loggedin){ %>
+
+            <a style="cursor: default;color: white;">สวัสดีอ้าย <%= username %>!</a>
+            <a href="/choose"><button class="order btn btn-light">สั่งซื้อเลย</button></a>
+
+
+            <% } else{ %>
+
+              <a onclick="document.getElementById('login-trigger').click();"><button
+                  class="order btn btn-light">สั่งซื้อเลย</button></a>
+
+              <% } %>
   </div>
 </div>
 
@@ -63,243 +70,253 @@
 <!-- Sidebar Modal -->
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 <div class="sidebar-modal" id="sidebarModal">
-    <div class="sidebar-header">
-        <button class="close-sidebar" id="closeSidebar"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-        </svg>
-        </button>
-    </div>
-    <div class="sidebar-body">
-        <!-- Styled Login Button -->
+  <div class="sidebar-header">
+    <button class="close-sidebar" id="closeSidebar"><svg xmlns="http://www.w3.org/2000/svg" fill="none"
+        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+      </svg>
+    </button>
+  </div>
+  <div class="sidebar-body">
+    <!-- Styled Login Button -->
 
-        <% if(loggedin){ %>
-          <div class="logout-button">
-            <a href="/logout">
-                <div class="d-flex align-items-center justify-content-center">
-                    <img src="images/user-icon.png" alt="User icon" class="login-icon">
-                    <span>ออกจากระบบ</span>
-                </div>
-            </a>
+    <% if(loggedin){ %>
+      <div class="logout-button">
+        <a href="/logout">
+          <div class="d-flex align-items-center justify-content-center">
+            <img src="images/user-icon.png" alt="User icon" class="login-icon">
+            <span>ออกจากระบบ</span>
           </div>
-        <% } else{ %>  
-          <div class="login-button">
-            <a href="/login" id="login-trigger">
-                <div class="d-flex align-items-center justify-content-center">
-                    <img src="images/user-icon.png" alt="User icon" class="login-icon">
-                    <span>เข้าสู่ระบบ/ลงทะเบียน</span>
-                </div>
-            </a>
-          </div>
+        </a>
+      </div>
+      <% } else{ %>
+        <div class="login-button">
+          <a href="/login" id="login-trigger">
+            <div class="d-flex align-items-center justify-content-center">
+              <img src="images/user-icon.png" alt="User icon" class="login-icon">
+              <span>เข้าสู่ระบบ/ลงทะเบียน</span>
+            </div>
+          </a>
+        </div>
         <% } %>
 
-        <% if(loggedin && (user_privilege === 'admin' || user_privilege === 'employee')){ %>
-          <hr class="sidebar-divider">
-          <div class="sidebar-menu-item">
+          <% if(loggedin && (user_privilege==='admin' || user_privilege==='employee' )){ %>
+            <hr class="sidebar-divider">
+            <div class="sidebar-menu-item">
               <img src="images/dashboard-icon.png" alt="Home icon">
               <a href="/dashboard">Dashboard</a>
-          </div>
-          <div class="sidebar-menu-item">
+            </div>
+            <div class="sidebar-menu-item">
               <img src="images/manage_food-icon.png" alt="Delivery icon">
               <a href="/ingredients_seller">จัดการคลังสินค้า</a>
-          </div>
-          <div class="sidebar-menu-item">
+            </div>
+            <div class="sidebar-menu-item">
               <img src="images/manage_order-icon.png" alt="FAQ icon">
               <a href="/tracking_seller">จัดการคำสั่งซื้อ</a>
-          </div>
+            </div>
 
-        <% } else if(loggedin && user_privilege == "customer"){ %>  
-          <hr class="sidebar-divider">
-          <div class="sidebar-menu-item">
-              <img src="images/home-icon.png" alt="Home icon">
-              <a href="/home">หน้าหลัก</a>
-          </div>
-          <div class="sidebar-menu-item">
-              <img src="images/delivery-icon.png" alt="Delivery icon">
-              <a href="/tracking">ติดตามสินค้า</a>
-          </div>
-          <div class="sidebar-menu-item">
-              <img src="images/faq-icon.png" alt="FAQ icon">
-              <a href="/home#howto">วิธีสั่งซื้อ</a>
-          </div>
-          <div class="sidebar-menu-item">
-              <img src="images/pizza-icon.png" alt="Pizza icon">
-              <a href="/faq">เกี่ยวกับเรา</a>
-          </div>
-          <div class="sidebar-menu-item">
-              <img src="images/contact-icon.png" alt="Contact icon">
-              <a href="#footer-custom">ติดต่อสอบถาม</a>
-          </div>
+            <% } else if(loggedin && user_privilege=="customer" ){ %>
+              <hr class="sidebar-divider">
+              <div class="sidebar-menu-item">
+                <img src="images/home-icon.png" alt="Home icon">
+                <a href="/home">หน้าหลัก</a>
+              </div>
+              <div class="sidebar-menu-item">
+                <img src="images/delivery-icon.png" alt="Delivery icon">
+                <a href="/tracking">ติดตามสินค้า</a>
+              </div>
+              <div class="sidebar-menu-item">
+                <img src="images/faq-icon.png" alt="FAQ icon">
+                <a href="/home#howto">วิธีสั่งซื้อ</a>
+              </div>
+              <div class="sidebar-menu-item">
+                <img src="images/pizza-icon.png" alt="Pizza icon">
+                <a href="/faq">เกี่ยวกับเรา</a>
+              </div>
+              <div class="sidebar-menu-item">
+                <img src="images/contact-icon.png" alt="Contact icon">
+                <a href="#footer-custom">ติดต่อสอบถาม</a>
+              </div>
 
-        <% } else{ %>  
-          <hr class="sidebar-divider">
-          <div class="sidebar-menu-item">
-              <img src="images/home-icon.png" alt="Home icon">
-              <a href="/home">หน้าหลัก</a>
-          </div>
-          <div class="sidebar-menu-item">
-              <img src="images/faq-icon.png" alt="FAQ icon">
-              <a href="/home#howto">วิธีสั่งซื้อ</a>
-          </div>
-          <div class="sidebar-menu-item">
-              <img src="images/pizza-icon.png" alt="Pizza icon">
-              <a href="/faq">เกี่ยวกับเรา</a>
-          </div>
-          <div class="sidebar-menu-item">
-              <img src="images/contact-icon.png" alt="Contact icon">
-              <a href="#footer-custom">ติดต่อสอบถาม</a>
-          </div>
+              <% } else{ %>
+                <hr class="sidebar-divider">
+                <div class="sidebar-menu-item">
+                  <img src="images/home-icon.png" alt="Home icon">
+                  <a href="/home">หน้าหลัก</a>
+                </div>
+                <div class="sidebar-menu-item">
+                  <img src="images/faq-icon.png" alt="FAQ icon">
+                  <a href="/home#howto">วิธีสั่งซื้อ</a>
+                </div>
+                <div class="sidebar-menu-item">
+                  <img src="images/pizza-icon.png" alt="Pizza icon">
+                  <a href="/faq">เกี่ยวกับเรา</a>
+                </div>
+                <div class="sidebar-menu-item">
+                  <img src="images/contact-icon.png" alt="Contact icon">
+                  <a href="#footer-custom">ติดต่อสอบถาม</a>
+                </div>
 
-        <% } %>
-        
-    </div>
+                <% } %>
+
+  </div>
 </div>
 
 <!-- Login Modal -->
 <div class="login-modal-overlay" id="loginModalOverlay">
-    <div class="login-modal">
-      <div class="login-modal-header">
-        <button type="button" class="modal-close" id="closeLoginModal">×</button>
-      </div>
-      <div class="login-modal-body">
-        <h2 class="login-modal-title">ล็อกอิน</h2>
-        
-        <div id="loginErrorMessage" class="error-message" ></div>
+  <div class="login-modal">
+    <div class="login-modal-header">
+      <button type="button" class="modal-close" id="closeLoginModal">×</button>
+    </div>
+    <div class="login-modal-body">
+      <h2 class="login-modal-title">ล็อกอิน</h2>
+
+      <div id="loginErrorMessage" class="error-message"></div>
 
 
-        <form action="/authen" method="post" id="loginForm" class="login-form">
-          <div class="form-group">
-            <input type="text" class="form-control login-input" id="username" name="username" placeholder="ชื่อผู้ใช้ หรือ อีเมล" required>
-          </div>
-          <div class="form-group">
-            <input type="password" class="form-control login-input" id="password" name="password" placeholder="รหัสผ่าน" required>
-          </div>
-          <button type="submit" class="login-submit-btn">ตกลง</button>
-        </form>
-        
-        <div class="login-register-link">
-          ยังไม่มีบัญชี? <a href="/register" class="register-link">ลงทะเบียน</a>
+      <form id="loginForm" class="login-form">
+        <div class="form-group">
+          <input type="text" class="form-control login-input" id="username" name="username"
+            placeholder="ชื่อผู้ใช้ หรือ อีเมล" required>
         </div>
+        <div class="form-group">
+          <input type="password" class="form-control login-input" id="password" name="password" placeholder="รหัสผ่าน"
+            required>
+        </div>
+        <button type="submit" class="login-submit-btn">ตกลง</button>
+      </form>
+
+      <div class="login-register-link">
+        ยังไม่มีบัญชี? <a href="/register" class="register-link">ลงทะเบียน</a>
       </div>
     </div>
   </div>
+</div>
 
 
 <!-- Registration Modal -->
 <div class="register-modal-overlay" id="registerModalOverlay">
-    <div class="register-modal">
-      <div class="register-modal-header">
-        <button type="button" class="modal-close" id="closeRegisterModal">×</button>
-      </div>
-      <div class="register-modal-body">
-        <h2 class="register-modal-title">ลงทะเบียน</h2>
-        
-        <form id="registerForm" class="register-form">
-          <div class="form-group mb-2">
-            <input type="text" class="form-control register-input" id="registerUsername" placeholder="ชื่อผู้ใช้" required>
-          </div>
-          <div class="register-phone mb-2">
-              <input type="tel" class="form-control register-input" id="registerEmail" placeholder="อีเมล" required>
-          </div>
-          <div class="form-group mb-2">
-            <input type="password" class="form-control register-input" id="registerPassword" placeholder="รหัสผ่าน" required>
-          </div>
-          <div class="form-group mb-2">
-            <input type="password" class="form-control register-input" id="confirmPassword" placeholder="ยืนยันรหัสผ่าน" required>
-          </div>
-          <div class="register-actions">
-            <button type="submit" class="register-submit-btn">ตกลง</button>
-            <button type="button" class="register-cancel-btn" id="cancelRegistration">ยกเลิก</button>
-          </div>
-        </form>
-      </div>
+  <div class="register-modal">
+    <div class="register-modal-header">
+      <button type="button" class="modal-close" id="closeRegisterModal">×</button>
+    </div>
+    <div class="register-modal-body">
+      <h2 class="register-modal-title">ลงทะเบียน</h2>
+
+      <div id="registerErrorMessage" class="error-message"></div>
+
+      <form id="registerForm" class="register-form">
+        <div class="form-group mb-2">
+          <input type="text" class="form-control register-input" id="registerUsername" placeholder="ชื่อผู้ใช้"
+            required>
+        </div>
+        <div class="register-phone mb-2">
+          <input type="tel" class="form-control register-input" id="registerEmail" placeholder="อีเมล" required>
+        </div>
+        <div class="form-group mb-2">
+          <input type="password" class="form-control register-input" id="registerPassword" placeholder="รหัสผ่าน"
+            required>
+        </div>
+        <div class="form-group mb-2">
+          <input type="password" class="form-control register-input" id="confirmPassword" placeholder="ยืนยันรหัสผ่าน"
+            required>
+        </div>
+        <div class="register-actions">
+          <button type="submit" class="register-submit-btn">ตกลง</button>
+          <button type="button" class="register-cancel-btn" id="cancelRegistration">ยกเลิก</button>
+        </div>
+      </form>
     </div>
   </div>
+</div>
 <!-- Bootstrap JS and dependencies -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- Custom JavaScript for sidebar functionality -->
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const menuToggle = document.getElementById('menuToggle');
-        const closeSidebar = document.getElementById('closeSidebar');
-        const sidebarModal = document.getElementById('sidebarModal');
-        const sidebarOverlay = document.getElementById('sidebarOverlay');
+  document.addEventListener('DOMContentLoaded', function () {
+    const menuToggle = document.getElementById('menuToggle');
+    const closeSidebar = document.getElementById('closeSidebar');
+    const sidebarModal = document.getElementById('sidebarModal');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
 
-        // Open sidebar when menu icon is clicked
-        menuToggle.addEventListener('click', function() {
-            sidebarModal.classList.add('show');
-            sidebarOverlay.classList.add('show');
-            document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
-        });
-
-        // Close sidebar when X button is clicked
-        closeSidebar.addEventListener('click', closeSidebarModal);
-
-        // Close sidebar when clicking on the overlay
-        sidebarOverlay.addEventListener('click', closeSidebarModal);
-
-        function closeSidebarModal() {
-            sidebarModal.classList.remove('show');
-            sidebarOverlay.classList.remove('show');
-            document.body.style.overflow = ''; // Restore scrolling
-        }
+    // Open sidebar when menu icon is clicked
+    menuToggle.addEventListener('click', function () {
+      sidebarModal.classList.add('show');
+      sidebarOverlay.classList.add('show');
+      document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
     });
+
+    // Close sidebar when X button is clicked
+    closeSidebar.addEventListener('click', closeSidebarModal);
+
+    // Close sidebar when clicking on the overlay
+    sidebarOverlay.addEventListener('click', closeSidebarModal);
+
+    function closeSidebarModal() {
+      sidebarModal.classList.remove('show');
+      sidebarOverlay.classList.remove('show');
+      document.body.style.overflow = ''; // Restore scrolling
+    }
+  });
 </script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Get the login button from the sidebar
-      const loginButton = document.querySelector('.login-button a');
-      const loginModalOverlay = document.getElementById('loginModalOverlay');
-      const closeLoginModal = document.getElementById('closeLoginModal');
-      const loginForm = document.getElementById('loginForm');
-      const errorMessageDiv = document.getElementById('loginErrorMessage');
-      
-      // Open login modal when login button is clicked
-      loginButton.addEventListener('click', function(e) {
-        e.preventDefault(); // Prevent default link behavior
-        
-        // Hide error message when opening the modal fresh
-        errorMessageDiv.style.display = 'none';
-        
-        // Close the sidebar first
-        const sidebarModal = document.getElementById('sidebarModal');
-        const sidebarOverlay = document.getElementById('sidebarOverlay');
-        sidebarModal.classList.remove('show');
-        sidebarOverlay.classList.remove('show');
-        
-        // Then show the login modal
-        loginModalOverlay.classList.add('active');
-      });
-      
-      // Close login modal when X button is clicked
-      closeLoginModal.addEventListener('click', function() {
+  document.addEventListener('DOMContentLoaded', function () {
+    // Get the login button from the sidebar
+    const loginButton = document.querySelector('.login-button a');
+    const loginModalOverlay = document.getElementById('loginModalOverlay');
+    const closeLoginModal = document.getElementById('closeLoginModal');
+    const loginForm = document.getElementById('loginForm');
+    const errorMessageDiv = document.getElementById('loginErrorMessage');
+
+    // Open login modal when login button is clicked
+    loginButton.addEventListener('click', function (e) {
+      e.preventDefault(); // Prevent default link behavior
+
+      // Hide error message when opening the modal fresh
+      errorMessageDiv.style.display = 'none';
+
+      // Close the sidebar first
+      const sidebarModal = document.getElementById('sidebarModal');
+      const sidebarOverlay = document.getElementById('sidebarOverlay');
+      sidebarModal.classList.remove('show');
+      sidebarOverlay.classList.remove('show');
+
+      // Then show the login modal
+      loginModalOverlay.classList.add('active');
+    });
+
+    // Close login modal when X button is clicked
+    closeLoginModal.addEventListener('click', function () {
+      loginModalOverlay.classList.remove('active');
+      document.body.style.overflow = '';
+    });
+
+    // Close login modal when clicking outside the modal
+    loginModalOverlay.addEventListener('mousedown', function (e) {
+      if (e.target === loginModalOverlay) {
         loginModalOverlay.classList.remove('active');
         document.body.style.overflow = '';
-      });
-      
-      // Close login modal when clicking outside the modal
-      loginModalOverlay.addEventListener('click', function(e) {
-        if (e.target === loginModalOverlay) {
-          loginModalOverlay.classList.remove('active');
-          document.body.style.overflow = '';
-        }
-      });
-      
-      // Handle login form submission
-      loginForm.addEventListener('submit', function(e) {
-        e.preventDefault(); // Prevent default form submission
-        
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
-        
-        // Send AJAX request
-        fetch('/authen', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ username, password }),
-        })
+      }
+    });
+
+    // Handle login form submission
+    loginForm.addEventListener('submit', function (e) {
+      e.preventDefault(); // Prevent default form submission
+
+      errorMessageDiv.style.display = 'none';
+
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      // Send AJAX request
+      fetch('/authen', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      })
         .then(response => response.json())
         .then(data => {
           if (data.success) {
@@ -307,6 +324,7 @@
             window.location.href = data.redirect;
           } else {
             // Display error message
+            console.log(data.message);
             errorMessageDiv.textContent = data.message || 'ล็อกอินไม่ถูกต้องกรุณาตรวจสอบ';
             errorMessageDiv.style.display = 'block';
           }
@@ -316,201 +334,225 @@
           errorMessageDiv.textContent = 'เกิดข้อผิดพลาดในการเชื่อมต่อ';
           errorMessageDiv.style.display = 'block';
         });
-      });
     });
-  </script>
+  });
+</script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Get elements from both login and register modals
-      const registerLink = document.querySelector('.register-link');
-      const loginModalOverlay = document.getElementById('loginModalOverlay');
-      const registerModalOverlay = document.getElementById('registerModalOverlay');
-      const closeRegisterModal = document.getElementById('closeRegisterModal');
-      const cancelRegistration = document.getElementById('cancelRegistration');
-      const registerForm = document.getElementById('registerForm');
-      
-      // Show register modal when register link is clicked
-      registerLink.addEventListener('click', function(e) {
-        e.preventDefault(); // Prevent default link behavior
-        
-        // Hide login modal
-        loginModalOverlay.classList.remove('active');
-        
-        // Show register modal
-        registerModalOverlay.classList.add('active');
-      });
-      
-      // Close register modal when X button is clicked
-      closeRegisterModal.addEventListener('click', function() {
-        registerModalOverlay.classList.remove('active');
-        document.body.style.overflow = '';
-      });
-      
-      // Close register modal when Cancel button is clicked
-      cancelRegistration.addEventListener('click', function() {
-        registerModalOverlay.classList.remove('active');
-        // Optionally show login modal again
-        loginModalOverlay.classList.add('active');
-      });
-      
-      // Close register modal when clicking outside the modal
-      registerModalOverlay.addEventListener('click', function(e) {
-        if (e.target === registerModalOverlay) {
-          registerModalOverlay.classList.remove('active');
-          document.body.style.overflow = '';
-        }
-      });
-      
-      // Handle registration form submission
-      registerForm.addEventListener('submit', function(e) {
-        e.preventDefault(); // Prevent default form submission
-        
-        // Get form values
-        const username = document.getElementById('registerUsername').value;
-        const phone = document.getElementById('registerEmail').value;
-        const password = document.getElementById('registerPassword').value;
-        const confirmPassword = document.getElementById('confirmPassword').value;
-        
-        if (!username || !phone){
-          alert('กรุณากรอกข้อมูลให้ครบ');
-          return;
-        }
-        // Validate passwords match
-        if (password !== confirmPassword) {
-          alert('รหัสผ่านไม่ตรงกัน กรุณาตรวจสอบอีกครั้ง');
-          return;
-        }
-        
-        // Here you would normally handle the registration with a fetch request to your backend
-        console.log('Registration attempt:', { username, birthdate, phone, password });
-        
-        // For demo purposes, just close the modal after "submission"
-        // In a real app, you'd handle the response from your backend
-        alert('Registration functionality would be implemented here');
-        registerModalOverlay.classList.remove('active');
-        document.body.style.overflow = '';
-      });
+  document.addEventListener('DOMContentLoaded', function () {
+    // Get elements from both login and register modals
+    const registerLink = document.querySelector('.register-link');
+    const loginModalOverlay = document.getElementById('loginModalOverlay');
+    const registerModalOverlay = document.getElementById('registerModalOverlay');
+    const closeRegisterModal = document.getElementById('closeRegisterModal');
+    const cancelRegistration = document.getElementById('cancelRegistration');
+    const registerForm = document.getElementById('registerForm');
+    const resErrorMessageDiv = document.getElementById('registerErrorMessage');
+
+    // Show register modal when register link is clicked
+    registerLink.addEventListener('click', function (e) {
+      e.preventDefault(); // Prevent default link behavior
+
+      resErrorMessageDiv.style.display = 'none';
+
+      // Hide login modal
+      loginModalOverlay.classList.remove('active');
+
+      // Show register modal
+      registerModalOverlay.classList.add('active');
     });
-  </script>
-  
+
+    // Close register modal when X button is clicked
+    closeRegisterModal.addEventListener('click', function () {
+      registerModalOverlay.classList.remove('active');
+      document.body.style.overflow = '';
+    });
+
+    // Close register modal when Cancel button is clicked
+    cancelRegistration.addEventListener('click', function () {
+      registerModalOverlay.classList.remove('active');
+      // Optionally show login modal again
+      loginModalOverlay.classList.add('active');
+    });
+
+    // Close register modal when clicking outside the modal
+    registerModalOverlay.addEventListener('mousedown', function (e) {
+      if (e.target === registerModalOverlay) {
+        registerModalOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+
+    // Handle registration form submission
+    registerForm.addEventListener('submit', function (e) {
+      e.preventDefault(); // Prevent default form submission
+
+      // Get form values
+      const username = document.getElementById('registerUsername').value;
+      const email = document.getElementById('registerEmail').value;
+      const password = document.getElementById('registerPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+
+      // Validate passwords match
+      if (password !== confirmPassword) {
+        resErrorMessageDiv.textContent = 'รหัสผ่านไม่ตรงกัน กรุณาตรวจสอบอีกครั้ง';
+        resErrorMessageDiv.style.display = 'block';
+        return;
+      }
+
+      else if (password == confirmPassword) {
+        resErrorMessageDiv.style.display = 'none';
+      }
+
+      // AJAX
+      fetch('/newuser', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, email, password }),
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            // Redirect on success
+            document.getElementById('registerUsername').value = "";
+            document.getElementById('registerEmail').value = "";
+            document.getElementById('registerPassword').value = "";
+            document.getElementById('confirmPassword').value = "";
+            document.getElementById('cancelRegistration').click();
+          } else {
+            // Display error message
+            resErrorMessageDiv.textContent = data.message || 'การลงทะเบียนไม่ถูกต้อง แจ้งอาจารย์บุญประเสิรฐ';
+            resErrorMessageDiv.style.display = 'block';
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          resErrorMessageDiv.textContent = 'เกิดข้อผิดพลาดในการเชื่อมต่อ';
+          resErrorMessageDiv.style.display = 'block';
+        });
+    });
+  });
+</script>
+
 <!-- The JavaScript for cart Dropdown -->
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-      const cartToggle = document.getElementById('cartToggle');
-      const cartDropdown = document.getElementById('cartDropdown');
-      
-      // Toggle cart dropdown when cart icon is clicked
-      cartToggle.addEventListener('click', function(e) {
-          e.preventDefault();
-          cartDropdown.classList.toggle('show');
-          
-          // Close sidebar if it's open
-          const sidebarModal = document.getElementById('sidebarModal');
-          const sidebarOverlay = document.getElementById('sidebarOverlay');
-          if (sidebarModal && sidebarModal.classList.contains('show')) {
-              sidebarModal.classList.remove('show');
-              sidebarOverlay.classList.remove('show');
-          }
-          
-          // Close login/register modals if they're open
-          const loginModalOverlay = document.getElementById('loginModalOverlay');
-          const registerModalOverlay = document.getElementById('registerModalOverlay');
-          if (loginModalOverlay && loginModalOverlay.classList.contains('active')) {
-              loginModalOverlay.classList.remove('active');
-          }
-          if (registerModalOverlay && registerModalOverlay.classList.contains('active')) {
-              registerModalOverlay.classList.remove('active');
-          }
-      });
-      
-      // Close cart dropdown when clicking outside
-      document.addEventListener('click', function(e) {
-          // If click is outside cart dropdown and not on the cart icon
-          if (cartDropdown && !cartDropdown.contains(e.target) && e.target !== cartToggle && !cartToggle.contains(e.target)) {
-              cartDropdown.classList.remove('show');
-          }
-      });
+  document.addEventListener('DOMContentLoaded', function () {
+    const cartToggle = document.getElementById('cartToggle');
+    const cartDropdown = document.getElementById('cartDropdown');
+
+    // Toggle cart dropdown when cart icon is clicked
+    cartToggle.addEventListener('click', function (e) {
+      e.preventDefault();
+      cartDropdown.classList.toggle('show');
+
+      // Close sidebar if it's open
+      const sidebarModal = document.getElementById('sidebarModal');
+      const sidebarOverlay = document.getElementById('sidebarOverlay');
+      if (sidebarModal && sidebarModal.classList.contains('show')) {
+        sidebarModal.classList.remove('show');
+        sidebarOverlay.classList.remove('show');
+      }
+
+      // Close login/register modals if they're open
+      const loginModalOverlay = document.getElementById('loginModalOverlay');
+      const registerModalOverlay = document.getElementById('registerModalOverlay');
+      if (loginModalOverlay && loginModalOverlay.classList.contains('active')) {
+        loginModalOverlay.classList.remove('active');
+      }
+      if (registerModalOverlay && registerModalOverlay.classList.contains('active')) {
+        registerModalOverlay.classList.remove('active');
+      }
+    });
+
+    // Close cart dropdown when clicking outside
+    document.addEventListener('click', function (e) {
+      // If click is outside cart dropdown and not on the cart icon
+      if (cartDropdown && !cartDropdown.contains(e.target) && e.target !== cartToggle && !cartToggle.contains(e.target)) {
+        cartDropdown.classList.remove('show');
+      }
+    });
   });
-  </script>
+</script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', function () {
     const contactLinks = document.querySelectorAll('a[href="#footer-custom"]');
     const sidebarModal = document.getElementById('sidebarModal');
     const sidebarOverlay = document.getElementById('sidebarOverlay');
 
     contactLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
+      link.addEventListener('click', function (e) {
+        e.preventDefault();
 
-            // ปิด sidebar modal ถ้ามีการเปิดอยู่
-            if (sidebarModal.classList.contains('show')) {
-                sidebarModal.classList.remove('show');
-                sidebarOverlay.classList.remove('show');
-                document.body.style.overflow = ''; // Restore scrolling
-                // รอให้ sidebar ปิดก่อน แล้วค่อยเลื่อนไปที่ footer
-                setTimeout(() => {
-                    scrollToFooter();
-                }, 300); // 300ms คือเวลา transition ปิด modal
-            } else {
-                scrollToFooter();
-            }
-        });
+        // ปิด sidebar modal ถ้ามีการเปิดอยู่
+        if (sidebarModal.classList.contains('show')) {
+          sidebarModal.classList.remove('show');
+          sidebarOverlay.classList.remove('show');
+          document.body.style.overflow = ''; // Restore scrolling
+          // รอให้ sidebar ปิดก่อน แล้วค่อยเลื่อนไปที่ footer
+          setTimeout(() => {
+            scrollToFooter();
+          }, 300); // 300ms คือเวลา transition ปิด modal
+        } else {
+          scrollToFooter();
+        }
+      });
     });
 
     function scrollToFooter() {
-        const footer = document.getElementById('footer-custom');
-        if (footer) {
-            footer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        } else {
-            console.log('Footer element not found');
-        }
+      const footer = document.getElementById('footer-custom');
+      if (footer) {
+        footer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        console.log('Footer element not found');
+      }
     }
-});
+  });
 
 </script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', function () {
     const Links = document.querySelectorAll('a[href="/home#howto"]');
     const sidebarModal = document.getElementById('sidebarModal');
     const sidebarOverlay = document.getElementById('sidebarOverlay');
 
     Links.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
+      link.addEventListener('click', function (e) {
+        e.preventDefault();
 
-            // ถ้าไม่อยู่หน้า Home ให้ไปหน้า Home ก่อน
-            if (window.location.pathname !== '/home') {
-                // ไปที่หน้า Home
-                window.location.href = '/home#howto';
-                scrollToHowto();
+        // ถ้าไม่อยู่หน้า Home ให้ไปหน้า Home ก่อน
+        if (window.location.pathname !== '/home') {
+          // ไปที่หน้า Home
+          window.location.href = '/home#howto';
+          scrollToHowto();
 
-            } else {
-                // ถ้าอยู่ในหน้า Home แล้ว, ปิด modal และเลื่อนไปที่ #howto
-                if (sidebarModal.classList.contains('show')) {
-                    sidebarModal.classList.remove('show');
-                    sidebarOverlay.classList.remove('show');
-                    document.body.style.overflow = ''; // Restore scrolling
-                    // รอให้ sidebar ปิดก่อน แล้วค่อยเลื่อนไปที่ #howto
-                    setTimeout(() => {
-                        scrollToHowto();
-                    }, 300);
-                } else {
-                    scrollToHowto();
-                }
-            }
-        });
+        } else {
+          // ถ้าอยู่ในหน้า Home แล้ว, ปิด modal และเลื่อนไปที่ #howto
+          if (sidebarModal.classList.contains('show')) {
+            sidebarModal.classList.remove('show');
+            sidebarOverlay.classList.remove('show');
+            document.body.style.overflow = ''; // Restore scrolling
+            // รอให้ sidebar ปิดก่อน แล้วค่อยเลื่อนไปที่ #howto
+            setTimeout(() => {
+              scrollToHowto();
+            }, 300);
+          } else {
+            scrollToHowto();
+          }
+        }
+      });
     });
 
     function scrollToHowto() {
-        const How = document.getElementById('howto');
-        if (How) {
-            How.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        } else {
-            console.log('Howto element not found');
-        }
+      const How = document.getElementById('howto');
+      if (How) {
+        How.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        console.log('Howto element not found');
+      }
     }
-});
-  </script>
+  });
+</script>

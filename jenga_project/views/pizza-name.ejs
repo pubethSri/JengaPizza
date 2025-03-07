@@ -128,13 +128,17 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="pizza-card p-3">
-                        <img src="images\pizza.png" alt="พิซซ่า">
+                        <img src="images\zai.png" alt="พิซซ่า">
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="description-card">
-                        <h2 style="font-weight: bold; color: rgb(187,62,0);">MY VERY OWN PIZZA</h2>
-                        <p>Never settle for the least , aiming to be cool, chic, sigma. My pizza is a unique one with a lot of basil and spices. Good for summer and I hope this famous one day.</p>
+                        <h2 style="font-weight: bold; color: rgb(187,62,0);"><%= item[0].pizza_name %></h2>
+                        <p>ประกอบไปด้วย
+                        <% for(var i = 0; i < item.length; i++) { %>
+                            <%= item[i].thai_name %><% if (i != item.length-1){ %>, <% } %>
+                        <% } %>
+                        </p>
                         <div class="d-flex">
                             <a href="/orderform" style="text-decoration: none;"><button class="btn btn-red mt-4 mr-2">แต่งหน้าพิซซ่า</button></a>
                             <a href="/category" style="text-decoration: none;"><button class="btn btn-light mt-4 d-flex">กลับไปหน้าเมนู

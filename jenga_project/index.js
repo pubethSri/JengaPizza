@@ -57,7 +57,7 @@ app.get("/choose", (req, res) => {
 });
 
 app.get("/category", (req, res) => {
-  const sql = `SELECT pizza_name FROM pizzas WHERE user_id = ${req.session.user_id}`
+  const sql = `SELECT pizza_name, pizza_id FROM pizzas WHERE user_id = ${req.session.user_id}`
   console.log(`${req.session.user_id}`);
   db.all(sql, (error, results) => {
     if (error) {
@@ -70,20 +70,35 @@ app.get("/category", (req, res) => {
   })
 });
 
-app.get("/pizza-name", (req, res) => {
-  res.render('pizza-name', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
+app.get("/pizza-:pizza_id", (req, res) => {
+  const pizza_id = req.params.pizza_id;
+  const sql = `SELECT pizza_name, thai_name FROM pizzas\
+              JOIN pizza_ingredients USING (pizza_id)\
+              JOIN ingredients USING (ingredient_id)\
+              WHERE pizza_id = ${pizza_id}\
+              ORDER BY ingredient_id;`;
+  
+  db.all(sql, (error, results) => {
+    if (error) {
+      console.log(error.message);
+      res.render('pizza-name', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "", item : [{ pizza_name: 'เจ๊ง', ingredient_name: 'เจ๊ง' }]});
+    }else{
+      res.render('pizza-name', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "", item : results});
+    }
+    res.end();
+  })
 });
 
 app.post("/authen", async (req, res) => {
   const { username, password } = req.body;
-  const sql = `SELECT * FROM users WHERE username = "${username}" AND user_password = "${password}"`
+  const sql = `SELECT * FROM users WHERE (username = "${username}" OR user_email = "${username}") AND user_password = "${password}"`
   db.all(sql, (error, results) => {
     if (error) {
       console.log(error.message);
     }
     if (results.length > 0) {
       req.session.loggedin = true;
-      req.session.username = username;
+      req.session.username = results[0].username;
       req.session.user_id = results[0].user_id;
       req.session.user_privilege = results[0].user_privilege;
       console.log("logged in!");
@@ -94,6 +109,30 @@ app.post("/authen", async (req, res) => {
     }
   })
 })
+
+app.post("/newuser", async (req, res) => {
+  const { username, email, password} = req.body;
+  const sql = `SELECT * FROM users WHERE username = "${username}" OR user_email = "${email}";`
+  db.all(sql, (error, results) => {
+    if (error) {
+      console.log(error.message);
+    }
+    if (results.length > 0) {
+      return res.json({ success: false, message: "ชื่อผู้ใช้หรืออีเมลนี้ถูกใช้ไปแล้ว"});
+    } else {
+      try {
+        const insert_sql = `INSERT INTO users (username, user_email, user_password, user_privilege)
+                            VALUES ("${username}", "${email}", "${password}", "customer");`
+        db.run(insert_sql);
+      } catch (error) {
+        console.log(error);
+      }
+      console.log("User created!");
+      return res.json({ success: true });
+    }
+  })
+})
+
 
 app.get("/logout", (req, res) => {
   req.session.destroy();
@@ -183,7 +222,23 @@ app.get("/qrpayment", (req, res) => {
 });
 
 app.get("/ingredients_seller", (req, res) => {
-  res.render('ingredients_seller', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
+  if(req.session.user_privilege == "admin" || req.session.user_privilege == "employee"){
+    const sql = `SELECT ingredient_name, stock_quantity, thai_name, unit FROM ingredients\
+                  WHERE ingredient_name NOT LIKE "%\\_%" ESCAPE "\\";`
+  db.all(sql, (error, results) => {
+    if (error) {
+      console.log(error.message);
+      console.log(sql);
+      res.render('ingredients_seller', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
+    }else{
+      console.log(results);
+      res.render('ingredients_seller', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "", ingredient:results});
+    }
+    res.end();
+  })
+  }else{
+    res.redirect("/home");
+  }
 });
 
 app.get("/aboutus", (req, res) => {

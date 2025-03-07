@@ -157,7 +157,7 @@
                 <% for(var i = 0; i < item.length; i++) { %>
                     <div class="filterDiv flavour col-md-4 ">
                         <div class="card p-3">
-                            <a href="/pizza-name"><img src="images/zai.png" alt=<%= item[i].pizza_name %>></a>
+                            <a href="/pizza-<%= item[i].pizza_id %>"><img src="images/zai.png" alt=<%= item[i].pizza_name %>></a>
                             <p><%= item[i].pizza_name %></p>
                         </div>
                     </div>
