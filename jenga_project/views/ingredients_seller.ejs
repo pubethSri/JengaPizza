@@ -179,34 +179,17 @@
                 <div class="category btn" onclick="filterSelection('etc')">อื่น ๆ</div>
             </div>
             <div class="row">
-                
+                <% for(var i = 0; i < ingredient.length; i++) { %>
                 <div class="filterDiv ingredient col-md-4">
                     <div class="card p-3">
-                        <a href=""><img src="images/pizza.png" alt="ผัก"></a>
-                        <p>ผัก</p>
-                        <p>คงเหลือ: 300</p>
+                        <a href=""><img src="images/<%= ingredient[i].ingredient_name %>.png" alt=<%= ingredient[i].ingredient_name %>></a>
+                        <p><%= ingredient[i].thainame %></p>
+                        <p>คงเหลือ: <%= ingredient[i].stock_quantity %> <%= ingredient[i].unit %></p>
                         <button type="button" class="btn btn-red" onclick="on(this)"><b>เติมสินค้า</b></button>
                     </div>
                 </div>
-                
-                <div class="filterDiv ingredient col-md-4">
-                    <div class="card p-3">
-                        <a href=""><img src="images/pizza.png" alt="เบค่อน"></a>
-                        <p>เบค่อน</p>
-                        <p>คงเหลือ: 300</p>
-                        <button type="button" class="btn btn-red" onclick="on(this)"><b>เติมสินค้า</b></button>
-                    </div>
-                </div>
+                <% } %>
 
-                <div class="filterDiv ingredient col-md-4">
-                    <div class="card p-3">
-                        <a href=""><img src="images/pizza.png" alt="สับปะรด"></a>
-                        <p>สับปะรด</p>
-                        <p>คงเหลือ: 300</p>
-                        <button type="button" class="btn btn-red" onclick="on(this)"><b>เติมสินค้า</b></button>
-                    </div>
-                </div>
-                
                 <div class="filterDiv etc col-md-4">
                     <div class="card p-3">
                         <a href=""><img src="images/pizza.png" alt="แฮชบราวน์"></a>
