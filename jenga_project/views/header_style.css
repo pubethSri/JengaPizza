@@ -449,3 +449,16 @@
 }
 
 
+.error-message {
+  background-color: #ffebee;
+  color: #d32f2f;
+  padding: 10px 15px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  text-align: center;
+  border: 1px solid #ffcdd2;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+  display: none; /* Hidden by default */
+}
