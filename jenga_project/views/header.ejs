@@ -167,7 +167,7 @@
         <div id="loginErrorMessage" class="error-message" ></div>
 
 
-        <form action="/authen" method="post" id="loginForm" class="login-form">
+        <form id="loginForm" class="login-form">
           <div class="form-group">
             <input type="text" class="form-control login-input" id="username" name="username" placeholder="ชื่อผู้ใช้ หรือ อีเมล" required>
           </div>
@@ -194,6 +194,8 @@
       <div class="register-modal-body">
         <h2 class="register-modal-title">ลงทะเบียน</h2>
         
+        <div id="registerErrorMessage" class="error-message" ></div>
+
         <form id="registerForm" class="register-form">
           <div class="form-group mb-2">
             <input type="text" class="form-control register-input" id="registerUsername" placeholder="ชื่อผู้ใช้" required>
@@ -290,6 +292,8 @@
       loginForm.addEventListener('submit', function(e) {
         e.preventDefault(); // Prevent default form submission
         
+        errorMessageDiv.style.display = 'none';
+
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
         
@@ -331,11 +335,14 @@
       const closeRegisterModal = document.getElementById('closeRegisterModal');
       const cancelRegistration = document.getElementById('cancelRegistration');
       const registerForm = document.getElementById('registerForm');
+      const resErrorMessageDiv = document.getElementById('registerErrorMessage');
       
       // Show register modal when register link is clicked
       registerLink.addEventListener('click', function(e) {
         e.preventDefault(); // Prevent default link behavior
         
+        resErrorMessageDiv.style.display = 'none';
+
         // Hide login modal
         loginModalOverlay.classList.remove('active');
         
@@ -370,28 +377,49 @@
         
         // Get form values
         const username = document.getElementById('registerUsername').value;
-        const phone = document.getElementById('registerEmail').value;
+        const email = document.getElementById('registerEmail').value;
         const password = document.getElementById('registerPassword').value;
         const confirmPassword = document.getElementById('confirmPassword').value;
         
-        if (!username || !phone){
-          alert('กรุณากรอกข้อมูลให้ครบ');
-          return;
-        }
         // Validate passwords match
         if (password !== confirmPassword) {
-          alert('รหัสผ่านไม่ตรงกัน กรุณาตรวจสอบอีกครั้ง');
+          resErrorMessageDiv.textContent = 'รหัสผ่านไม่ตรงกัน กรุณาตรวจสอบอีกครั้ง';
+          resErrorMessageDiv.style.display = 'block';
           return;
         }
         
-        // Here you would normally handle the registration with a fetch request to your backend
-        console.log('Registration attempt:', { username, birthdate, phone, password });
-        
-        // For demo purposes, just close the modal after "submission"
-        // In a real app, you'd handle the response from your backend
-        alert('Registration functionality would be implemented here');
-        registerModalOverlay.classList.remove('active');
-        document.body.style.overflow = '';
+        else if (password == confirmPassword) {
+          resErrorMessageDiv.style.display = 'none';
+        }
+
+        // AJAX
+        fetch('/newuser', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ username, email, password }),
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            // Redirect on success
+            document.getElementById('registerUsername').value = "";
+            document.getElementById('registerEmail').value= "";
+            document.getElementById('registerPassword').value= "";
+            document.getElementById('confirmPassword').value= "";
+            document.getElementById('cancelRegistration').click();
+          } else {
+            // Display error message
+            resErrorMessageDiv.textContent = data.message || 'การลงทะเบียนไม่ถูกต้อง แจ้งอาจารย์บุญประเสิรฐ';
+            resErrorMessageDiv.style.display = 'block';
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          resErrorMessageDiv.textContent = 'เกิดข้อผิดพลาดในการเชื่อมต่อ';
+          resErrorMessageDiv.style.display = 'block';
+        });
       });
     });
   </script>

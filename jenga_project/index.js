@@ -95,6 +95,30 @@ app.post("/authen", async (req, res) => {
   })
 })
 
+app.post("/newuser", async (req, res) => {
+  const { username, email, password} = req.body;
+  const sql = `SELECT * FROM users WHERE username = "${username}" OR user_email = "${email}";`
+  db.all(sql, (error, results) => {
+    if (error) {
+      console.log(error.message);
+    }
+    if (results.length > 0) {
+      return res.json({ success: false, message: "ชื่อผู้ใช้หรืออีเมลนี้ถูกใช้ไปแล้ว"});
+    } else {
+      try {
+        const insert_sql = `INSERT INTO users (username, user_email, user_password, user_privilege)
+                            VALUES ("${username}", "${email}", "${password}", "customer");`
+        db.run(insert_sql);
+      } catch (error) {
+        console.log(error);
+      }
+      console.log("User created!");
+      return res.json({ success: true });
+    }
+  })
+})
+
+
 app.get("/logout", (req, res) => {
   req.session.destroy();
   // console.log(req.session.loggedin);
