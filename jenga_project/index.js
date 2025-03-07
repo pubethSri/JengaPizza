@@ -71,7 +71,22 @@ app.get("/category", (req, res) => {
 });
 
 app.get("/pizza-:pizza_id", (req, res) => {
-  res.render('pizza-name', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
+  const pizza_id = req.params.pizza_id;
+  const sql = `SELECT pizza_name, ingredient_name FROM pizzas\
+              JOIN pizza_ingredients USING (pizza_id)\
+              JOIN ingredients USING (ingredient_id)\
+              WHERE pizza_id = ${pizza_id}\
+              ORDER BY ingredient_id;`;
+  
+  db.all(sql, (error, results) => {
+    if (error) {
+      console.log(error.message);
+      res.render('pizza-name', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "", item : [{ pizza_name: 'เจ๊ง', ingredient_name: 'เจ๊ง' }]});
+    }else{
+      res.render('pizza-name', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "", item : results});
+    }
+    res.end();
+  })
 });
 
 app.post("/authen", async (req, res) => {
