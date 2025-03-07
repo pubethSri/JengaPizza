@@ -87,11 +87,11 @@ app.post("/authen", async (req, res) => {
       req.session.user_id = results[0].user_id;
       req.session.user_privilege = results[0].user_privilege;
       console.log("logged in!");
-      res.redirect('/home');
+      return res.json({ success: true, redirect: '/home' });
     } else {
-      res.send("incorrect password and/or password!");
+      return res.json({ success: false, message: "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง" });
+      // res.send("incorrect password and/or password!");
     }
-    res.end();
   })
 })
 
