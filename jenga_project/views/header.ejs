@@ -293,7 +293,7 @@
     });
 
     // Close login modal when clicking outside the modal
-    loginModalOverlay.addEventListener('click', function (e) {
+    loginModalOverlay.addEventListener('mousedown', function (e) {
       if (e.target === loginModalOverlay) {
         loginModalOverlay.classList.remove('active');
         document.body.style.overflow = '';
@@ -381,7 +381,7 @@
     });
 
     // Close register modal when clicking outside the modal
-    registerModalOverlay.addEventListener('click', function (e) {
+    registerModalOverlay.addEventListener('mousedown', function (e) {
       if (e.target === registerModalOverlay) {
         registerModalOverlay.classList.remove('active');
         document.body.style.overflow = '';
