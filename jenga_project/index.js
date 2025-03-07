@@ -72,7 +72,7 @@ app.get("/category", (req, res) => {
 
 app.get("/pizza-:pizza_id", (req, res) => {
   const pizza_id = req.params.pizza_id;
-  const sql = `SELECT pizza_name, ingredient_name FROM pizzas\
+  const sql = `SELECT pizza_name, thai_name FROM pizzas\
               JOIN pizza_ingredients USING (pizza_id)\
               JOIN ingredients USING (ingredient_id)\
               WHERE pizza_id = ${pizza_id}\
