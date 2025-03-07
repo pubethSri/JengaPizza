@@ -300,11 +300,6 @@
       }
     });
 
-    // Prevent click event from bubbling up inside the modal content
-    modalContent.addEventListener('click', function (e) {
-      e.stopPropagation(); // Stop the event from bubbling up to the overlay
-    });
-
     // Handle login form submission
     loginForm.addEventListener('submit', function (e) {
       e.preventDefault(); // Prevent default form submission
