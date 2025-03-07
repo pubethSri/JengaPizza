@@ -91,22 +91,22 @@ app.get("/pizza-:pizza_id", (req, res) => {
 
 app.post("/authen", async (req, res) => {
   const { username, password } = req.body;
-  const sql = `SELECT * FROM users WHERE username = "${username}" AND user_password = "${password}"`
+  const sql = `SELECT * FROM users WHERE (username = "${username}" OR user_email = "${username}") AND user_password = "${password}"`
   db.all(sql, (error, results) => {
     if (error) {
       console.log(error.message);
     }
     if (results.length > 0) {
       req.session.loggedin = true;
-      req.session.username = username;
+      req.session.username = results[0].username;
       req.session.user_id = results[0].user_id;
       req.session.user_privilege = results[0].user_privilege;
       console.log("logged in!");
-      res.redirect('/home');
+      return res.json({ success: true, redirect: '/home' });
     } else {
-      res.send("incorrect password and/or password!");
+      return res.json({ success: false, message: "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง" });
+      // res.send("incorrect password and/or password!");
     }
-    res.end();
   })
 })
 
@@ -123,6 +123,32 @@ app.get("/orderform", (req, res) => {
 
 app.get("/createform", (req, res) => {
   res.render('createform', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
+});
+
+app.post("/create", async (req, res) => {
+  const { pizza_name, dough, size, sauce, topping } = req.body;
+  const price = price_calc(dough, size, topping);
+  const sql = `INSERT INTO pizzas (pizza_name, price, user_id) VALUES ("${pizza_name}", ${price}, ${req.session.user_id})`
+  db.all(sql, (error, results) => {
+    if (error) {
+      console.log(error.message);
+    }else{
+      console.log("Pizza Created!");
+    }
+    res.end();
+  })
+  topping_adder(`${dough}_${size}`, pizza_name);
+  topping_adder(sauce, pizza_name);
+  if(typeof(topping) == "string"){
+    topping_adder(topping, pizza_name);
+  }else{
+    topping.forEach((item)=>{
+      topping_adder(item, pizza_name);
+    });
+  }
+
+  // res.send({ pizza_data: { pizza_name: pizza_name, dough: dough, size: size, sauce: sauce, topping: topping } });
+  res.redirect("/category");
 });
 
 app.post("/create", async (req, res) => {
