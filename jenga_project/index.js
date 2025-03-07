@@ -136,6 +136,32 @@ app.post("/create", async (req, res) => {
   res.redirect("/category");
 });
 
+app.post("/create", async (req, res) => {
+  const { pizza_name, dough, size, sauce, topping } = req.body;
+  const price = price_calc(dough, size, topping);
+  const sql = `INSERT INTO pizzas (pizza_name, price, user_id) VALUES ("${pizza_name}", ${price}, ${req.session.user_id})`
+  db.all(sql, (error, results) => {
+    if (error) {
+      console.log(error.message);
+    }else{
+      console.log("Pizza Created!");
+    }
+    res.end();
+  })
+  topping_adder(`${dough}_${size}`, pizza_name);
+  topping_adder(sauce, pizza_name);
+  if(typeof(topping) == "string"){
+    topping_adder(topping, pizza_name);
+  }else{
+    topping.forEach((item)=>{
+      topping_adder(item, pizza_name);
+    });
+  }
+
+  // res.send({ pizza_data: { pizza_name: pizza_name, dough: dough, size: size, sauce: sauce, topping: topping } });
+  res.redirect("/category");
+});
+
 app.get("/orderlist", (req, res) => {
   res.render('orderlist', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
 });
