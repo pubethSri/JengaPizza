@@ -230,10 +230,8 @@ app.get("/ingredients_seller", (req, res) => {
   db.all(sql, (error, results) => {
     if (error) {
       console.log(error.message);
-      console.log(sql);
       res.render('ingredients_seller', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
     }else{
-      console.log(results);
       res.render('ingredients_seller', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "", ingredient:results});
     }
     res.end();
