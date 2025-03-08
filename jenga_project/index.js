@@ -193,7 +193,7 @@ app.get("/orderlist", async (req, res) => {
     return res.redirect('/home');
   }
 
-  const sql = `SELECT item_id, item_type FROM orders JOIN order_items USING (order_id) WHERE user_id = ${req.session.user_id};`;
+  const sql = `SELECT item_id, item_type, quantity FROM orders JOIN order_items USING (order_id) WHERE user_id = ${req.session.user_id} AND order_status = "pending";`;
 
   try {
     const results = await new Promise((resolve, reject) => {
@@ -202,7 +202,7 @@ app.get("/orderlist", async (req, res) => {
 
     const menu_order = await Promise.all(results.map(async (item) => {
       if (item.item_type === 'pizza') {
-        const select_sql = `SELECT pizza_name, GROUP_CONCAT(thai_name, ', ' ORDER BY ingredient_id) AS thai_name, price 
+        const select_sql = `SELECT pizza_name, GROUP_CONCAT(thai_name, ', ' ORDER BY ingredient_id) AS thai_name, price, pizza_id
                             FROM pizzas
                             JOIN pizza_ingredients USING (pizza_id)
                             JOIN ingredients USING (ingredient_id)
@@ -212,7 +212,20 @@ app.get("/orderlist", async (req, res) => {
         const pizza = await new Promise((resolve, reject) => {
           db.all(select_sql, (error, rows) => (error ? reject(error) : resolve(rows)));
         });
+        pizza[0].quantity = item.quantity;
+        pizza[0].type = item.item_type;
+        return pizza[0];
+      }else if (item.item_type === 'etc') {
+        const select_sql = `SELECT etc_name, price, etc_id
+                            FROM etc
+                            WHERE etc_id = ${item.item_id}
+                            ORDER BY etc_id;`;
 
+        const pizza = await new Promise((resolve, reject) => {
+          db.all(select_sql, (error, rows) => (error ? reject(error) : resolve(rows)));
+        });
+        pizza[0].quantity = item.quantity;
+        pizza[0].type = item.item_type;
         return pizza[0];
       }
     }));

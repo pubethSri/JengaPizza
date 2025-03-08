@@ -149,9 +149,10 @@
             <h2><b>รายการอาหาร</b></h2>
             <div class="row">
                 <% for(var i = 0; i < menu.length; i++) { %>
+                    <% if(menu[i].type == "pizza"){ %>
                 <div class="col-md-6">
                     <div class="card p-3">
-                        <img src="images/zai.png" alt="ฮาวาเอี้ยน">
+                        <img src="images/pizza<%= menu[i].pizza_id %>.png" alt="<%= menu[i].pizza_name %>">
                         <p style="font-size: 26px; color: rgb(187, 62, 0);"><%= menu[i].pizza_name %></p>
                         <p style="font-size: 14px; color: grey;">รายละเอียด: <%= menu[i].thai_name %></p>
                         <div class="quantity-wrapper d-flex mb-3"  style="justify-content: center;">
@@ -162,7 +163,7 @@
                                     </svg>
                                 </button>
                             </div>
-                            <input type="number" step="1" max="" value="1" maxlength="4" size="4" name="quantity" class="quantity-field">
+                            <input type="number" step="1" max="" value=<%= menu[i].quantity %> maxlength="4" size="4" name="quantity" class="quantity-field">
                             <div class="quantity-group-append">
                                 <button type="button" class="btn btn-plus add-quantity d-flex align-items-center justify-content-center" data-field="quantity">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -175,6 +176,33 @@
                         <a href="#"><button class="btn btn-remove mb-3">นำออกจากรายการ</button></a>
                     </div>
                 </div>
+                <% }else if(menu[i].type == "etc"){ %>
+                <div class="col-md-6">
+                    <div class="card p-3">
+                        <img src="images/etc<%= menu[i].etc_id %>.png" alt="<%= menu[i].etc_name %>">
+                        <p style="font-size: 26px; color: rgb(187, 62, 0);"><%= menu[i].etc_name %></p>
+                        <div class="quantity-wrapper d-flex mb-3"  style="justify-content: center;">
+                            <div class="quantity-group-append">
+                                <button type="button" class="btn btn-minus add-quantity d-flex align-items-center justify-content-center" data-field="quantity">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                    </svg>
+                                </button>
+                            </div>
+                            <input type="number" step="1" max="" value=<%= menu[i].quantity %> maxlength="4" size="4" name="quantity" class="quantity-field">
+                            <div class="quantity-group-append">
+                                <button type="button" class="btn btn-plus add-quantity d-flex align-items-center justify-content-center" data-field="quantity">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <p style="text-align: center; font-size: 20px; font-weight: bolder; color: rgb(187, 62, 0);"><%= menu[i].price %> บาท</p>
+                        <a href="#"><button class="btn btn-remove mb-3">นำออกจากรายการ</button></a>
+                    </div>
+                </div>
+                <% } %>
                 <% } %>
 
             </div>
