@@ -128,7 +128,12 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="pizza-card p-3">
-                        <img src="images\zai.png" alt="พิซซ่า">
+                        <% if(item[0].pizza_id >= 4 && item[0].pizza_id <= 9){ %>
+                            <img src="images\pizza<%= item[0].pizza_id %>.png" alt="พิซซ่า">
+                        <% } else{ %>
+                            <img src="images\pizza.png" alt="พิซซ่า">
+                        <% } %>
+                        
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -158,22 +163,22 @@
             <div class="row">
                 <div class="filterDiv flavour col-md-4 ">
                     <div class="card p-3">
-                        <a href="/pizza-name"><img src="images/pizza.png" alt="ฮาวาเอี้ยน"></a>
+                        <a href="/pizza-5"><img src="images/pizza5.png" alt="ฮาวาเอี้ยน"></a>
                         <p>พิซซ่าฮาวาเอี้ยน</p>
                     </div>
                 </div>
                 
                 <div class="filterDiv ingredient col-md-4">
                     <div class="card p-3">
-                        <a href=""><img src="images/pizza.png" alt="ผัก"></a>
-                        <p>พิซซ่าผักรวม</p>
+                        <a href="/pizza-6"><img src="images/pizza6.png" alt="ผัก"></a>
+                        <p>พิซซ่าเวเจเทเรียน</p>
                     </div>
                 </div>
                 
                 <div class="filterDiv ingredient col-md-4">
                     <div class="card p-3">
-                        <a href=""><img src="images/pizza.png" alt="เบค่อน"></a>
-                        <p>พิซซ่าเบค่อน</p>
+                        <a href="/pizza-7"><img src="images/pizza7.png" alt="เบค่อน"></a>
+                        <p>พิซซ่าเปปเปอร์โรนี</p>
                     </div>
                 </div>
             </div>
