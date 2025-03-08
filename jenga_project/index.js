@@ -142,37 +142,19 @@ app.get("/logout", (req, res) => {
   res.redirect('/home');
 })
 app.get("/orderform", (req, res) => {
-  res.render('orderform', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
+  if (req.session.loggedin) {
+    res.render('orderform', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
+  } else {
+    res.redirect('/home');
+  }
 });
 
 app.get("/createform", (req, res) => {
-  res.render('createform', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
-});
-
-app.post("/create", async (req, res) => {
-  const { pizza_name, dough, size, sauce, topping } = req.body;
-  const price = price_calc(dough, size, topping);
-  const sql = `INSERT INTO pizzas (pizza_name, price, user_id) VALUES ("${pizza_name}", ${price}, ${req.session.user_id})`
-  db.all(sql, (error, results) => {
-    if (error) {
-      console.log(error.message);
-    }else{
-      console.log("Pizza Created!");
-    }
-    res.end();
-  })
-  topping_adder(`${dough}_${size}`, pizza_name);
-  topping_adder(sauce, pizza_name);
-  if(typeof(topping) == "string"){
-    topping_adder(topping, pizza_name);
-  }else{
-    topping.forEach((item)=>{
-      topping_adder(item, pizza_name);
-    });
+  if (req.session.loggedin) {
+    res.render('createform', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
+  } else {
+    res.redirect('/home');
   }
-
-  // res.send({ pizza_data: { pizza_name: pizza_name, dough: dough, size: size, sauce: sauce, topping: topping } });
-  res.redirect("/category");
 });
 
 app.post("/create", async (req, res) => {
@@ -202,23 +184,43 @@ app.post("/create", async (req, res) => {
 });
 
 app.get("/orderlist", (req, res) => {
-  res.render('orderlist', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
+  if (req.session.loggedin) {
+    res.render('orderlist', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
+  } else {
+    res.redirect('/home');
+  }
 });
 
 app.get("/tracking", (req, res) => {
-  res.render('tracking', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
+  if (req.session.loggedin) {
+    res.render('tracking', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
+  } else {
+    res.redirect('/home');
+  }
 });
 
 app.get("/tracking_seller", (req, res) => {
-  res.render('tracking_seller', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
+  if (req.session.loggedin) {
+    res.render('tracking_seller', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
+  } else {
+    res.redirect('/home');
+  }
 });
 
 app.get("/customerinfo", (req, res) => {
-  res.render('customerinfo', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
+  if (req.session.loggedin) {
+    res.render('customerinfo', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
+  } else {
+    res.redirect('/home');
+  }
 });
 
 app.get("/qrpayment", (req, res) => {
-  res.render('qrpayment', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
+  if (req.session.loggedin) {
+    res.render('qrpayment', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
+  } else {
+    res.redirect('/home');
+  }
 });
 
 app.get("/ingredients_seller", (req, res) => {
