@@ -42,7 +42,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/home", (req, res) => {
-  res.render('home', { loggedin: req.session.loggedin, username: req.session.username, user_privilege: req.session.user_privilege || ""});
+  res.render('home', { loggedin: req.session.loggedin, username: req.session.username, user_privilege: req.session.user_privilege || "" });
   // console.log(req.session.user_privilege);
 });
 
@@ -68,7 +68,7 @@ app.get("/category", (req, res) => {
     if (error) {
       console.log(error.message);
       res.render('category', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "", item: [] });
-    }else{
+    } else {
       res.render('category', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "", item: results });
     }
     res.end();
@@ -82,13 +82,13 @@ app.get("/pizza-:pizza_id", (req, res) => {
               JOIN ingredients USING (ingredient_id)\
               WHERE pizza_id = ${pizza_id}\
               ORDER BY ingredient_id;`;
-  
+
   db.all(sql, (error, results) => {
     if (error) {
       console.log(error.message);
-      res.render('pizza-name', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "", item : [{ pizza_name: 'เจ๊ง', ingredient_name: 'เจ๊ง' }]});
-    }else{
-      res.render('pizza-name', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "", item : results});
+      res.render('pizza-name', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "", item: [{ pizza_name: 'เจ๊ง', ingredient_name: 'เจ๊ง' }] });
+    } else {
+      res.render('pizza-name', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "", item: results });
     }
     res.end();
   })
@@ -116,14 +116,14 @@ app.post("/authen", async (req, res) => {
 })
 
 app.post("/newuser", async (req, res) => {
-  const { username, email, password} = req.body;
+  const { username, email, password } = req.body;
   const sql = `SELECT * FROM users WHERE username = "${username}" OR user_email = "${email}";`
   db.all(sql, (error, results) => {
     if (error) {
       console.log(error.message);
     }
     if (results.length > 0) {
-      return res.json({ success: false, message: "ชื่อผู้ใช้หรืออีเมลนี้ถูกใช้ไปแล้ว"});
+      return res.json({ success: false, message: "ชื่อผู้ใช้หรืออีเมลนี้ถูกใช้ไปแล้ว" });
     } else {
       try {
         const insert_sql = `INSERT INTO users (username, user_email, user_password, user_privilege)
@@ -148,7 +148,7 @@ app.get("/logout", (req, res) => {
 })
 app.get("/orderform", (req, res) => {
   if (req.session.loggedin) {
-    res.render('orderform', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
+    res.render('orderform', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "" });
   } else {
     res.redirect('/home');
   }
@@ -156,7 +156,7 @@ app.get("/orderform", (req, res) => {
 
 app.get("/createform", (req, res) => {
   if (req.session.loggedin) {
-    res.render('createform', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
+    res.render('createform', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "" });
   } else {
     res.redirect('/home');
   }
@@ -169,17 +169,17 @@ app.post("/create", async (req, res) => {
   db.all(sql, (error, results) => {
     if (error) {
       console.log(error.message);
-    }else{
+    } else {
       console.log("Pizza Created!");
     }
     res.end();
   })
   topping_adder(`${dough}_${size}`, pizza_name);
   topping_adder(sauce, pizza_name);
-  if(typeof(topping) == "string"){
+  if (typeof (topping) == "string") {
     topping_adder(topping, pizza_name);
-  }else{
-    topping.forEach((item)=>{
+  } else {
+    topping.forEach((item) => {
       topping_adder(item, pizza_name);
     });
   }
@@ -188,17 +188,52 @@ app.post("/create", async (req, res) => {
   res.redirect("/category");
 });
 
-app.get("/orderlist", (req, res) => {
-  if (req.session.loggedin) {
-    res.render('orderlist', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
-  } else {
-    res.redirect('/home');
+app.get("/orderlist", async (req, res) => {
+  if (!req.session.loggedin) {
+    return res.redirect('/home');
+  }
+
+  const sql = `SELECT item_id, item_type FROM orders JOIN order_items USING (order_id) WHERE user_id = ${req.session.user_id};`;
+
+  try {
+    const results = await new Promise((resolve, reject) => {
+      db.all(sql, (error, rows) => (error ? reject(error) : resolve(rows)));
+    });
+
+    const menu_order = await Promise.all(results.map(async (item) => {
+      if (item.item_type === 'pizza') {
+        const select_sql = `SELECT pizza_name, GROUP_CONCAT(thai_name, ', ' ORDER BY ingredient_id) AS thai_name, price 
+                            FROM pizzas
+                            JOIN pizza_ingredients USING (pizza_id)
+                            JOIN ingredients USING (ingredient_id)
+                            WHERE pizza_id = ${item.item_id}
+                            ORDER BY ingredient_id;`;
+
+        const pizza = await new Promise((resolve, reject) => {
+          db.all(select_sql, (error, rows) => (error ? reject(error) : resolve(rows)));
+        });
+
+        return pizza[0];
+      }
+    }));
+
+    res.render('orderlist', {
+      loggedin: req.session.loggedin,
+      username: req.session.username || "",
+      user_privilege: req.session.user_privilege || "",
+      menu: menu_order.filter(Boolean)
+    });
+
+  } catch (error) {
+    console.error(error.message);
+    res.render('orderlist', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "", menu: [] });
   }
 });
 
+
 app.get("/tracking", (req, res) => {
   if (req.session.loggedin) {
-    res.render('tracking', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
+    res.render('tracking', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "" });
   } else {
     res.redirect('/home');
   }
@@ -206,7 +241,7 @@ app.get("/tracking", (req, res) => {
 
 app.get("/tracking_seller", (req, res) => {
   if (req.session.loggedin) {
-    res.render('tracking_seller', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
+    res.render('tracking_seller', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "" });
   } else {
     res.redirect('/home');
   }
@@ -214,7 +249,7 @@ app.get("/tracking_seller", (req, res) => {
 
 app.get("/customerinfo", (req, res) => {
   if (req.session.loggedin) {
-    res.render('customerinfo', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
+    res.render('customerinfo', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "" });
   } else {
     res.redirect('/home');
   }
@@ -222,76 +257,76 @@ app.get("/customerinfo", (req, res) => {
 
 app.get("/qrpayment", (req, res) => {
   if (req.session.loggedin) {
-    res.render('qrpayment', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
+    res.render('qrpayment', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "" });
   } else {
     res.redirect('/home');
   }
 });
 
 app.get("/ingredients_seller", (req, res) => {
-  if(req.session.user_privilege == "admin" || req.session.user_privilege == "employee"){
+  if (req.session.user_privilege == "admin" || req.session.user_privilege == "employee") {
     const sql = `SELECT ingredient_name, stock_quantity, thai_name, unit FROM ingredients\
                   WHERE ingredient_name NOT LIKE "%\\_%" ESCAPE "\\";`
-  db.all(sql, (error, results) => {
-    if (error) {
-      console.log(error.message);
-      res.render('ingredients_seller', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
-    }else{
-      res.render('ingredients_seller', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "", ingredient:results});
-    }
-    res.end();
-  })
-  }else{
+    db.all(sql, (error, results) => {
+      if (error) {
+        console.log(error.message);
+        res.render('ingredients_seller', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "" });
+      } else {
+        res.render('ingredients_seller', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "", ingredient: results });
+      }
+      res.end();
+    })
+  } else {
     res.redirect("/home");
   }
 });
 
 app.get("/aboutus", (req, res) => {
-  res.render('aboutus', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
+  res.render('aboutus', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "" });
 });
 
 app.get("/faq", (req, res) => {
-  res.render('faq', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""});
+  res.render('faq', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "" });
 });
 
 app.all('*', (req, res) => {
-  res.render('404', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""})
+  res.render('404', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "" })
 });
 
 app.listen(port, () => {
   console.log(`This Web Server is running on port ${port}`);
 });
 
-let price_calc = (dough, size, topping) =>{
+let price_calc = (dough, size, topping) => {
   var dough_spec = 1;
   var size_spec = 1;
 
-  if(dough == "cheese_crust" || dough == "sausage_crust"){
+  if (dough == "cheese_crust" || dough == "sausage_crust") {
     var dough_spec = 1.3;
   }
 
-  if(size == "M"){
+  if (size == "M") {
     var size_spec = 1.4;
-  }else if(size == "L"){
+  } else if (size == "L") {
     var size_spec = 1.8;
-  }else if(size == "XL"){
+  } else if (size == "XL") {
     var size_spec = 2.2;
   }
 
-  if(typeof(topping) == "string"){
+  if (typeof (topping) == "string") {
     var price = Math.floor((150 * dough_spec) + (100 * size_spec) + (49));
-  }else{
-    var price = Math.floor((150 * dough_spec) + (100 * size_spec) + (Math.max(topping.length-2, 1)* 49));
+  } else {
+    var price = Math.floor((150 * dough_spec) + (100 * size_spec) + (Math.max(topping.length - 2, 1) * 49));
   }
 
   return price;
 };
 
-let topping_adder = (topping, pizza_name)=>{
+let topping_adder = (topping, pizza_name) => {
   var quantity = 50
-  if(topping.search("sauce") != -1){
+  if (topping.search("sauce") != -1) {
     quantity = 250;
-  }else if(topping.search("crust") != -1 || topping.search("original") != -1 || topping.search("crispy") != -1){
+  } else if (topping.search("crust") != -1 || topping.search("original") != -1 || topping.search("crispy") != -1) {
     quantity = 1;
   }
   const sql2 = `INSERT INTO pizza_ingredients (pizza_id, ingredient_id, quantity_required)\
@@ -299,10 +334,10 @@ SELECT \
     (SELECT pizza_id FROM pizzas WHERE pizza_name = "${pizza_name}") AS pizza_id,\
     (SELECT ingredient_id FROM ingredients WHERE ingredient_name = "${topping}") AS ingredient_id,\
     ${quantity} AS quantity_required;`
-  
-    db.all(sql2, (error, results2) => {
-      if (error) {
-        console.log(error.message);
-      }
-    })
+
+  db.all(sql2, (error, results2) => {
+    if (error) {
+      console.log(error.message);
+    }
+  })
 };
