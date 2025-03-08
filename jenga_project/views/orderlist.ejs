@@ -153,11 +153,7 @@
                     <div class="card p-3">
                         <img src="images/zai.png" alt="ฮาวาเอี้ยน">
                         <p style="font-size: 26px; color: rgb(187, 62, 0);"><%= menu[i].pizza_name %></p>
-                        <p style="font-size: 14px; color: grey;">รายละเอียด:
-                            <% for(var i = 0; i < item.length; i++) { %>
-                                <%= item[i].thai_name %><% if (i != item.length-1){ %>, <% } %>
-                            <% } %>
-                        </p>
+                        <p style="font-size: 14px; color: grey;">รายละเอียด: <%= menu[i].thai_name %></p>
                         <div class="quantity-wrapper d-flex mb-3"  style="justify-content: center;">
                             <div class="quantity-group-append">
                                 <button type="button" class="btn btn-minus add-quantity d-flex align-items-center justify-content-center" data-field="quantity">
@@ -175,65 +171,12 @@
                                 </button>
                             </div>
                         </div>
-                        <p style="text-align: center; font-size: 20px; font-weight: bolder; color: rgb(187, 62, 0);">399.00 บาท</p>
+                        <p style="text-align: center; font-size: 20px; font-weight: bolder; color: rgb(187, 62, 0);"><%= menu[i].price %> บาท</p>
                         <a href="#"><button class="btn btn-remove mb-3">นำออกจากรายการ</button></a>
                     </div>
                 </div>
                 <% } %>
 
-                <div class="col-md-6">
-                    <div class="card p-3">
-                        <img src="images/pizza.png" alt="ฮาวาน่า">
-                        <p style="font-size: 26px; color: rgb(187, 62, 0);">พิซซ่าฮาวาน่า</p>
-                        <p style="font-size: 14px; color: grey;">รายละเอียด: หนานุ่ม, XL, บาร์บีคิวซอส, เห็ด, สัปปะรด, แฮม</p>
-                        <div class="quantity-wrapper d-flex mb-3"  style="justify-content: center;">
-                            <div class="quantity-group-append">
-                                <button type="button" class="btn btn-minus add-quantity d-flex align-items-center justify-content-center" data-field="quantity">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                    </svg>
-                                </button>
-                            </div>
-                            <input type="number" step="1" max="" value="1" maxlength="4" size="4" name="quantity" class="quantity-field">
-                            <div class="quantity-group-append">
-                                <button type="button" class="btn btn-plus add-quantity d-flex align-items-center justify-content-center" data-field="quantity">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                        <p style="text-align: center; font-size: 20px; font-weight: bolder; color: rgb(187, 62, 0);">399.00 บาท</p>
-                        <a href="#"><button class="btn btn-remove mb-3">นำออกจากรายการ</button></a>
-                    </div>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="card p-3">
-                        <img src="images/pizza.png" alt="ฮาวาโน่">
-                        <p style="font-size: 26px; color: rgb(187, 62, 0);">พิซซ่าฮาวาโน่</p>
-                        <p style="font-size: 14px; color: grey;">รายละเอียด: หนานุ่ม, XL, บาร์บีคิวซอส, เห็ด, สัปปะรด, แฮม</p>
-                        <div class="quantity-wrapper d-flex mb-3"  style="justify-content: center;">
-                            <div class="quantity-group-append">
-                                <button type="button" class="btn btn-minus add-quantity d-flex align-items-center justify-content-center" data-field="quantity">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                    </svg>
-                                </button>
-                            </div>
-                            <input type="number" step="1" max="" value="1" maxlength="4" size="4" name="quantity" class="quantity-field">
-                            <div class="quantity-group-append">
-                                <button type="button" class="btn btn-plus add-quantity d-flex align-items-center justify-content-center" data-field="quantity">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                        <p style="text-align: center; font-size: 20px; font-weight: bolder; color: rgb(187, 62, 0);">399.00 บาท</p>
-                        <a href="#"><button class="btn btn-remove mb-3">นำออกจากรายการ</button></a>
-                    </div>
-                </div>
             </div>
             <div class="button-wrapper d-flex" style="justify-content: center;">
                 <div class="mt-3 mb-3">
