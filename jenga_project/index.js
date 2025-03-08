@@ -57,7 +57,12 @@ app.get("/choose", (req, res) => {
 });
 
 app.get("/category", (req, res) => {
-  const sql = `SELECT pizza_name, pizza_id FROM pizzas WHERE user_id = ${req.session.user_id} OR user_id = 1 ORDER BY user_id`
+  let sql = "";
+  if (req.session.loggedin) {
+    sql = `SELECT pizza_name, pizza_id FROM pizzas WHERE user_id = ${req.session.user_id} OR user_id = 1 ORDER BY user_id`
+  } else {
+    sql = `SELECT pizza_name, pizza_id FROM pizzas WHERE user_id = 1 ORDER BY user_id`
+  }
   console.log(`${req.session.user_id}`);
   db.all(sql, (error, results) => {
     if (error) {
