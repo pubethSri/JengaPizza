@@ -134,8 +134,7 @@
                 <div class="col-md-6">
                     <div class="description-card">
                         <h2 style="font-weight: bold; color: rgb(187,62,0);"><%= item[0].pizza_name %></h2>
-                        <p>ประกอบไปด้วย
-                        <% for(var i = 0; i < item.length; i++) { %>
+                        <p><% for(var i = 0; i < item.length; i++) { %>
                             <%= item[i].thai_name %><% if (i != item.length-1){ %>, <% } %>
                         <% } %>
                         </p>
