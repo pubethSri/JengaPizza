@@ -148,11 +148,16 @@
         <div class="box mb-3">
             <h2><b>รายการอาหาร</b></h2>
             <div class="row">
+                <% for(var i = 0; i < menu.length; i++) { %>
                 <div class="col-md-6">
                     <div class="card p-3">
-                        <img src="images/pizza.png" alt="ฮาวาเอี้ยน">
-                        <p style="font-size: 26px; color: rgb(187, 62, 0);">พิซซ่าฮาวาเอี้ยน</p>
-                        <p style="font-size: 14px; color: grey;">รายละเอียด: หนานุ่ม, XL, บาร์บีคิวซอส, เห็ด, สัปปะรด, แฮม</p>
+                        <img src="images/zai.png" alt="ฮาวาเอี้ยน">
+                        <p style="font-size: 26px; color: rgb(187, 62, 0);"><%= menu[i].pizza_name %></p>
+                        <p style="font-size: 14px; color: grey;">รายละเอียด:
+                            <% for(var i = 0; i < item.length; i++) { %>
+                                <%= item[i].thai_name %><% if (i != item.length-1){ %>, <% } %>
+                            <% } %>
+                        </p>
                         <div class="quantity-wrapper d-flex mb-3"  style="justify-content: center;">
                             <div class="quantity-group-append">
                                 <button type="button" class="btn btn-minus add-quantity d-flex align-items-center justify-content-center" data-field="quantity">
@@ -174,6 +179,7 @@
                         <a href="#"><button class="btn btn-remove mb-3">นำออกจากรายการ</button></a>
                     </div>
                 </div>
+                <% } %>
 
                 <div class="col-md-6">
                     <div class="card p-3">
