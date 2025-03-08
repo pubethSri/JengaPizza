@@ -150,7 +150,7 @@
                 <% for(var i = 0; i < item.length; i++) { %>
                     <div class="filterDiv flavour col-md-4 ">
                         <div class="card p-3">
-                            <% if(item[i].pizza_id >= 4 && item[i].pizza_id <= 9){ %>
+                            <% if(item[i].pizza_id >= 3 && item[i].pizza_id <= 9){ %>
                                 <a href="/pizza-<%= item[i].pizza_id %>"><img src="images/pizza<%= item[i].pizza_id %>.png" alt=<%= item[i].pizza_name %>></a>
                             <% } else{ %>
                                 <a href="/pizza-<%= item[i].pizza_id %>"><img src="images/pizza.png" alt=<%= item[i].pizza_name %>></a>
