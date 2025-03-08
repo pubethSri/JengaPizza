@@ -250,7 +250,7 @@ app.get("/faq", (req, res) => {
 });
 
 app.all('*', (req, res) => {
-  res.send("You should not be here and this page is 404 not found");
+  res.render('404', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || ""})
 });
 
 app.listen(port, () => {
