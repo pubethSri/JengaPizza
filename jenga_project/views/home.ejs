@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,6 +15,7 @@
             font-family: Prompt;
             src: url("fonts/Prompt-Regular.ttf");
         }
+
         body {
             font-family: Prompt;
             margin: 0;
@@ -30,12 +32,13 @@
             opacity: 0.1;
             z-index: -1;
         }
-        
+
         /* Specific adjustments for working with a fixed header */
         .main-content {
-            padding-top: 60px; /* Same as header height */
+            padding-top: 60px;
+            /* Same as header height */
         }
-        
+
         /* Banner carousel styling */
         /* Banner carousel styling - updated for better image fit */
         .banner-carousel {
@@ -44,7 +47,7 @@
             overflow: hidden;
             margin-bottom: 20px;
         }
-        
+
         .banner-container {
             width: 100%;
             position: relative;
@@ -53,25 +56,29 @@
             height: auto;
             max-height: none;
         }
-        
+
         .banner-slides {
             display: flex;
-            width: 300%; /* 3 slides */
+            width: 300%;
+            /* 3 slides */
             transition: transform 0.5s ease-in-out;
         }
-        
+
         .banner-slide {
-            width: 33.333%; /* Each slide takes 1/3 of the container */
+            width: 33.333%;
+            /* Each slide takes 1/3 of the container */
             flex-shrink: 0;
         }
-        
+
         .banner-image {
             width: 100%;
-            height: auto; /* This is key - let height adjust naturally */
+            height: auto;
+            /* This is key - let height adjust naturally */
             display: block;
-            object-fit: contain; /* Changed from cover to contain */
+            object-fit: contain;
+            /* Changed from cover to contain */
         }
-        
+
         /* Navigation dots - position relative to image bottom */
         .banner-dots {
             position: absolute;
@@ -82,7 +89,7 @@
             gap: 10px;
             z-index: 10;
         }
-        
+
         .dot {
             width: 12px;
             height: 12px;
@@ -91,11 +98,11 @@
             cursor: pointer;
             transition: background-color 0.3s;
         }
-        
+
         .dot.active {
             background-color: rgb(255, 255, 255);
         }
-        
+
         /* Content section styling */
         .content-section {
             padding: 40px 0;
@@ -123,7 +130,8 @@
         .container-center {
             margin: auto;
             display: flex;
-            align-items: center;  /* Ensure vertical centering */
+            align-items: center;
+            /* Ensure vertical centering */
             width: 80%;
         }
 
@@ -174,7 +182,7 @@
             justify-content: center;
             padding: 50px 20px;
         }
-        
+
         .delivery-image img {
             max-width: 100%;
             border-radius: 10px;
@@ -236,7 +244,7 @@
                                 <p>พิซซ่าฮาวาเอี้ยน</p>
                             </div>
                         </div>
-                        
+
                         <div class="filterDiv flavour col-md-4 ">
                             <div class="card p-3">
                                 <a href="/pizza-name"><img src="images/pizza.png" alt="ฮาวาน่า"></a>
@@ -253,9 +261,12 @@
                     </div>
                     <div class="d-flex justify-content-center">
                         <a href="/category" class="btn btn-light mt-4 d-flex">ดูหน้าพิซซ่าตัวอย่างและวัตถุดิบอื่น ๆ
-                            <div style="height: 20px; width: 20px; margin-left: 5px;"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
-                            </svg></div>
+                            <div style="height: 20px; width: 20px; margin-left: 5px;"><svg
+                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="size-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+                                </svg></div>
                         </a>
                     </div>
                 </div>
@@ -264,7 +275,8 @@
 
         <div class="howto-group" id="howto">
             <div class="howto-text">
-                <p style="font-size: 50px; font-weight: bolder; text-align: center;">วิธีการสั่งซื้อง่าย ๆ ที่คุณก็ทำด้วยตัวเองได้</p>
+                <p style="font-size: 50px; font-weight: bolder; text-align: center;">วิธีการสั่งซื้อง่าย ๆ
+                    ที่คุณก็ทำด้วยตัวเองได้</p>
             </div>
 
             <div class="container-center">
@@ -272,31 +284,42 @@
                     <div class="row">
                         <div class="howto-context col-md-4">
                             <div class="card p-3">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="size-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
                                 </svg>
                                 <h4 class="mb-4">เลือกพิซซ่าที่ใช่</h4>
-                                <p style="padding-left: 20px; padding-right: 20px;">ออกแบบพิซซ่าในสไตล์ที่คุณชื่นชอบและไม่เหมือนใคร เพียงกรอกฟอร์มเพื่อสร้างพิซซ่าสุดวิเศษที่อาจไม่เคยมีที่ไหนมาก่อน</p>
-                            </div>
-                        </div>
-                        
-                        <div class="howto-context col-md-4">
-                            <div class="card p-3">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z" />
-                                </svg>
-                                <h4 class="mb-4">ชำระเงิน</h4>
-                                <p style="padding-left: 20px; padding-right: 20px;">ชำระผ่าน QR Promptpay และรอการตรวจสอบจากระบบ</p>
+                                <p style="padding-left: 20px; padding-right: 20px;">
+                                    ออกแบบพิซซ่าในสไตล์ที่คุณชื่นชอบและไม่เหมือนใคร
+                                    เพียงกรอกฟอร์มเพื่อสร้างพิซซ่าสุดวิเศษที่อาจไม่เคยมีที่ไหนมาก่อน</p>
                             </div>
                         </div>
 
                         <div class="howto-context col-md-4">
                             <div class="card p-3">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349M3.75 21V9.349m0 0a3.001 3.001 0 0 0 3.75-.615A2.993 2.993 0 0 0 9.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 0 0 2.25 1.016c.896 0 1.7-.393 2.25-1.015a3.001 3.001 0 0 0 3.75.614m-16.5 0a3.004 3.004 0 0 1-.621-4.72l1.189-1.19A1.5 1.5 0 0 1 5.378 3h13.243a1.5 1.5 0 0 1 1.06.44l1.19 1.189a3 3 0 0 1-.621 4.72M6.75 18h3.75a.75.75 0 0 0 .75-.75V13.5a.75.75 0 0 0-.75-.75H6.75a.75.75 0 0 0-.75.75v3.75c0 .414.336.75.75.75Z" />
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="size-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z" />
+                                </svg>
+                                <h4 class="mb-4">ชำระเงิน</h4>
+                                <p style="padding-left: 20px; padding-right: 20px;">ชำระผ่าน QR Promptpay
+                                    และรอการตรวจสอบจากระบบ</p>
+                            </div>
+                        </div>
+
+                        <div class="howto-context col-md-4">
+                            <div class="card p-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="size-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349M3.75 21V9.349m0 0a3.001 3.001 0 0 0 3.75-.615A2.993 2.993 0 0 0 9.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 0 0 2.25 1.016c.896 0 1.7-.393 2.25-1.015a3.001 3.001 0 0 0 3.75.614m-16.5 0a3.004 3.004 0 0 1-.621-4.72l1.189-1.19A1.5 1.5 0 0 1 5.378 3h13.243a1.5 1.5 0 0 1 1.06.44l1.19 1.189a3 3 0 0 1-.621 4.72M6.75 18h3.75a.75.75 0 0 0 .75-.75V13.5a.75.75 0 0 0-.75-.75H6.75a.75.75 0 0 0-.75.75v3.75c0 .414.336.75.75.75Z" />
                                 </svg>
                                 <h4 class="mb-4">รอรับพิซซ่าร้อน ๆ ได้เลย</h4>
-                                <p style="padding-left: 20px; padding-right: 20px;">เมื่อคุณทำขั้นตอนก่อนหน้าเสร็จสิ้นแล้ว ก็รอรับพิซซ่าร้อน ๆ อยู่ที่บ้านได้เลย เราสัญญาว่าจะนำส่งคุณให้เร็วที่สุด</p>
+                                <p style="padding-left: 20px; padding-right: 20px;">
+                                    เมื่อคุณทำขั้นตอนก่อนหน้าเสร็จสิ้นแล้ว ก็รอรับพิซซ่าร้อน ๆ อยู่ที่บ้านได้เลย
+                                    เราสัญญาว่าจะนำส่งคุณให้เร็วที่สุด</p>
                             </div>
                         </div>
                     </div>
@@ -310,11 +333,18 @@
                     </div>
                     <div class="col-md-6 d-flex justify-content-center align-items-center">
                         <div class="motto-text">
-                            <h2 style="font-size: 60px;font-weight: 800; font-family: Arial, Helvetica, sans-serif; color: black;">Fast, Delicious <br><span class="text-muted">and</span><br><span class="motto-text" style="font-size: 80px; font-weight: 900;">UNIQUE</span></h2>
-                            <p style="color: black;">สวัสดี! เราคือคนทำพิซซ่าโฮมเมดในกรุงเทพ พิซซ่าของเรานำเสนอถึงความคิดสร้างสรรค์ แปลกใหม่ และไม่ซ้ำใคร โดยคำนึงถึงความต้องการของลูกค้าของเราเป็นสำคัญ พร้อมกันนี้เรายังมีวัตถุดิบให้คุณเลือกอย่างหลากหลายอีกด้วย เป็นพิซซ่าที่คู่ควรแก่การลิ้มลองสักครั้ง!</p>
+                            <h2
+                                style="font-size: 60px;font-weight: 800; font-family: Arial, Helvetica, sans-serif; color: black;">
+                                Fast, Delicious <br><span class="text-muted">and</span><br><span class="motto-text"
+                                    style="font-size: 80px; font-weight: 900;">UNIQUE</span></h2>
+                            <p style="color: black;">สวัสดี! เราคือคนทำพิซซ่าโฮมเมดในกรุงเทพ
+                                พิซซ่าของเรานำเสนอถึงความคิดสร้างสรรค์ แปลกใหม่ และไม่ซ้ำใคร
+                                โดยคำนึงถึงความต้องการของลูกค้าของเราเป็นสำคัญ
+                                พร้อมกันนี้เรายังมีวัตถุดิบให้คุณเลือกอย่างหลากหลายอีกด้วย
+                                เป็นพิซซ่าที่คู่ควรแก่การลิ้มลองสักครั้ง!</p>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
         </div>
@@ -325,56 +355,70 @@
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const slides = document.getElementById('bannerSlides');
             const dots = document.querySelectorAll('.dot');
             let currentSlide = 0;
             let slideInterval;
-            
+
             // Function to update the active slide
             function goToSlide(index) {
                 // Update slide position
                 slides.style.transform = `translateX(-${index * 33.333}%)`;
-                
+
                 // Update active dot
                 dots.forEach(dot => dot.classList.remove('active'));
                 dots[index].classList.add('active');
-                
+
                 // Update current slide index
                 currentSlide = index;
             }
-            
+
             // Function to advance to the next slide
             function nextSlide() {
                 currentSlide = (currentSlide + 1) % 3;
                 goToSlide(currentSlide);
             }
-            
+
             // Start the automatic slide rotation
             function startSlideShow() {
                 slideInterval = setInterval(nextSlide, 10000); // Change slide every 10 seconds
             }
-            
+
             // Stop the automatic slide rotation
             function stopSlideShow() {
                 clearInterval(slideInterval);
             }
-            
+
             // Add click event listeners to the dots
             dots.forEach(dot => {
-                dot.addEventListener('click', function() {
+                dot.addEventListener('click', function () {
                     const slideIndex = parseInt(this.getAttribute('data-slide'));
                     goToSlide(slideIndex);
-                    
+
                     // Reset the timer when a dot is clicked
                     stopSlideShow();
                     startSlideShow();
                 });
             });
-            
+
             // Start the slideshow
             startSlideShow();
         });
     </script>
+
+    <script>
+        window.onload = function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const nli = urlParams.get('nli');
+            let loggedin = "<%= loggedin %>";
+            if (!loggedin) {
+                if (nli) {
+                    document.getElementById('login-trigger').click();
+                }
+            }
+        };
+    </script>
 </body>
+
 </html>

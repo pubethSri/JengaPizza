@@ -48,7 +48,7 @@ app.get("/choose", (req, res) => {
   if (req.session.loggedin) {
     res.render('choose', { loggedin: req.session.loggedin, username: req.session.username, user_privilege: req.session.user_privilege || "" });
   } else {
-    res.redirect('/home');
+    res.redirect('/home?nli=true');
   }
 });
 
@@ -214,7 +214,7 @@ app.get("/orderform", (req, res) => {
   if (req.session.loggedin) {
     res.render('orderform', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "" });
   } else {
-    res.redirect('/home');
+    res.redirect('/home?nli=true');
   }
 });
 
@@ -222,7 +222,7 @@ app.get("/createform", (req, res) => {
   if (req.session.loggedin) {
     res.render('createform', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "" });
   } else {
-    res.redirect('/home');
+    res.redirect('/home?nli=true');
   }
 });
 
@@ -254,7 +254,7 @@ app.post("/create", async (req, res) => {
 
 app.get("/orderlist", async (req, res) => {
   if (!req.session.loggedin) {
-    return res.redirect('/home');
+    return res.redirect('/home?nli=true');
   }
 
   const sql = `SELECT order_id, item_id, item_type, quantity FROM orders JOIN order_items USING (order_id) WHERE user_id = ${req.session.user_id} AND order_status = "pending";`;
@@ -315,7 +315,7 @@ app.get("/tracking", (req, res) => {
   if (req.session.loggedin) {
     res.render('tracking', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "" });
   } else {
-    res.redirect('/home');
+    res.redirect('/home?nli=true');
   }
 });
 
@@ -323,7 +323,7 @@ app.get("/tracking_seller", (req, res) => {
   if (req.session.loggedin) {
     res.render('tracking_seller', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "" });
   } else {
-    res.redirect('/home');
+    res.redirect('/home?nli=true');
   }
 });
 
@@ -359,7 +359,7 @@ app.get("/customerinfo", (req, res) => {
       }
     });
   } else {
-    res.redirect('/home');
+    res.redirect('/home?nli=true');
   }
 });
 
@@ -404,7 +404,7 @@ app.get("/qrpayment", (req, res) => {
   if (req.session.loggedin) {
     res.render('qrpayment', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "" });
   } else {
-    res.redirect('/home');
+    res.redirect('/home?nli=true');
   }
 });
 
@@ -447,7 +447,7 @@ app.get("/ingredients_seller", (req, res) => {
       });
     });
   } else {
-    res.redirect("/home");
+    res.redirect("/home?nli=true");
   }
 });
 
@@ -589,10 +589,8 @@ app.post("/addtocart", async (req, res) => {
       res.json({ message: "ส่งมาล้ะแต่ Error", redirect: '/orderlist' });
     }
   } else {
-    res.json({ message: "ส่งมาล้ะแต่ Error", redirect: '/home' });
+    res.json({ message: "ส่งมาล้ะแต่ Error", redirect: '/home?nli=true' });
   }
-
-  // res.redirect('/home');
 });
 
 

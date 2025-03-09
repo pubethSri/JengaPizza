@@ -196,8 +196,8 @@
     </footer>
 
     <script>
-        let id = <%= JSON.stringify(item[0].etc_id) %>;
-        let price = <%= JSON.stringify(item[0].price) %>;
+        let id = "<%= JSON.stringify(item[0].etc_id) %>";
+        let price = "<%= JSON.stringify(item[0].price) %>";
         document.getElementById("addtocartBtn").addEventListener("click", function () {
             fetch('/addtocart', {  // Route in Express
                 method: 'POST',
