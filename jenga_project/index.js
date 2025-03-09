@@ -41,7 +41,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/home", (req, res) => {
-  res.render('home', { loggedin: req.session.loggedin, username: req.session.username, user_privilege: req.session.user_privilege || ""});
+  res.render('home', { loggedin: req.session.loggedin, username: req.session.username, user_privilege: req.session.user_privilege || "" });
 });
 
 app.get("/choose", (req, res) => {
@@ -52,38 +52,78 @@ app.get("/choose", (req, res) => {
   }
 });
 
-app.get("/category", (req, res) => {
+app.get("/category", async (req, res) => {
   let sql = "";
   if (req.session.loggedin) {
     sql = `SELECT pizza_name, pizza_id FROM pizzas WHERE user_id = ${req.session.user_id} OR user_id = 1 ORDER BY user_id`
   } else {
     sql = `SELECT pizza_name, pizza_id FROM pizzas WHERE user_id = 1 ORDER BY user_id`
   }
-  console.log(`${req.session.user_id}`);
-  db.all(sql, (error, results) => {
-    if (error) {
-      console.log(error.message);
-      res.render('category', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "", item: [] });
-    } else {
-      res.render('category', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "", item: results });
-    }
-  });
+  let etc_query = "SELECT * FROM etc";
+  let ingredient_query = `SELECT ingredient_id, ingredient_name, stock_quantity, thai_name FROM ingredients
+                          WHERE ingredient_name NOT LIKE "%\\_%" ESCAPE "\\";`
+  let pizza_results = "";
+  let etc_results = "";
+  let ingredient_results = "";
+  try {
+    pizza_results = await new Promise((resolve, reject) => {
+      db.all(sql, (error, rows) => (error ? reject(error) : resolve(rows)));
+    })
+
+    etc_results = await new Promise((resolve, reject) => {
+      db.all(etc_query, (error, rows) => (error ? reject(error) : resolve(rows)));
+    })
+    
+    ingredient_results = await new Promise((resolve, reject) => {
+      db.all(ingredient_query, (error, rows) => (error ? reject(error) : resolve(rows)));
+    })
+
+    res.render('category', {
+      loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "",
+      pizza_item: pizza_results, etc_item: etc_results, ingredient_item: ingredient_results
+    });
+  
+  } catch (error) {
+    console.error(error.message);
+    res.render('category', {
+      loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "",
+      pizza_item: [], etc_item: [], ingredient_item: []
+    });
+  }
+  
 });
 
 app.get("/pizza-:pizza_id", (req, res) => {
   const pizza_id = req.params.pizza_id;
-  const sql = `SELECT pizza_id, pizza_name, thai_name FROM pizzas\
+  const sql = `SELECT pizza_id, pizza_name, thai_name, price FROM pizzas\
               JOIN pizza_ingredients USING (pizza_id)\
               JOIN ingredients USING (ingredient_id)\
               WHERE pizza_id = ${pizza_id}\
               ORDER BY ingredient_id;`;
-
+  
   db.all(sql, (error, results) => {
+    console.log(results);
     if (error) {
       console.log(error.message);
       res.render('pizza-name', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "", item: [{ pizza_name: 'เจ๊ง', ingredient_name: 'เจ๊ง' }] });
     } else {
       res.render('pizza-name', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "", item: results });
+    }
+  });
+});
+
+app.get("/etc-:etc_id", (req, res) => {
+  const etc_id = req.params.etc_id;
+  const sql = `SELECT * FROM etc
+               WHERE etc_id = ${etc_id}`;
+  
+  db.all(sql, (error, results) => {
+    console.log(results);
+    if (error) {
+      console.log(error.message);
+      res.render('etc-name', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "", item: [{ etc_name: 'เจ๊ง', price: 'เจ๊ง' }] });
+    } else {
+      res.render('etc-name', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "", item: results });
     }
   });
 });
@@ -164,7 +204,7 @@ app.post("/create", async (req, res) => {
       console.log("Pizza Created!");
     }
   });
-  
+
   topping_adder(`${dough}_${size}`, pizza_name);
   topping_adder(sauce, pizza_name);
   if (typeof (topping) == "string") {
@@ -206,7 +246,7 @@ app.get("/orderlist", async (req, res) => {
         pizza[0].quantity = item.quantity;
         pizza[0].type = item.item_type;
         return pizza[0];
-      }else if (item.item_type === 'etc') {
+      } else if (item.item_type === 'etc') {
         const select_sql = `SELECT etc_name, price, etc_id
                             FROM etc
                             WHERE etc_id = ${item.item_id}
@@ -269,24 +309,24 @@ app.get("/qrpayment", (req, res) => {
 
 // Updated ingredients seller route to fetch all necessary data
 app.get("/ingredients_seller", (req, res) => {
-  if(req.session.user_privilege == "admin" || req.session.user_privilege == "employee") {
+  if (req.session.user_privilege == "admin" || req.session.user_privilege == "employee") {
     const sql = `SELECT ingredient_id, ingredient_name, stock_quantity, thai_name, unit FROM ingredients
                 WHERE ingredient_name NOT LIKE "%\\_%" ESCAPE "\\";`
     db.all(sql, (error, results) => {
       if (error) {
         console.log(error.message);
-        res.render('ingredients_seller', { 
-          loggedin: req.session.loggedin, 
-          username: req.session.username || "", 
+        res.render('ingredients_seller', {
+          loggedin: req.session.loggedin,
+          username: req.session.username || "",
           user_privilege: req.session.user_privilege || "",
           ingredient: []
         });
       } else {
         console.log(results);
-        res.render('ingredients_seller', { 
-          loggedin: req.session.loggedin, 
-          username: req.session.username || "", 
-          user_privilege: req.session.user_privilege || "", 
+        res.render('ingredients_seller', {
+          loggedin: req.session.loggedin,
+          username: req.session.username || "",
+          user_privilege: req.session.user_privilege || "",
           ingredient: results
         });
       }
@@ -298,39 +338,39 @@ app.get("/ingredients_seller", (req, res) => {
 
 // route to handle inventory updates
 app.post("/update-stock", (req, res) => {
-  if(req.session.user_privilege !== "admin" && req.session.user_privilege !== "employee") {
+  if (req.session.user_privilege !== "admin" && req.session.user_privilege !== "employee") {
     return res.status(403).send("Access denied");
   }
 
   const { ingredient_id, quantity, operation, current_stock } = req.body;
-  
+
   // Input validation
   if (!ingredient_id || !quantity || !operation) {
     return res.status(400).send("Missing required parameters");
   }
-  
+
   // Convert quantity to number
   const changeAmount = parseInt(quantity);
   if (isNaN(changeAmount) || changeAmount <= 0) {
     return res.status(400).send("Invalid quantity");
   }
-  
+
   // Get current stock from database to ensure we have the latest value
   const checkSql = `SELECT stock_quantity FROM ingredients WHERE ingredient_id = ?`;
-  
+
   db.get(checkSql, [ingredient_id], (error, result) => {
     if (error) {
       console.error("Database error:", error.message);
       return res.status(500).send("Database error");
     }
-    
+
     if (!result) {
       return res.status(404).send("Ingredient not found");
     }
-    
+
     let currentStock = result.stock_quantity;
     let newStock;
-    
+
     if (operation === "increase") {
       newStock = currentStock + changeAmount;
     } else if (operation === "decrease") {
@@ -341,18 +381,18 @@ app.post("/update-stock", (req, res) => {
     } else {
       return res.status(400).send("Invalid operation");
     }
-    
+
     // Update stock in database
     const updateSql = `UPDATE ingredients SET stock_quantity = ? WHERE ingredient_id = ?`;
-    
-    db.run(updateSql, [newStock, ingredient_id], function(error) {
+
+    db.run(updateSql, [newStock, ingredient_id], function (error) {
       if (error) {
         console.error("Update error:", error.message);
         return res.status(500).send("Update failed");
       }
-      
+
       console.log(`Stock updated: Ingredient #${ingredient_id} ${operation}d by ${changeAmount}. New stock: ${newStock}`);
-      
+
       // Redirect back to the ingredients page
       res.redirect("/ingredients_seller");
     });

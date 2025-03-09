@@ -147,47 +147,38 @@
                     </div>
                 </div>
 
-                <% for(var i = 0; i < item.length; i++) { %>
+                <% for(var i = 0; i < pizza_item.length; i++) { %>
                     <div class="filterDiv flavour col-md-4 ">
                         <div class="card p-3">
-                            <% if(item[i].pizza_id >= 3 && item[i].pizza_id <= 9){ %>
-                                <a href="/pizza-<%= item[i].pizza_id %>"><img src="images/pizza<%= item[i].pizza_id %>.png" alt=<%= item[i].pizza_name %>></a>
+                            <% if(pizza_item[i].pizza_id >= 3 && pizza_item[i].pizza_id <= 9){ %>
+                                <a href="/pizza-<%= pizza_item[i].pizza_id %>"><img src="images/pizza<%= pizza_item[i].pizza_id %>.png" alt=<%= pizza_item[i].pizza_name %>></a>
                             <% } else{ %>
-                                <a href="/pizza-<%= item[i].pizza_id %>"><img src="images/pizza.png" alt=<%= item[i].pizza_name %>></a>
+                                <a href="/pizza-<%= pizza_item[i].pizza_id %>"><img src="images/pizza.png" alt=<%= pizza_item[i].pizza_name %>></a>
                             <% } %>
-                            <p><%= item[i].pizza_name %></p>
+                            <p><%= pizza_item[i].pizza_name %></p>
                         </div>
                     </div>
                 <% } %>
 
                 
-                <div class="filterDiv ingredient col-md-4">
-                    <div class="card p-3">
-                        <a href=""><img src="images/pizza.png" alt="ผัก"></a>
-                        <p>ผัก</p>
+                <% for(var i = 0; i < etc_item.length; i++) { %>
+                    <div class="filterDiv etc col-md-4 ">
+                        <div class="card p-3">
+                            <a href="/etc-<%= etc_item[i].etc_id %>"><img src="images/etc<%= etc_item[i].etc_id %>.png" alt=<%= etc_item[i].etc_name %>></a>
+                            <p><%= etc_item[i].etc_name %></p>
+                        </div>
                     </div>
-                </div>
+                <% } %>
+
+                <% for(var i = 0; i < ingredient_item.length; i++) { %>
+                    <div class="filterDiv ingredient col-md-4 ">
+                        <div class="card p-3">
+                            <img src="images/<%= ingredient_item[i].ingredient_name %>.png" alt=<%= ingredient_item[i].thai_name %>>
+                            <p><%= ingredient_item[i].thai_name %></p>
+                        </div>
+                    </div>
+                <% } %>
                 
-                <div class="filterDiv ingredient col-md-4">
-                    <div class="card p-3">
-                        <a href=""><img src="images/pizza.png" alt="เบค่อน"></a>
-                        <p>เบค่อน</p>
-                    </div>
-                </div>
-                
-                <div class="filterDiv etc col-md-4">
-                    <div class="card p-3">
-                        <a href=""><img src="images/pizza.png" alt="แฮชบราวน์"></a>
-                        <p>แฮชบราวน์</p>
-                    </div>
-                </div>
-                
-                <div class="filterDiv etc col-md-4">
-                    <div class="card p-3">
-                        <a href=""><img src="images/pizza.png" alt="ไก่ทอด"></a>
-                        <p>ไก่ทอด</p>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
