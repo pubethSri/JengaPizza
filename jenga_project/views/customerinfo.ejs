@@ -139,50 +139,52 @@
                     </div>
                 </div>
                 <div class="col-md-6" style="text-align: left;">
-                    <form>
+                    <form method="post" action="/new_address">
                         <h2><b>อีกนิดเดียว ใกล้เสร็จแล้ว!</b></h2>
                         <div class="mb-3">
-                            <input type="text" class="form-control" id="validationTextarea" placeholder="ชื่อลูกค้า" required>
+                            <input type="text" name="receiver_name" class="form-control" id="validationTextarea" placeholder="ชื่อลูกค้า" required value="<%= address.receiver_name %>" <%= address.tag %>>
                         </div>
 
                         <div class="mb-3">
-                            <input type="text" class="form-control" id="validationTextarea" placeholder="เบอร์โทรศัพท์" required>
+                            <input type="text" name="phone_no" class="form-control" id="validationTextarea" placeholder="เบอร์โทรศัพท์" required value="<%= address.phone_no %>" <%= address.tag %>>
                         </div>
 
                         <div class="mb-3">
-                            <input type="text" class="form-control" id="validationTextarea" placeholder="บ้านเลขที่" required>
+                            <input type="text" name="house_no" class="form-control" id="validationTextarea" placeholder="บ้านเลขที่" required value="<%= address.house_no %>" <%= address.tag %>>
                         </div>
 
                         <div class="mb-3">
-                            <input type="text" class="form-control" id="validationTextarea" placeholder="หมู่บ้าน" required>
+                            <input type="text" name="village_no" class="form-control" id="validationTextarea" placeholder="หมู่บ้าน" required value="<%= address.village_no %>" <%= address.tag %>>
                         </div>
 
                         <div class="mb-3">
-                            <input type="text" class="form-control" id="validationTextarea" placeholder="ถนน" required>
+                            <input type="text" name="street" class="form-control" id="validationTextarea" placeholder="ถนน" required value="<%= address.street %>" <%= address.tag %>>
                         </div>
 
                         <div class="mb-3">
-                            <input type="text" class="form-control" id="validationTextarea" placeholder="แขวง/ตำบล" required>
+                            <input type="text" name="sub_district" class="form-control" id="validationTextarea" placeholder="แขวง/ตำบล" required value="<%= address.sub_district %>" <%= address.tag %>>
                         </div>
 
                         <div class="mb-3">
-                            <input type="text" class="form-control" id="validationTextarea" placeholder="เขต/อำเภอ" required>
+                            <input type="text" name="district" class="form-control" id="validationTextarea" placeholder="เขต/อำเภอ" required value="<%= address.district %>" <%= address.tag %>>
                         </div>
 
                         <div class="mb-3">
-                            <input type="text" class="form-control" id="validationTextarea" placeholder="จังหวัด" required>
+                            <input type="text" name="province" class="form-control" id="validationTextarea" placeholder="จังหวัด" required value="<%= address.province %>" <%= address.tag %>>
                         </div>
 
                         <div class="mb-3">
-                            <input type="text" class="form-control" id="validationTextarea" placeholder="ประเทศ" required>
+                            <input type="text" name="country" class="form-control" id="validationTextarea" placeholder="ประเทศ" required value="ประเทศไทย" disabled>
+                        </div>
+
+                        <div class="mb-3">
+                            <input type="text" name="postal_code" class="form-control" id="validationTextarea" placeholder="รหัสไปรษณีย์" required value="<%= address.postal_code %>" <%= address.tag %>>
                         </div>
 
                         <div class="button-wrapper d-flex" style="justify-content: center;">
                             <div class="mb-3">
-                                <a href="/qrpayment"><button class="btn btn-red" type="submit" onclick="window.location.href='/qrpayment';">ตกลง</button></a>
-                                <a href="/orderlist">
-                                    <button class="btn btn-grey" type="button" onclick="window.location.href='/orderlist';">ยกเลิก</button>
-                                </a>
+                                <button class="btn btn-red" type="submit">ตกลง</button>
+                                <button class="btn btn-grey" type="button" onclick="window.location.href='/orderlist';">ยกเลิก</button>
                             </div>
                         </div>
                     </form>

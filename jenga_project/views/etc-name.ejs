@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,8 +35,10 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: calc(100vh - 60px); /* Adjust for navbar */
-            padding-top: 60px; /* Ensure content is not hidden behind navbar */
+            min-height: calc(100vh - 60px);
+            /* Adjust for navbar */
+            padding-top: 60px;
+            /* Ensure content is not hidden behind navbar */
         }
 
         .box {
@@ -47,7 +50,8 @@
 
         .box .row {
             display: flex;
-            align-items: center; /* Center items vertically */
+            align-items: center;
+            /* Center items vertically */
         }
 
         .pizza-card {
@@ -113,9 +117,9 @@
         .more {
             background-color: white;
         }
-
     </style>
 </head>
+
 <body>
 
     <header>
@@ -131,19 +135,27 @@
                         <img src="images\etc<%= item[0].etc_id %>.png" alt="พิซซ่า">
                         <p id="price"
                             style="text-align: center; font-size: 20px; font-weight: bolder; color: rgb(187, 62, 0);">
-                            <%= item[0].price %>.00 บาท</p>
+                            <%= item[0].price %>.00 บาท
+                        </p>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="description-card">
-                        <h2 style="font-weight: bold; color: rgb(187,62,0);"><%= item[0].etc_name %></h2>
+                        <h2 style="font-weight: bold; color: rgb(187,62,0);">
+                            <%= item[0].etc_name %>
+                        </h2>
                         <div class="d-flex">
-                            <a href="/orderform" style="text-decoration: none;"><button class="btn btn-red mt-4 mr-2">เพิ่มเข้ารายการสินค้า</button></a>
-                            <a href="/category" style="text-decoration: none;"><button class="btn btn-light mt-4 d-flex">กลับไปหน้าเมนู
-                                <div style="height: 20px; width: 20px; margin-left: 5px;"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
-                                </svg></div>
-                              </button></a>
+                            <div style="text-decoration: none;"><button id="addtocartBtn"
+                                    class="btn btn-red mt-4 mr-2">เพิ่มเข้ารายการสินค้า</button></div>
+                            <a href="/category" style="text-decoration: none;"><button
+                                    class="btn btn-light mt-4 d-flex">กลับไปหน้าเมนู
+                                    <div style="height: 20px; width: 20px; margin-left: 5px;"><svg
+                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" class="size-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+                                        </svg></div>
+                                </button></a>
                         </div>
                     </div>
                 </div>
@@ -161,14 +173,14 @@
                         <p>น้ำเปล่า</p>
                     </div>
                 </div>
-                
+
                 <div class="filterDiv ingredient col-md-4">
                     <div class="card p-3">
                         <a href="/etc-3"><img src="images/etc3.png" alt="ผัก"></a>
                         <p>ไก่ทอด เดวิลวิงส์</p>
                     </div>
                 </div>
-                
+
                 <div class="filterDiv ingredient col-md-4">
                     <div class="card p-3">
                         <a href="/etc-6"><img src="images/etc6.png" alt="เบค่อน"></a>
@@ -183,5 +195,23 @@
         <%- include('footer') %>
     </footer>
 
+    <script>
+        let id = "<%= JSON.stringify(item[0].etc_id) %>";
+        let price = "<%= JSON.stringify(item[0].price) %>";
+        document.getElementById("addtocartBtn").addEventListener("click", function () {
+            fetch('/addtocart', {  // Route in Express
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ item_id: id, item_type: "etc", item_price: price })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    window.location.href = data.redirect;
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+
 </body>
+
 </html>

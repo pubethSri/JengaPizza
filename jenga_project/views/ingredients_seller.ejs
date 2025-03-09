@@ -170,6 +170,11 @@
             -webkit-appearance: none;
             margin: 0;
         }
+        
+        .price-info {
+            font-size: 0.9rem;
+            color: #444;
+        }
     </style>
 </head>
 <body>
@@ -197,7 +202,29 @@
                                    data-id="<%= ingredient[i].ingredient_id %>" 
                                    data-name="<%= ingredient[i].thai_name %>"
                                    data-stock="<%= ingredient[i].stock_quantity %>"
-                                   data-unit="<%= ingredient[i].unit %>">
+                                   data-unit="<%= ingredient[i].unit %>"
+                                   data-type="ingredient">
+                                <b>จัดการคลัง</b>
+                            </button>
+                        </div>
+                    </div>
+                    <% } %>
+                <% } %>
+                
+                <% if(typeof etc !== 'undefined') { %>
+                    <% for(var i = 0; i < etc.length; i++) { %>
+                    <div class="filterDiv etc col-md-4">
+                        <div class="card p-3">
+                            <a href=""><img src="images/etc<%= etc[i].etc_id %>.png" alt="<%= etc[i].etc_name %>"></a>
+                            <p><%= etc[i].etc_name %></p>
+                            <p>คงเหลือ: <%= etc[i].stock_quantity %></p>
+                            <!-- <p class="price-info">ราคา: <%= etc[i].price %> บาท</p> -->
+                            <button type="button" class="btn btn-red" onclick="on(this)" 
+                                   data-id="<%= etc[i].etc_id %>" 
+                                   data-name="<%= etc[i].etc_name %>"
+                                   data-stock="<%= etc[i].stock_quantity %>"
+                                   data-price="<%= etc[i].price %>"
+                                   data-type="etc">
                                 <b>จัดการคลัง</b>
                             </button>
                         </div>
@@ -205,65 +232,39 @@
                     <% } %>
                 <% } else { %>
                     <!-- Fallback static data if no database connection -->
-                    <div class="filterDiv ingredient col-md-4">
+                    <div class="filterDiv etc col-md-4">
                         <div class="card p-3">
-                            <a href=""><img src="images/pizza.png" alt="ผัก"></a>
-                            <p>ผัก</p>
+                            <a href=""><img src="images/pizza.png" alt="แฮชบราวน์"></a>
+                            <p>แฮชบราวน์</p>
                             <p>คงเหลือ: 300</p>
                             <button type="button" class="btn btn-red" onclick="on(this)"><b>จัดการคลัง</b></button>
                         </div>
                     </div>
                     
-                    <div class="filterDiv ingredient col-md-4">
+                    <div class="filterDiv etc col-md-4">
                         <div class="card p-3">
-                            <a href=""><img src="images/pizza.png" alt="เบค่อน"></a>
-                            <p>เบค่อน</p>
+                            <a href=""><img src="images/pizza.png" alt="ไก่ทอด"></a>
+                            <p>ไก่ทอด</p>
                             <p>คงเหลือ: 300</p>
                             <button type="button" class="btn btn-red" onclick="on(this)"><b>จัดการคลัง</b></button>
                         </div>
                     </div>
 
-                    <div class="filterDiv ingredient col-md-4">
+                    <div class="filterDiv etc col-md-4">
                         <div class="card p-3">
-                            <a href=""><img src="images/pizza.png" alt="สับปะรด"></a>
-                            <p>สับปะรด</p>
+                            <a href=""><img src="images/pizza.png" alt="ลาซานญ่า"></a>
+                            <p>ลาซานญ่า</p>
                             <p>คงเหลือ: 300</p>
                             <button type="button" class="btn btn-red" onclick="on(this)"><b>จัดการคลัง</b></button>
                         </div>
                     </div>
                 <% } %>
-                
-                <div class="filterDiv etc col-md-4">
-                    <div class="card p-3">
-                        <a href=""><img src="images/pizza.png" alt="แฮชบราวน์"></a>
-                        <p>แฮชบราวน์</p>
-                        <p>คงเหลือ: 300</p>
-                        <button type="button" class="btn btn-red" onclick="on(this)"><b>จัดการคลัง</b></button>
-                    </div>
-                </div>
-                
-                <div class="filterDiv etc col-md-4">
-                    <div class="card p-3">
-                        <a href=""><img src="images/pizza.png" alt="ไก่ทอด"></a>
-                        <p>ไก่ทอด</p>
-                        <p>คงเหลือ: 300</p>
-                        <button type="button" class="btn btn-red" onclick="on(this)"><b>จัดการคลัง</b></button>
-                    </div>
-                </div>
-
-                <div class="filterDiv etc col-md-4">
-                    <div class="card p-3">
-                        <a href=""><img src="images/pizza.png" alt="ลาซานญ่า"></a>
-                        <p>ลาซานญ่า</p>
-                        <p>คงเหลือ: 300</p>
-                        <button type="button" class="btn btn-red" onclick="on(this)"><b>จัดการคลัง</b></button>
-                    </div>
-                </div>
             </div>
             
             <div id="stock-modal">
                 <div id="text">
                     <p style="color: black; font-size: large;"><b>คงเหลือ: <span id="modal-stock">300</span> <span id="modal-unit"></span></b></p>
+                    <!-- <p id="modal-price" style="color: black; font-size: small; display: none;"><b>ราคา: <span>0</span> บาท</b></p> -->
                     <div class="quantity-wrapper d-flex mb-3" style="justify-content: center;">
                         <div class="quantity-group-append">
                             <button type="button" class="btn btn-minus add-quantity d-flex align-items-center justify-content-center" data-field="quantity">
@@ -287,6 +288,7 @@
                     </div>
                     <form id="update-form" action="/update-stock" method="POST" style="display: none;">
                         <input type="hidden" name="ingredient_id" id="ingredient-id">
+                        <input type="hidden" name="etc_id" id="etc-id">
                         <input type="hidden" name="quantity" id="update-quantity">
                         <input type="hidden" name="operation" id="update-operation">
                         <input type="hidden" name="current_stock" id="current-stock">
@@ -301,6 +303,29 @@
     </footer>
 
     <script>
+        // check which tab to display when redirect to the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if there's a tab parameter in the URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const tabParam = urlParams.get('tab');
+            
+            // Set the active tab based on the parameter
+            if (tabParam === 'etc') {
+                // Switch to etc tab
+                filterSelection('etc');
+                
+                // Update the active class
+                var current = document.getElementsByClassName("active");
+                if (current.length > 0) {
+                current[0].classList.remove("active");
+                }
+                document.querySelector('.category[onclick="filterSelection(\'etc\')"]').classList.add("active");
+            } else {
+                // Default to ingredient tab
+                filterSelection('ingredient');
+            }
+        });
+        
         filterSelection("ingredient")
         function filterSelection(c) {
           var x, i;
@@ -346,65 +371,92 @@
         }
 
         function on(element) {
-        let card = element.closest(".card");
-        let ingredientId = element.dataset.id || '';
-        let stockText = card.querySelectorAll("p")[1];
-        let stockAmount = 0;
-        let unit = '';
-        
-        // Check if we're using database data (with data attributes) or static data
-        if (element.dataset.stock) {
-            stockAmount = parseInt(element.dataset.stock);
-            unit = element.dataset.unit || '';
-        } else {
-            // Extract from the text for static data
-            stockAmount = parseInt(stockText.innerText.match(/\d+/)[0]);
+            let card = element.closest(".card");
+            let itemType = element.dataset.type || '';
+            let itemId = element.dataset.id || '';
+            let stockText = card.querySelectorAll("p")[1];
+            let stockAmount = 0;
+            let unit = '';
+            let price = '';
+            
+            // Reset the form
+            document.getElementById("ingredient-id").value = '';
+            document.getElementById("etc-id").value = '';
+            
+            // Check if we're using database data (with data attributes) or static data
+            if (element.dataset.stock) {
+                stockAmount = parseInt(element.dataset.stock);
+                unit = element.dataset.unit || '';
+                price = element.dataset.price || '';
+            } else {
+                // Extract from the text for static data
+                stockAmount = parseInt(stockText.innerText.match(/\d+/)[0]);
+            }
+
+            // Update modal with current stock information
+            document.getElementById("modal-stock").innerText = stockAmount;
+            document.getElementById("modal-unit").innerText = unit;
+            
+            // Handle price display for etc items
+            // let priceElement = document.getElementById("modal-price");
+            // if (price && itemType === 'etc') {
+            //     priceElement.querySelector("span").innerText = price;
+            //     priceElement.style.display = "block";
+            // } else {
+            //     priceElement.style.display = "none";
+            // }
+            
+            // Set default quantity to 1
+            let inputField = document.querySelector(".quantity-field");
+            inputField.value = 1;
+
+            // Store data for form submission based on item type
+            if (itemType === 'etc') {
+                document.getElementById("etc-id").value = itemId;
+            } else {
+                document.getElementById("ingredient-id").value = itemId;
+            }
+            
+            document.getElementById("current-stock").value = stockAmount;
+            
+            // Store references for updating UI
+            document.getElementById("stock-modal").setAttribute("data-stock", stockAmount);
+            document.getElementById("stock-modal").setAttribute("data-card", JSON.stringify(card.innerHTML));
+            document.getElementById("stock-modal").setAttribute("data-unit", unit);
+            document.getElementById("stock-modal").setAttribute("data-type", itemType);
+
+            // Show modal
+            document.getElementById("stock-modal").style.display = "block";
+            
+            // Add event listener for closing modal when clicking outside
+            document.getElementById("stock-modal").addEventListener("click", closeModalOutside);
         }
-
-        // Update modal with current stock information
-        document.getElementById("modal-stock").innerText = stockAmount;
-        document.getElementById("modal-unit").innerText = unit;
-        
-        // Set default quantity to 1
-        let inputField = document.querySelector(".quantity-field");
-        inputField.value = 1;
-
-        // Store data for form submission
-        document.getElementById("ingredient-id").value = ingredientId;
-        document.getElementById("current-stock").value = stockAmount;
-        
-        // Store references for updating UI
-        document.getElementById("stock-modal").setAttribute("data-stock", stockAmount);
-        document.getElementById("stock-modal").setAttribute("data-card", JSON.stringify(card.innerHTML));
-        document.getElementById("stock-modal").setAttribute("data-unit", unit);
-
-        // Show modal
-        document.getElementById("stock-modal").style.display = "block";
-        
-        // Add event listener for closing modal when clicking outside
-        document.getElementById("stock-modal").addEventListener("click", closeModalOutside);
-    }
     
-    // Add function to close modal when clicking outside
-    function closeModalOutside(event) {
-        let modal = document.getElementById("stock-modal");
-        let textDiv = document.getElementById("text");
-        
-        // If the click is on the modal background (not the content)
-        if (event.target === modal) {
-            modal.style.display = "none";
-            // Remove the event listener to prevent memory leaks
-            modal.removeEventListener("click", closeModalOutside);
+        // Add function to close modal when clicking outside
+        function closeModalOutside(event) {
+            let modal = document.getElementById("stock-modal");
+            let textDiv = document.getElementById("text");
+            
+            // If the click is on the modal background (not the content)
+            if (event.target === modal) {
+                modal.style.display = "none";
+                // Remove the event listener to prevent memory leaks
+                modal.removeEventListener("click", closeModalOutside);
+            }
         }
-    }
 
         function updateStock(operation) {
             let modal = document.getElementById("stock-modal");
             let stockAmount = parseInt(modal.getAttribute("data-stock")); 
             let unit = modal.getAttribute("data-unit") || '';
+            let itemType = modal.getAttribute("data-type") || '';
             let inputField = document.querySelector(".quantity-field");
             let changeAmount = parseInt(inputField.value);
             let ingredientId = document.getElementById("ingredient-id").value;
+            let etcId = document.getElementById("etc-id").value;
+            
+            // Determine if we're handling an ingredient or etc item
+            let hasId = ingredientId || etcId;
 
             if (isNaN(changeAmount) || changeAmount <= 0) return;
 
@@ -416,8 +468,8 @@
                 return;
             }
 
-            // If we have an ingredient ID (from database), submit form
-            if (ingredientId) {
+            // If we have an item ID (from database), submit form
+            if (hasId) {
                 document.getElementById("update-quantity").value = changeAmount;
                 document.getElementById("update-operation").value = operation;
                 
