@@ -136,8 +136,6 @@
         }
 
         .btn-minus, .btn-plus {
-            /* width: 45px; 
-            height: 45px; */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -184,37 +182,56 @@
     <div class="container-center">
         <div class="box mb-3">
             <div class="row d-flex justify-content-center text-center" id="filterButton">
-                <div class="category btn" onclick="filterSelection('ingredient')">วัตถุดิบ</div>
+                <div class="category btn active" onclick="filterSelection('ingredient')">วัตถุดิบ</div>
                 <div class="category btn" onclick="filterSelection('etc')">อื่น ๆ</div>
             </div>
             <div class="row">
-                
-                <div class="filterDiv ingredient col-md-4">
-                    <div class="card p-3">
-                        <a href=""><img src="images/pizza.png" alt="ผัก"></a>
-                        <p>ผัก</p>
-                        <p>คงเหลือ: 300</p>
-                        <button type="button" class="btn btn-red" onclick="on(this)"><b>จัดการคลัง</b></button>
+                <% if(typeof ingredient !== 'undefined') { %>
+                    <% for(var i = 0; i < ingredient.length; i++) { %>
+                    <div class="filterDiv ingredient col-md-4">
+                        <div class="card p-3">
+                            <a href=""><img src="images/<%= ingredient[i].ingredient_name %>.png" alt="<%= ingredient[i].thai_name %>"></a>
+                            <p><%= ingredient[i].thai_name %></p>
+                            <p>คงเหลือ: <%= ingredient[i].stock_quantity %> <%= ingredient[i].unit %></p>
+                            <button type="button" class="btn btn-red" onclick="on(this)" 
+                                   data-id="<%= ingredient[i].ingredient_id %>" 
+                                   data-name="<%= ingredient[i].thai_name %>"
+                                   data-stock="<%= ingredient[i].stock_quantity %>"
+                                   data-unit="<%= ingredient[i].unit %>">
+                                <b>จัดการคลัง</b>
+                            </button>
+                        </div>
                     </div>
-                </div>
-                
-                <div class="filterDiv ingredient col-md-4">
-                    <div class="card p-3">
-                        <a href=""><img src="images/pizza.png" alt="เบค่อน"></a>
-                        <p>เบค่อน</p>
-                        <p>คงเหลือ: 300</p>
-                        <button type="button" class="btn btn-red" onclick="on(this)"><b>จัดการคลัง</b></button>
+                    <% } %>
+                <% } else { %>
+                    <!-- Fallback static data if no database connection -->
+                    <div class="filterDiv ingredient col-md-4">
+                        <div class="card p-3">
+                            <a href=""><img src="images/pizza.png" alt="ผัก"></a>
+                            <p>ผัก</p>
+                            <p>คงเหลือ: 300</p>
+                            <button type="button" class="btn btn-red" onclick="on(this)"><b>จัดการคลัง</b></button>
+                        </div>
                     </div>
-                </div>
+                    
+                    <div class="filterDiv ingredient col-md-4">
+                        <div class="card p-3">
+                            <a href=""><img src="images/pizza.png" alt="เบค่อน"></a>
+                            <p>เบค่อน</p>
+                            <p>คงเหลือ: 300</p>
+                            <button type="button" class="btn btn-red" onclick="on(this)"><b>จัดการคลัง</b></button>
+                        </div>
+                    </div>
 
-                <div class="filterDiv ingredient col-md-4">
-                    <div class="card p-3">
-                        <a href=""><img src="images/pizza.png" alt="สับปะรด"></a>
-                        <p>สับปะรด</p>
-                        <p>คงเหลือ: 300</p>
-                        <button type="button" class="btn btn-red" onclick="on(this)"><b>จัดการคลัง</b></button>
+                    <div class="filterDiv ingredient col-md-4">
+                        <div class="card p-3">
+                            <a href=""><img src="images/pizza.png" alt="สับปะรด"></a>
+                            <p>สับปะรด</p>
+                            <p>คงเหลือ: 300</p>
+                            <button type="button" class="btn btn-red" onclick="on(this)"><b>จัดการคลัง</b></button>
+                        </div>
                     </div>
-                </div>
+                <% } %>
                 
                 <div class="filterDiv etc col-md-4">
                     <div class="card p-3">
@@ -242,12 +259,12 @@
                         <button type="button" class="btn btn-red" onclick="on(this)"><b>จัดการคลัง</b></button>
                     </div>
                 </div>
-
             </div>
+            
             <div id="stock-modal">
                 <div id="text">
-                    <p style="color: black; font-size: large;"><b>คงเหลือ: 300</b></p>
-                    <div class="quantity-wrapper d-flex mb-3"  style="justify-content: center;">
+                    <p style="color: black; font-size: large;"><b>คงเหลือ: <span id="modal-stock">300</span> <span id="modal-unit"></span></b></p>
+                    <div class="quantity-wrapper d-flex mb-3" style="justify-content: center;">
                         <div class="quantity-group-append">
                             <button type="button" class="btn btn-minus add-quantity d-flex align-items-center justify-content-center" data-field="quantity">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -255,7 +272,7 @@
                                 </svg>
                             </button>
                         </div>
-                        <input type="number" step="1" max="" value="1" maxlength="4" size="4" name="quantity" class="quantity-field">
+                        <input type="number" step="1" max="" value="1" maxlength="4" size="4" name="quantity" class="quantity-field" id="quantity-input">
                         <div class="quantity-group-append">
                             <button type="button" class="btn btn-plus add-quantity d-flex align-items-center justify-content-center" data-field="quantity">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -268,6 +285,12 @@
                         <button class="btn btn-red m-2" type="submit" onclick="updateStock('decrease')">ลด</button>
                         <button class="btn btn-success m-2" type="submit" onclick="updateStock('increase')">เพิ่ม</button>
                     </div>
+                    <form id="update-form" action="/update-stock" method="POST" style="display: none;">
+                        <input type="hidden" name="ingredient_id" id="ingredient-id">
+                        <input type="hidden" name="quantity" id="update-quantity">
+                        <input type="hidden" name="operation" id="update-operation">
+                        <input type="hidden" name="current_stock" id="current-stock">
+                    </form>
                 </div>
             </div>
         </div>
@@ -323,36 +346,96 @@
         }
 
         function on(element) {
-            let card = element.closest(".card"); 
-            let stockText = card.querySelectorAll("p")[1]; 
-            let stockAmount = parseInt(stockText.innerText.match(/\d+/)[0]);
-
-            // update remains
-            document.querySelector("#text p").innerText = `คงเหลือ: ${stockAmount}`;
-
-            // set default to 1
-            let inputField = document.querySelector(".quantity-field");
-            inputField.value = 1;  
-
-            // add stock in modal
-            document.getElementById("stock-modal").setAttribute("data-stock", stockAmount);
-            document.getElementById("stock-modal").setAttribute("data-card", JSON.stringify(card.innerHTML));
-
-            // show modal
-            document.getElementById("stock-modal").style.display = "block";
+        let card = element.closest(".card");
+        let ingredientId = element.dataset.id || '';
+        let stockText = card.querySelectorAll("p")[1];
+        let stockAmount = 0;
+        let unit = '';
+        
+        // Check if we're using database data (with data attributes) or static data
+        if (element.dataset.stock) {
+            stockAmount = parseInt(element.dataset.stock);
+            unit = element.dataset.unit || '';
+        } else {
+            // Extract from the text for static data
+            stockAmount = parseInt(stockText.innerText.match(/\d+/)[0]);
         }
+
+        // Update modal with current stock information
+        document.getElementById("modal-stock").innerText = stockAmount;
+        document.getElementById("modal-unit").innerText = unit;
+        
+        // Set default quantity to 1
+        let inputField = document.querySelector(".quantity-field");
+        inputField.value = 1;
+
+        // Store data for form submission
+        document.getElementById("ingredient-id").value = ingredientId;
+        document.getElementById("current-stock").value = stockAmount;
+        
+        // Store references for updating UI
+        document.getElementById("stock-modal").setAttribute("data-stock", stockAmount);
+        document.getElementById("stock-modal").setAttribute("data-card", JSON.stringify(card.innerHTML));
+        document.getElementById("stock-modal").setAttribute("data-unit", unit);
+
+        // Show modal
+        document.getElementById("stock-modal").style.display = "block";
+        
+        // Add event listener for closing modal when clicking outside
+        document.getElementById("stock-modal").addEventListener("click", closeModalOutside);
+    }
+    
+    // Add function to close modal when clicking outside
+    function closeModalOutside(event) {
+        let modal = document.getElementById("stock-modal");
+        let textDiv = document.getElementById("text");
+        
+        // If the click is on the modal background (not the content)
+        if (event.target === modal) {
+            modal.style.display = "none";
+            // Remove the event listener to prevent memory leaks
+            modal.removeEventListener("click", closeModalOutside);
+        }
+    }
 
         function updateStock(operation) {
             let modal = document.getElementById("stock-modal");
             let stockAmount = parseInt(modal.getAttribute("data-stock")); 
+            let unit = modal.getAttribute("data-unit") || '';
             let inputField = document.querySelector(".quantity-field");
             let changeAmount = parseInt(inputField.value);
+            let ingredientId = document.getElementById("ingredient-id").value;
 
             if (isNaN(changeAmount) || changeAmount <= 0) return;
 
             let newStock = operation === "increase" ? stockAmount + changeAmount : stockAmount - changeAmount;
-            if (newStock < 0) newStock = 0;
+            
+            // Prevent negative stock
+            if (newStock < 0) {
+                alert("ไม่สามารถลดจำนวนได้ เนื่องจากสินค้าในคลังไม่เพียงพอ");
+                return;
+            }
 
+            // If we have an ingredient ID (from database), submit form
+            if (ingredientId) {
+                document.getElementById("update-quantity").value = changeAmount;
+                document.getElementById("update-operation").value = operation;
+                
+                // For frontend validation before submission
+                if (operation === 'decrease') {
+                    let currentStockInput = document.getElementById("current-stock");
+                    // Double-check that we're not trying to remove more than available
+                    if (parseInt(currentStockInput.value) < changeAmount) {
+                        alert("ไม่สามารถลดจำนวนได้ เนื่องจากสินค้าในคลังไม่เพียงพอ");
+                        return;
+                    }
+                }
+                
+                document.getElementById("update-form").submit();
+                return;
+            }
+
+            // Otherwise, update UI directly (for static data)
             // Get the product name from modal's stored card
             let cardHTML = modal.getAttribute("data-card");
             let tempDiv = document.createElement("div");
@@ -364,7 +447,7 @@
             for (let i = 0; i < cards.length; i++) {
                 let cardTitle = cards[i].querySelector("p").innerText;
                 if (cardTitle === productName) {
-                    cards[i].querySelectorAll("p")[1].innerText = `คงเหลือ: ${newStock}`;
+                    cards[i].querySelectorAll("p")[1].innerText = `คงเหลือ: ${newStock}${unit ? ' ' + unit : ''}`;
                     break;
                 }
             }
@@ -373,12 +456,11 @@
             modal.style.display = "none";
         }
 
+        // Plus/minus buttons for quantity input
         $(".btn-plus").on("click", function(e) {
             e.preventDefault();
             let inputField = $(this).closest('.quantity-wrapper').find('input[name="quantity"]');
             let currentVal = parseInt(inputField.val(), 10);
-            let modal = document.getElementById("stock-modal");
-            let stockAmount = parseInt(modal.getAttribute("data-stock"));
 
             if (!isNaN(currentVal)) {
                 inputField.val(currentVal + 1);
@@ -394,7 +476,6 @@
                 inputField.val(currentVal - 1);
             }
         });
-
     </script>
 
 </body>

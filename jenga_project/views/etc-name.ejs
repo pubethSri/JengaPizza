@@ -128,11 +128,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="pizza-card p-3">
-                        <% if(item[0].pizza_id >= 3 && item[0].pizza_id <= 9){ %>
-                            <img src="images\pizza<%= item[0].pizza_id %>.png" alt="พิซซ่า">
-                        <% } else{ %>
-                            <img src="images\pizza.png" alt="พิซซ่า">
-                        <% } %>
+                        <img src="images\etc<%= item[0].etc_id %>.png" alt="พิซซ่า">
                         <p id="price"
                             style="text-align: center; font-size: 20px; font-weight: bolder; color: rgb(187, 62, 0);">
                             <%= item[0].price %>.00 บาท</p>
@@ -140,11 +136,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="description-card">
-                        <h2 style="font-weight: bold; color: rgb(187,62,0);"><%= item[0].pizza_name %></h2>
-                        <p><% for(var i = 0; i < item.length; i++) { %>
-                            <%= item[i].thai_name %><% if (i != item.length-1){ %>, <% } %>
-                        <% } %>
-                        </p>
+                        <h2 style="font-weight: bold; color: rgb(187,62,0);"><%= item[0].etc_name %></h2>
                         <div class="d-flex">
                             <a href="/orderform" style="text-decoration: none;"><button class="btn btn-red mt-4 mr-2">เพิ่มเข้ารายการสินค้า</button></a>
                             <a href="/category" style="text-decoration: none;"><button class="btn btn-light mt-4 d-flex">กลับไปหน้าเมนู
@@ -165,22 +157,22 @@
             <div class="row">
                 <div class="filterDiv flavour col-md-4 ">
                     <div class="card p-3">
-                        <a href="/pizza-5"><img src="images/pizza5.png" alt="ฮาวาเอี้ยน"></a>
-                        <p>พิซซ่าฮาวาเอี้ยน</p>
+                        <a href="/etc-1"><img src="images/etc1.png" alt="ฮาวาเอี้ยน"></a>
+                        <p>น้ำเปล่า</p>
                     </div>
                 </div>
                 
                 <div class="filterDiv ingredient col-md-4">
                     <div class="card p-3">
-                        <a href="/pizza-6"><img src="images/pizza6.png" alt="ผัก"></a>
-                        <p>พิซซ่าเวเจเทเรียน</p>
+                        <a href="/etc-3"><img src="images/etc3.png" alt="ผัก"></a>
+                        <p>ไก่ทอด เดวิลวิงส์</p>
                     </div>
                 </div>
                 
                 <div class="filterDiv ingredient col-md-4">
                     <div class="card p-3">
-                        <a href="/pizza-7"><img src="images/pizza7.png" alt="เบค่อน"></a>
-                        <p>พิซซ่าเปปเปอร์โรนี</p>
+                        <a href="/etc-6"><img src="images/etc6.png" alt="เบค่อน"></a>
+                        <p>เค้กทีรามิสุ</p>
                     </div>
                 </div>
             </div>
