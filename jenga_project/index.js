@@ -86,7 +86,7 @@ app.get("/category", async (req, res) => {
     etc_results = await new Promise((resolve, reject) => {
       db.all(etc_query, (error, rows) => (error ? reject(error) : resolve(rows)));
     })
-    
+
     ingredient_results = await new Promise((resolve, reject) => {
       db.all(ingredient_query, (error, rows) => (error ? reject(error) : resolve(rows)));
     })
@@ -95,7 +95,7 @@ app.get("/category", async (req, res) => {
       loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "",
       pizza_item: pizza_results, etc_item: etc_results, ingredient_item: ingredient_results
     });
-  
+
   } catch (error) {
     console.error(error.message);
     res.render('category', {
@@ -103,7 +103,7 @@ app.get("/category", async (req, res) => {
       pizza_item: [], etc_item: [], ingredient_item: []
     });
   }
-  
+
 });
 
 app.get("/pizza-:pizza_id", (req, res) => {
@@ -113,9 +113,8 @@ app.get("/pizza-:pizza_id", (req, res) => {
               JOIN ingredients USING (ingredient_id)\
               WHERE pizza_id = ${pizza_id}\
               ORDER BY ingredient_id;`;
-  
+
   db.all(sql, (error, results) => {
-    console.log(results);
     if (error) {
       console.log(error.message);
       res.render('pizza-name', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "", item: [{ pizza_name: 'เจ๊ง', ingredient_name: 'เจ๊ง' }] });
@@ -129,9 +128,8 @@ app.get("/etc-:etc_id", (req, res) => {
   const etc_id = req.params.etc_id;
   const sql = `SELECT * FROM etc
                WHERE etc_id = ${etc_id}`;
-  
+
   db.all(sql, (error, results) => {
-    console.log(results);
     if (error) {
       console.log(error.message);
       res.render('etc-name', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "", item: [{ etc_name: 'เจ๊ง', price: 'เจ๊ง' }] });
@@ -179,7 +177,7 @@ app.post("/newuser", async (req, res) => {
         console.log(error);
       }
       console.log("User created!");
-      return res.json({ success: true });
+      return res.json({ success: true, redirect: '/home' });
     }
   })
 });
@@ -326,24 +324,24 @@ app.get("/ingredients_seller", (req, res) => {
     // Get ingredients data
     const ingredientSql = `SELECT ingredient_id, ingredient_name, stock_quantity, thai_name, unit FROM ingredients
                 WHERE ingredient_name NOT LIKE "%\\_%" ESCAPE "\\";`;
-    
+
     // Get etc data
     const etcSql = `SELECT etc_id, etc_name, stock_quantity, price FROM etc;`;
-    
+
     // Get ingredients data
     db.all(ingredientSql, (ingredientError, ingredientResults) => {
       if (ingredientError) {
         console.log("Ingredient error:", ingredientError.message);
         ingredientResults = [];
       }
-      
+
       // Get etc data
       db.all(etcSql, (etcError, etcResults) => {
         if (etcError) {
           console.log("Etc error:", etcError.message);
           etcResults = [];
         }
-        
+
         // Render the page with both data sets
         res.render('ingredients_seller', {
           loggedin: req.session.loggedin,
@@ -387,7 +385,7 @@ app.post("/update-stock", (req, res) => {
   const itemId = isEtcItem ? etc_id : ingredient_id;
   const tableName = isEtcItem ? 'etc' : 'ingredients';
   const idColumn = isEtcItem ? 'etc_id' : 'ingredient_id';
-  
+
   // Get current stock from database to ensure we have the latest value
   const checkSql = `SELECT stock_quantity FROM ${tableName} WHERE ${idColumn} = ?`;
 
@@ -418,19 +416,66 @@ app.post("/update-stock", (req, res) => {
     // Update stock in database
     const updateSql = `UPDATE ${tableName} SET stock_quantity = ? WHERE ${idColumn} = ?`;
 
-    db.run(updateSql, [newStock, itemId], function(error) {
+    db.run(updateSql, [newStock, itemId], function (error) {
       if (error) {
         console.error("Update error:", error.message);
         return res.status(500).send("Update failed");
       }
-      
+
       console.log(`Stock updated: ${tableName} #${itemId} ${operation}d by ${changeAmount}. New stock: ${newStock}`);
-      
+
       // Redirect with a query parameter to indicate which tab should be active
       const tabToShow = isEtcItem ? 'etc' : 'ingredient';
       res.redirect(`/ingredients_seller?tab=${tabToShow}`);
     });
   });
+});
+
+app.post("/addtocart", async (req, res) => {
+  if (req.session.loggedin) {
+    const { item_id, item_type, item_price } = req.body;
+
+    try {
+      // Checking if there is a pending order yet, if not create one
+      const init_order_status_checking_query =
+        `SELECT order_status, order_id, user_id FROM orders
+        WHERE order_status IS "pending" AND user_id IS "${req.session.user_id}"`;
+      const init_order_status_checking_results = await new Promise((resolve, reject) => {
+        db.all(init_order_status_checking_query, (error, rows) => (error ? reject(error) : resolve(rows)));
+      });
+      if (init_order_status_checking_results.length == 0) {
+        const init_the_order =
+          `INSERT into orders (user_id)
+          VALUES (${req.session.user_id});`
+        const init_order_res = await new Promise((resolve, reject) => {
+          db.run(init_the_order, (error, rows) => (error ? reject(error) : resolve(rows)));
+        });
+        console.log("Cart created.");
+      }
+      const get_order_id_query =
+      `SELECT order_id FROM orders
+       WHERE order_status IS "pending" AND user_id IS "${req.session.user_id}"`;
+      const order_id_curr = await new Promise((resolve, reject) => {
+        db.all(get_order_id_query, (error, rows) => (error ? reject(error) : resolve(rows)));
+      });
+
+      const query_for_add = `INSERT INTO order_items
+                             VALUES ("${order_id_curr[0].order_id}", "${item_type}", "${item_id}", 1, "${item_price}")`;
+      const adding = await new Promise((resolve, reject) => {
+        db.run(query_for_add, (error, rows) => (error ? reject(error) : resolve(rows)));
+      });
+      console.log("Order Added to cart.");
+
+      res.json({ message: "ส่งมาล้ะ", redirect: '/orderlist' });
+    } catch (error) {
+      console.error(error.message);
+      res.json({ message: "ส่งมาล้ะแต่ Error", redirect: '/orderlist' });
+    }
+  } else {
+    res.json({ message: "ส่งมาล้ะแต่ Error", redirect: '/home' });
+  }
+
+  // res.redirect('/home');
 });
 
 
