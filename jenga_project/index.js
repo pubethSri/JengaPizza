@@ -4,7 +4,7 @@ const port = 3000;
 const bodyParser = require("body-parser");
 const sqlite3 = require('sqlite3').verbose();
 const session = require('express-session');
-const { log } = require("console");
+const { log, error } = require("console");
 
 // Connect to SQLite database
 let db = new sqlite3.Database("data/pizzeria.db", (err) => {
@@ -54,26 +54,48 @@ app.get("/choose", (req, res) => {
 
 app.get("/category", async (req, res) => {
   let sql = "";
+  let etc_query = "";
   if (req.session.loggedin) {
-    sql = `SELECT pizza_id, pizza_name, price FROM pizzas
-           LEFT JOIN (SELECT pizza_id, ingredient_id, SUM(quantity_required) AS require, stock_quantity FROM pizza_ingredients
-           JOIN ingredients USING (ingredient_id)
-           WHERE ingredient_id >= 21
-           GROUP BY pizza_id, ingredient_id
-           HAVING require > stock_quantity
-           ) USING (pizza_id)
-           WHERE ingredient_id is NULL AND (user_id = ${req.session.user_id} OR user_id = 1) ORDER BY user_id`
+    sql = 
+    `SELECT pizza_id, pizza_name, price FROM pizzas
+    LEFT JOIN (SELECT pizza_id, ingredient_id, SUM(quantity_required) AS require, stock_quantity FROM pizza_ingredients
+    JOIN ingredients USING (ingredient_id)
+    WHERE ingredient_id >= 21
+    GROUP BY pizza_id, ingredient_id
+    HAVING require > stock_quantity
+    ) USING (pizza_id)
+    LEFT JOIN (SELECT item_id FROM orders
+    JOIN order_items USING (order_id)
+    WHERE item_type IS "pizza" AND user_id IS "${req.session.user_id}" AND order_status IS "pending")
+    ON item_id = pizza_id
+    WHERE ingredient_id is NULL AND (user_id = "${req.session.user_id}" OR user_id = 1) AND item_id IS NULL
+    ORDER BY user_id`
+
+    etc_query =
+    `SELECT * FROM etc
+    LEFT JOIN (SELECT item_id FROM orders
+    JOIN order_items USING (order_id)
+    WHERE item_type IS "etc" AND user_id IS "${req.session.user_id}")
+    ON item_id = etc_id
+    WHERE stock_quantity > 0 AND item_id IS NULL`
   } else {
-    sql = `SELECT pizza_id, pizza_name, price FROM pizzas
-           LEFT JOIN (SELECT pizza_id, ingredient_id, SUM(quantity_required) AS require, stock_quantity FROM pizza_ingredients
-           JOIN ingredients USING (ingredient_id)
-           WHERE ingredient_id >= 21
-           GROUP BY pizza_id, ingredient_id
-           HAVING require > stock_quantity
-           ) USING (pizza_id)
-           WHERE ingredient_id is NULL AND user_id = 1 ORDER BY user_id`
+    sql = 
+    `SELECT pizza_id, pizza_name, price FROM pizzas
+    LEFT JOIN (SELECT pizza_id, ingredient_id, SUM(quantity_required) AS require, stock_quantity FROM pizza_ingredients
+    JOIN ingredients USING (ingredient_id)
+    WHERE ingredient_id >= 21
+    GROUP BY pizza_id, ingredient_id
+    HAVING require > stock_quantity
+    ) USING (pizza_id)
+    LEFT JOIN (SELECT item_id FROM orders
+    JOIN order_items USING (order_id)
+    WHERE item_type IS "pizza" AND user_id IS "1" AND order_status IS "pending")
+    ON item_id = pizza_id
+    WHERE ingredient_id is NULL AND user_id = 1 AND item_id IS NULL
+    ORDER BY user_id`
+
+    etc_query = "SELECT * FROM etc WHERE stock_quantity > 0";
   }
-  let etc_query = "SELECT * FROM etc WHERE stock_quantity > 0";
   let ingredient_query = `SELECT ingredient_id, ingredient_name, stock_quantity, thai_name FROM ingredients
                           WHERE ingredient_name NOT LIKE "%\\_%" ESCAPE "\\" AND stock_quantity > 0;`
   let pizza_results = "";
@@ -235,12 +257,13 @@ app.get("/orderlist", async (req, res) => {
     return res.redirect('/home');
   }
 
-  const sql = `SELECT item_id, item_type, quantity FROM orders JOIN order_items USING (order_id) WHERE user_id = ${req.session.user_id} AND order_status = "pending";`;
+  const sql = `SELECT order_id, item_id, item_type, quantity FROM orders JOIN order_items USING (order_id) WHERE user_id = ${req.session.user_id} AND order_status = "pending";`;
 
   try {
     const results = await new Promise((resolve, reject) => {
       db.all(sql, (error, rows) => (error ? reject(error) : resolve(rows)));
     });
+    
 
     const menu_order = await Promise.all(results.map(async (item) => {
       if (item.item_type === 'pizza') {
@@ -254,6 +277,7 @@ app.get("/orderlist", async (req, res) => {
         const pizza = await new Promise((resolve, reject) => {
           db.all(select_sql, (error, rows) => (error ? reject(error) : resolve(rows)));
         });
+        pizza[0].order_id = item.order_id;
         pizza[0].quantity = item.quantity;
         pizza[0].type = item.item_type;
         return pizza[0];
@@ -266,6 +290,7 @@ app.get("/orderlist", async (req, res) => {
         const pizza = await new Promise((resolve, reject) => {
           db.all(select_sql, (error, rows) => (error ? reject(error) : resolve(rows)));
         });
+        pizza[0].order_id = item.order_id;
         pizza[0].quantity = item.quantity;
         pizza[0].type = item.item_type;
         return pizza[0];
@@ -430,6 +455,33 @@ app.post("/update-stock", (req, res) => {
     });
   });
 });
+
+app.post("/remove_orderitem", async (req, res) => {
+  const { order_id, item_id, type, value } = req.body;
+  try {
+    const remove = 
+    `DELETE FROM order_items
+     WHERE order_id IS "${order_id}" AND item_type IS "${type}" AND item_id IS "${item_id}";`
+    db.run(remove);
+    res.json({ message: "ส่งมาล้ะแต่", redirect: '/orderlist' });
+  } catch (error) {
+    res.json({ message: "ส่งมาล้ะแต่ Error", redirect: '/orderlist' });
+  }
+})
+
+app.post("/update_orderitem", async (req, res) => {
+  const { order_id, item_id, type, value } = req.body;
+  try {
+    const update = 
+    `UPDATE order_items
+     SET quantity = "${value}"
+     WHERE order_id IS "${order_id}" AND item_type IS "${type}" AND item_id IS "${item_id}";`
+    db.run(update);
+    res.json({ message: "ส่งมาล้ะแต่" });
+  } catch (error) {
+    res.json({ message: "ส่งมาล้ะแต่ Error" });
+  }
+})
 
 app.post("/addtocart", async (req, res) => {
   if (req.session.loggedin) {

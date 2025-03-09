@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,8 +35,10 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: calc(100vh - 60px); /* Adjust for navbar */
-            padding-top: 60px; /* Ensure content is not hidden behind navbar */
+            min-height: calc(100vh - 60px);
+            /* Adjust for navbar */
+            padding-top: 60px;
+            /* Ensure content is not hidden behind navbar */
         }
 
         .box {
@@ -47,7 +50,8 @@
 
         .box .row {
             display: flex;
-            align-items: center; /* Center items vertically */
+            align-items: center;
+            /* Center items vertically */
         }
 
         .card {
@@ -79,7 +83,7 @@
             color: white;
         }
 
-        .btn-update{
+        .btn-update {
             background-color: rgb(187, 62, 0);
             color: white;
         }
@@ -145,9 +149,9 @@
             -webkit-appearance: none;
             margin: 0;
         }
-
     </style>
 </head>
+
 <body>
 
     <header>
@@ -157,75 +161,110 @@
     <div class="container-center">
         <div class="box mb-3">
             <h2><b>รายการอาหาร</b></h2>
+            <h1 id="total_price"><b>0.00 บาท</b></h1>
             <div class="row">
-                <% for(var i = 0; i < menu.length; i++) { %>
-                    <% if(menu[i].type == "pizza"){ %>
-                <div class="col-md-6">
-                    <div class="card p-3">
-                        <img src="images/pizza<%= menu[i].pizza_id %>.png" alt="<%= menu[i].pizza_name %>">
-                        <p style="font-size: 26px; color: rgb(187, 62, 0);"><%= menu[i].pizza_name %></p>
-                        <p style="font-size: 14px; color: grey;">รายละเอียด: <%= menu[i].thai_name %></p>
-                        <div class="quantity-wrapper d-flex mb-3"  style="justify-content: center;">
-                            <div class="quantity-group-append">
-                                <button type="button" class="btn btn-minus add-quantity d-flex align-items-center justify-content-center" data-field="quantity">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                    </svg>
-                                </button>
-                            </div>
-                            <input type="number" step="1" max="" value=<%= menu[i].quantity %> maxlength="4" size="4" name="quantity" class="quantity-field">
-                            <div class="quantity-group-append">
-                                <button type="button" class="btn btn-plus add-quantity d-flex align-items-center justify-content-center" data-field="quantity">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                        <p style="text-align: center; font-size: 20px; font-weight: bolder; color: rgb(187, 62, 0);"><%= menu[i].price %> บาท</p>
-                        <div class="mt-3 mb-3">
-                            <button class="btn btn-remove">นำออกจากรายการ</button>
-                            <button class="btn btn-update">อัพเดท</button>
-                        </div>
-                    </div>
-                </div>
-                <% }else if(menu[i].type == "etc"){ %>
-                <div class="col-md-6">
-                    <div class="card p-3">
-                        <img src="images/etc<%= menu[i].etc_id %>.png" alt="<%= menu[i].etc_name %>">
-                        <p style="font-size: 26px; color: rgb(187, 62, 0);"><%= menu[i].etc_name %></p>
-                        <div class="quantity-wrapper d-flex mb-3"  style="justify-content: center;">
-                            <div class="quantity-group-append">
-                                <button type="button" class="btn btn-minus add-quantity d-flex align-items-center justify-content-center" data-field="quantity">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                    </svg>
-                                </button>
-                            </div>
-                            <input type="number" step="1" max="" value=<%= menu[i].quantity %> maxlength="4" size="4" name="quantity" class="quantity-field">
-                            <div class="quantity-group-append">
-                                <button type="button" class="btn btn-plus add-quantity d-flex align-items-center justify-content-center" data-field="quantity">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                    </svg>
-                                </button>
+                <% for(var i=0; i < menu.length; i++) { %>
+                    <% if(menu[i].type=="pizza" ){ %>
+                        <div id="<%= menu[i].order_id %> <%= menu[i].pizza_id %> <%= menu[i].type %>" class="col-md-6">
+                            <div class="card p-3">
+                                <img src="images/pizza<%= menu[i].pizza_id %>.png" alt="<%= menu[i].pizza_name %>">
+                                <p style="font-size: 26px; color: rgb(187, 62, 0);">
+                                    <%= menu[i].pizza_name %>
+                                </p>
+                                <p style="font-size: 14px; color: grey;">รายละเอียด: <%= menu[i].thai_name %>
+                                </p>
+                                <div class="quantity-wrapper d-flex mb-3" style="justify-content: center;">
+                                    <div class="quantity-group-append">
+                                        <button type="button"
+                                            class="btn btn-minus add-quantity d-flex align-items-center justify-content-center"
+                                            data-field="quantity">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke-width="1.5" stroke="currentColor" class="size-6">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <input type="number" step="1" max="" value=<%=menu[i].quantity %> maxlength="4"
+                                    size="4" name="quantity" class="quantity-field">
+                                    <div class="quantity-group-append">
+                                        <button type="button"
+                                            class="btn btn-plus add-quantity d-flex align-items-center justify-content-center"
+                                            data-field="quantity">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                                <p
+                                    style="text-align: center; font-size: 20px; font-weight: bolder; color: rgb(187, 62, 0);">
+                                    <%= menu[i].price %> บาท
+                                </p>
+                                <div class="mt-3 mb-3">
+                                    <button class="btn btn-remove">นำออกจากรายการ</button>
+                                    <button class="btn btn-update">อัพเดท</button>
+                                </div>
                             </div>
                         </div>
-                        <p style="text-align: center; font-size: 20px; font-weight: bolder; color: rgb(187, 62, 0);"><%= menu[i].price %> บาท</p>
-                        <div class="mt-3 mb-3">
-                            <button class="btn btn-remove">นำออกจากรายการ</button>
-                            <button class="btn btn-update">อัพเดท</button>
-                        </div>
-                    </div>
-                </div>
-                <% } %>
-                <% } %>
+                        <% }else if(menu[i].type=="etc" ){ %>
+                            <div id="<%= menu[i].order_id %> <%= menu[i].etc_id %> <%= menu[i].type %>"
+                                class="col-md-6">
+                                <div class="card p-3">
+                                    <img src="images/etc<%= menu[i].etc_id %>.png" alt="<%= menu[i].etc_name %>">
+                                    <p style="font-size: 26px; color: rgb(187, 62, 0);">
+                                        <%= menu[i].etc_name %>
+                                    </p>
+                                    <div class="quantity-wrapper d-flex mb-3" style="justify-content: center;">
+                                        <div class="quantity-group-append">
+                                            <button type="button"
+                                                class="btn btn-minus add-quantity d-flex align-items-center justify-content-center"
+                                                data-field="quantity">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                    stroke-width="1.5" stroke="currentColor" class="size-6">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <input type="number" step="1" max="" value=<%=menu[i].quantity %> maxlength="4"
+                                        size="4" name="quantity" class="quantity-field">
+                                        <div class="quantity-group-append">
+                                            <button type="button"
+                                                class="btn btn-plus add-quantity d-flex align-items-center justify-content-center"
+                                                data-field="quantity">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                    stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <p
+                                        style="text-align: center; font-size: 20px; font-weight: bolder; color: rgb(187, 62, 0);">
+                                        <%= menu[i].price %> บาท
+                                    </p>
+                                    <div class="mt-3 mb-3">
+                                        <button class="btn btn-remove">นำออกจากรายการ</button>
+                                        <button class="btn btn-update">อัพเดท</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <% } %>
+                                <% } %>
 
             </div>
             <div class="button-wrapper d-flex" style="justify-content: center;">
                 <div class="mt-3 mb-3">
-                    <a href="/customerinfo"><button class="btn btn-red">ชำระเงิน</button></a>
-                    <a href="/category"><button class="btn btn-grey">เลือกซื้อสินค้า</button></a>
+                    <% if(menu.length > 0){ %>
+                        <a href="/customerinfo"><button class="btn btn-red">ชำระเงิน</button></a>
+                        <a href="/category"><button class="btn btn-grey">เลือกซื้อสินค้า</button></a>
+                    <% } else{ %>
+                        <a href="/category"><button class="btn btn-red">เลือกซื้อสินค้า</button></a>
+                    <% } %>
                 </div>
             </div>
         </div>
@@ -236,9 +275,27 @@
     </footer>
 
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             // Plus, minus button
-            $(".btn-plus").on("click", function(e) {
+            function updateTotalPrice() {
+                let totalPrice = 0;
+
+                // Loop through all items and calculate the total price
+                $(".card").each(function () {
+                    let price = parseFloat($(this).find("p[style*='font-size: 20px']").first().text().trim().replace("บาท", ""));
+                    let quantity = parseInt($(this).find("input.quantity-field").val(), 10);
+                    if (!isNaN(price) && !isNaN(quantity)) {
+                        totalPrice += price * quantity;
+                    }
+                });
+
+                // Update the total price in the h1 tag
+                $("#total_price").text(totalPrice.toFixed(2) + " บาท");
+            }
+
+            updateTotalPrice();
+
+            $(".btn-plus").on("click", function (e) {
                 e.preventDefault();
                 var $input = $(this).closest('.quantity-wrapper').find('input[name="quantity"]');
                 var currentVal = parseInt($input.val(), 10);
@@ -249,7 +306,7 @@
                 }
             });
 
-            $(".btn-minus").on("click", function(e) {
+            $(".btn-minus").on("click", function (e) {
                 e.preventDefault();
                 var $input = $(this).closest('.quantity-wrapper').find('input[name="quantity"]');
                 var currentVal = parseInt($input.val(), 10);
@@ -260,9 +317,50 @@
                 }
             });
 
-            $(".btn-remove").on("click", function(e) {
+            $(".btn-remove").on("click", function (e) {
                 e.preventDefault();
-                $(this).closest(".col-md-6").remove();
+
+                let string_to_split = $(this).closest(".col-md-6").attr("id");
+                let [order_id, item_id, type] = string_to_split.split(" ");
+                let quantity = $(this).closest("div[id]").find("input.quantity-field").val();
+
+                fetch('/remove_orderitem', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ order_id: order_id, item_id: item_id, type: type, value: quantity })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        window.location.href = data.redirect;
+                    })
+                    .catch(error => console.error('Error:', error));
+            });
+
+            $(".btn-update").on("click", function (e) {
+                e.preventDefault();
+
+                let string_to_split = $(this).closest(".col-md-6").attr("id");
+                let [order_id, item_id, type] = string_to_split.split(" ");
+                let quantity = $(this).closest("div[id]").find("input.quantity-field").val(); // Get the quantity value
+                let price = parseFloat($(this).closest("div[id]").find(".card p").last().text().trim().replace("บาท", "")); // Get the price from the p tag
+
+                console.log(price);
+
+                // Calculate the total price
+                let totalPrice = price * quantity;
+
+                // Update the total price in the p tag
+
+                // Optionally send the update request if necessary
+                fetch('/update_orderitem', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ order_id: order_id, item_id: item_id, type: type, value: quantity })
+                })
+                    .then(response => response.json())
+                    .then(data => console.log('Data: ', data))
+                    .catch(error => console.error('Error:', error));
+                updateTotalPrice();
             });
 
         });
@@ -270,4 +368,5 @@
     </script>
 
 </body>
+
 </html>
