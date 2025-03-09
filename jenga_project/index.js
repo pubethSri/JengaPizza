@@ -304,10 +304,75 @@ app.get("/tracking_seller", (req, res) => {
 
 app.get("/customerinfo", (req, res) => {
   if (req.session.loggedin) {
-    res.render('customerinfo', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "" });
+    const sql = `SELECT * FROM user_address WHERE user_id = ${req.session.user_id};`
+    db.get(sql, (error, result) => {
+      if (error) {
+        console.error("Database error:", error.message);
+        return res.status(500).send("Database error");
+      } else {
+        if (result != undefined) {
+          result.tag = "disabled";
+          res.render('customerinfo', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "", address: result });
+        } else {
+          res.render('customerinfo', {
+            loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "", address: {
+              address_id: "",
+              user_id: "",
+              receiver_name: "",
+              phone_no: "",
+              house_no: "",
+              village_no: "",
+              street: "",
+              sub_district: "",
+              district: "",
+              province: "",
+              postal_code: "",
+              tag: ""
+            }
+          });
+        }
+      }
+    });
   } else {
     res.redirect('/home');
   }
+});
+
+app.post("/new_address", (req, res) => {
+  const { receiver_name,
+    phone_no,
+    house_no,
+    village_no,
+    street,
+    sub_district,
+    district,
+    province,
+    postal_code } = req.body;
+  const sql = `INSERT INTO user_address (user_id, receiver_name,\
+    phone_no,\
+    house_no,\
+    village_no,\
+    street,\
+    sub_district,\
+    district,\
+    province,\
+    postal_code) VALUES (${req.session.user_id}, "${receiver_name}",
+  "${phone_no}",
+  "${house_no}",
+  "${village_no}",
+  "${street}",
+  "${sub_district}",
+  "${district}",
+  "${province}",
+  "${postal_code}")`
+  db.all(sql, (error, results) => {
+    if (error) {
+      console.log(error.message);
+    } else {
+      console.log("Address added!");
+      res.redirect("/qrpayment");
+    }
+  });
 });
 
 app.get("/qrpayment", (req, res) => {
@@ -453,7 +518,7 @@ app.post("/addtocart", async (req, res) => {
         console.log("Cart created.");
       }
       const get_order_id_query =
-      `SELECT order_id FROM orders
+        `SELECT order_id FROM orders
        WHERE order_status IS "pending" AND user_id IS "${req.session.user_id}"`;
       const order_id_curr = await new Promise((resolve, reject) => {
         db.all(get_order_id_query, (error, rows) => (error ? reject(error) : resolve(rows)));
