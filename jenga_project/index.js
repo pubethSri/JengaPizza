@@ -55,13 +55,27 @@ app.get("/choose", (req, res) => {
 app.get("/category", async (req, res) => {
   let sql = "";
   if (req.session.loggedin) {
-    sql = `SELECT pizza_name, pizza_id FROM pizzas WHERE user_id = ${req.session.user_id} OR user_id = 1 ORDER BY user_id`
+    sql = `SELECT pizza_id, pizza_name, price FROM pizzas
+           LEFT JOIN (SELECT pizza_id, ingredient_id, SUM(quantity_required) AS require, stock_quantity FROM pizza_ingredients
+           JOIN ingredients USING (ingredient_id)
+           WHERE ingredient_id >= 21
+           GROUP BY pizza_id, ingredient_id
+           HAVING require > stock_quantity
+           ) USING (pizza_id)
+           WHERE ingredient_id is NULL AND (user_id = ${req.session.user_id} OR user_id = 1) ORDER BY user_id`
   } else {
-    sql = `SELECT pizza_name, pizza_id FROM pizzas WHERE user_id = 1 ORDER BY user_id`
+    sql = `SELECT pizza_id, pizza_name, price FROM pizzas
+           LEFT JOIN (SELECT pizza_id, ingredient_id, SUM(quantity_required) AS require, stock_quantity FROM pizza_ingredients
+           JOIN ingredients USING (ingredient_id)
+           WHERE ingredient_id >= 21
+           GROUP BY pizza_id, ingredient_id
+           HAVING require > stock_quantity
+           ) USING (pizza_id)
+           WHERE ingredient_id is NULL AND user_id = 1 ORDER BY user_id`
   }
-  let etc_query = "SELECT * FROM etc";
+  let etc_query = "SELECT * FROM etc WHERE stock_quantity > 0";
   let ingredient_query = `SELECT ingredient_id, ingredient_name, stock_quantity, thai_name FROM ingredients
-                          WHERE ingredient_name NOT LIKE "%\\_%" ESCAPE "\\";`
+                          WHERE ingredient_name NOT LIKE "%\\_%" ESCAPE "\\" AND stock_quantity > 0;`
   let pizza_results = "";
   let etc_results = "";
   let ingredient_results = "";
@@ -69,7 +83,6 @@ app.get("/category", async (req, res) => {
     pizza_results = await new Promise((resolve, reject) => {
       db.all(sql, (error, rows) => (error ? reject(error) : resolve(rows)));
     })
-
     etc_results = await new Promise((resolve, reject) => {
       db.all(etc_query, (error, rows) => (error ? reject(error) : resolve(rows)));
     })
