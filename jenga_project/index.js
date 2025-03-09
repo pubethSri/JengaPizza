@@ -320,45 +320,60 @@ app.get("/qrpayment", (req, res) => {
   }
 });
 
-// Updated ingredients seller route to fetch all necessary data
+// Updated ingredients seller route to fetch all necessary data including 2 tables (etc and ingredient)
 app.get("/ingredients_seller", (req, res) => {
   if (req.session.user_privilege == "admin" || req.session.user_privilege == "employee") {
-    const sql = `SELECT ingredient_id, ingredient_name, stock_quantity, thai_name, unit FROM ingredients
-                WHERE ingredient_name NOT LIKE "%\\_%" ESCAPE "\\";`
-    db.all(sql, (error, results) => {
-      if (error) {
-        console.log(error.message);
-        res.render('ingredients_seller', {
-          loggedin: req.session.loggedin,
-          username: req.session.username || "",
-          user_privilege: req.session.user_privilege || "",
-          ingredient: []
-        });
-      } else {
-        console.log(results);
-        res.render('ingredients_seller', {
-          loggedin: req.session.loggedin,
-          username: req.session.username || "",
-          user_privilege: req.session.user_privilege || "",
-          ingredient: results
-        });
+    // Get ingredients data
+    const ingredientSql = `SELECT ingredient_id, ingredient_name, stock_quantity, thai_name, unit FROM ingredients
+                WHERE ingredient_name NOT LIKE "%\\_%" ESCAPE "\\";`;
+    
+    // Get etc data
+    const etcSql = `SELECT etc_id, etc_name, stock_quantity, price FROM etc;`;
+    
+    // Get ingredients data
+    db.all(ingredientSql, (ingredientError, ingredientResults) => {
+      if (ingredientError) {
+        console.log("Ingredient error:", ingredientError.message);
+        ingredientResults = [];
       }
+      
+      // Get etc data
+      db.all(etcSql, (etcError, etcResults) => {
+        if (etcError) {
+          console.log("Etc error:", etcError.message);
+          etcResults = [];
+        }
+        
+        // Render the page with both data sets
+        res.render('ingredients_seller', {
+          loggedin: req.session.loggedin,
+          username: req.session.username || "",
+          user_privilege: req.session.user_privilege || "",
+          ingredient: ingredientResults,
+          etc: etcResults
+        });
+        // debug data
+        // console.log(ingredientResults);
+        // console.log(etcResults);
+
+      });
     });
   } else {
     res.redirect("/home");
   }
 });
 
-// route to handle inventory updates
+// Enhanced route to handle inventory updates for both ingredients and etc tables
 app.post("/update-stock", (req, res) => {
   if (req.session.user_privilege !== "admin" && req.session.user_privilege !== "employee") {
     return res.status(403).send("Access denied");
   }
 
-  const { ingredient_id, quantity, operation, current_stock } = req.body;
+  const { ingredient_id, etc_id, quantity, operation, current_stock } = req.body;
+  const isEtcItem = etc_id ? true : false;
 
   // Input validation
-  if (!ingredient_id || !quantity || !operation) {
+  if ((!ingredient_id && !etc_id) || !quantity || !operation) {
     return res.status(400).send("Missing required parameters");
   }
 
@@ -368,17 +383,22 @@ app.post("/update-stock", (req, res) => {
     return res.status(400).send("Invalid quantity");
   }
 
+  // Set up the appropriate SQL and parameters based on item type
+  const itemId = isEtcItem ? etc_id : ingredient_id;
+  const tableName = isEtcItem ? 'etc' : 'ingredients';
+  const idColumn = isEtcItem ? 'etc_id' : 'ingredient_id';
+  
   // Get current stock from database to ensure we have the latest value
-  const checkSql = `SELECT stock_quantity FROM ingredients WHERE ingredient_id = ?`;
+  const checkSql = `SELECT stock_quantity FROM ${tableName} WHERE ${idColumn} = ?`;
 
-  db.get(checkSql, [ingredient_id], (error, result) => {
+  db.get(checkSql, [itemId], (error, result) => {
     if (error) {
       console.error("Database error:", error.message);
       return res.status(500).send("Database error");
     }
 
     if (!result) {
-      return res.status(404).send("Ingredient not found");
+      return res.status(404).send("Item not found");
     }
 
     let currentStock = result.stock_quantity;
@@ -396,21 +416,23 @@ app.post("/update-stock", (req, res) => {
     }
 
     // Update stock in database
-    const updateSql = `UPDATE ingredients SET stock_quantity = ? WHERE ingredient_id = ?`;
+    const updateSql = `UPDATE ${tableName} SET stock_quantity = ? WHERE ${idColumn} = ?`;
 
-    db.run(updateSql, [newStock, ingredient_id], function (error) {
+    db.run(updateSql, [newStock, itemId], function(error) {
       if (error) {
         console.error("Update error:", error.message);
         return res.status(500).send("Update failed");
       }
-
-      console.log(`Stock updated: Ingredient #${ingredient_id} ${operation}d by ${changeAmount}. New stock: ${newStock}`);
-
-      // Redirect back to the ingredients page
-      res.redirect("/ingredients_seller");
+      
+      console.log(`Stock updated: ${tableName} #${itemId} ${operation}d by ${changeAmount}. New stock: ${newStock}`);
+      
+      // Redirect with a query parameter to indicate which tab should be active
+      const tabToShow = isEtcItem ? 'etc' : 'ingredient';
+      res.redirect(`/ingredients_seller?tab=${tabToShow}`);
     });
   });
 });
+
 
 app.get("/aboutus", (req, res) => {
   res.render('aboutus', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "" });
