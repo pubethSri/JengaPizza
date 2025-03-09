@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -39,10 +40,13 @@
         .container-center {
             margin: auto;
             display: flex;
-            align-items: center;  /* Ensure vertical centering */
+            align-items: center;
+            /* Ensure vertical centering */
             width: 80%;
-            min-height: calc(100vh - 60px); /* Adjust for navbar */
-            padding-top: 60px; /* Prevent overlap with navbar */
+            min-height: calc(100vh - 60px);
+            /* Adjust for navbar */
+            padding-top: 60px;
+            /* Prevent overlap with navbar */
         }
 
         .category {
@@ -54,8 +58,8 @@
         }
 
         .category.active {
-            color: rgb(187,62,0);
-            border-bottom: 1px solid rgb(187,62,0);
+            color: rgb(187, 62, 0);
+            border-bottom: 1px solid rgb(187, 62, 0);
         }
 
         .card {
@@ -102,7 +106,8 @@
         }
 
         .filterDiv {
-            display: none; /* Hide all by default */
+            display: none;
+            /* Hide all by default */
         }
 
         #myInput {
@@ -117,6 +122,7 @@
         }
     </style>
 </head>
+
 <body>
 
     <header>
@@ -127,58 +133,73 @@
     <div class="container-center">
         <div class="box mb-3">
             <div class="search-filter-container">
-                <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names..." title="Type in a name">
+                <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names..."
+                    title="Type in a name">
                 <div class="row d-flex justify-content-center text-center" id="filterButton">
                     <div class="category btn" onclick="filterSelection('')">ทั้งหมด</div>
-                    <div class="category btn" onclick="filterSelection('flavour')">หน้าพิซซ่า</div>
+                    <div class="category btn" id="pizzaFilter" onclick="filterSelection('flavour')">หน้าพิซซ่า</div>
                     <div class="category btn" onclick="filterSelection('ingredient')">วัตถุดิบ</div>
-                    <div class="category btn" onclick="filterSelection('etc')">อื่น ๆ</div>
+                    <div class="category btn" id="etcFilter" onclick="filterSelection('etc')">อื่น ๆ</div>
                 </div>
             </div>
             <div class="row" id="row">
                 <div class="filterDiv flavour col-md-4 ">
                     <div class="card p-3">
                         <a href="/createform" class="create-pizza d-block">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                             </svg>
                         </a>
                         <p>สร้างหน้าพิซซ่าเอง</p>
                     </div>
                 </div>
 
-                <% for(var i = 0; i < pizza_item.length; i++) { %>
+                <% for(var i=0; i < pizza_item.length; i++) { %>
                     <div class="filterDiv flavour col-md-4 ">
                         <div class="card p-3">
-                            <% if(pizza_item[i].pizza_id >= 3 && pizza_item[i].pizza_id <= 9){ %>
-                                <a href="/pizza-<%= pizza_item[i].pizza_id %>"><img src="images/pizza<%= pizza_item[i].pizza_id %>.png" alt=<%= pizza_item[i].pizza_name %>></a>
-                            <% } else{ %>
-                                <a href="/pizza-<%= pizza_item[i].pizza_id %>"><img src="images/pizza.png" alt=<%= pizza_item[i].pizza_name %>></a>
+                            <% if(pizza_item[i].pizza_id>= 3 && pizza_item[i].pizza_id <= 9){ %>
+                                    <a href="/pizza-<%= pizza_item[i].pizza_id %>"><img
+                                            src="images/pizza<%= pizza_item[i].pizza_id %>.png"
+                                            alt=<%=pizza_item[i].pizza_name %>></a>
+                                    <% } else{ %>
+                                        <a href="/pizza-<%= pizza_item[i].pizza_id %>"><img src="images/pizza.png"
+                                                alt=<%=pizza_item[i].pizza_name %>></a>
+                                        <% } %>
+                                            <p>
+                                                <%= pizza_item[i].pizza_name %>
+                                            </p>
+                        </div>
+                    </div>
+                    <% } %>
+
+
+                        <% for(var i=0; i < etc_item.length; i++) { %>
+                            <div class="filterDiv etc col-md-4 ">
+                                <div class="card p-3">
+                                    <a href="/etc-<%= etc_item[i].etc_id %>"><img
+                                            src="images/etc<%= etc_item[i].etc_id %>.png" alt=<%=etc_item[i].etc_name
+                                            %>></a>
+                                    <p>
+                                        <%= etc_item[i].etc_name %>
+                                    </p>
+                                </div>
+                            </div>
                             <% } %>
-                            <p><%= pizza_item[i].pizza_name %></p>
-                        </div>
-                    </div>
-                <% } %>
 
-                
-                <% for(var i = 0; i < etc_item.length; i++) { %>
-                    <div class="filterDiv etc col-md-4 ">
-                        <div class="card p-3">
-                            <a href="/etc-<%= etc_item[i].etc_id %>"><img src="images/etc<%= etc_item[i].etc_id %>.png" alt=<%= etc_item[i].etc_name %>></a>
-                            <p><%= etc_item[i].etc_name %></p>
-                        </div>
-                    </div>
-                <% } %>
+                                <% for(var i=0; i < ingredient_item.length; i++) { %>
+                                    <div class="filterDiv ingredient col-md-4 ">
+                                        <div class="card p-3">
+                                            <img src="images/<%= ingredient_item[i].ingredient_name %>.png"
+                                                alt=<%=ingredient_item[i].thai_name %>>
+                                            <p>
+                                                <%= ingredient_item[i].thai_name %>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <% } %>
 
-                <% for(var i = 0; i < ingredient_item.length; i++) { %>
-                    <div class="filterDiv ingredient col-md-4 ">
-                        <div class="card p-3">
-                            <img src="images/<%= ingredient_item[i].ingredient_name %>.png" alt=<%= ingredient_item[i].thai_name %>>
-                            <p><%= ingredient_item[i].thai_name %></p>
-                        </div>
-                    </div>
-                <% } %>
-                
             </div>
         </div>
     </div>
@@ -188,10 +209,10 @@
     </footer>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             filterSelection(""); // show immediately
         });
-    
+
         function filterSelection(c) {
             var x = document.getElementsByClassName("filterDiv");
             for (var i = 0; i < x.length; i++) {
@@ -204,7 +225,7 @@
                 }
             }
         }
-    
+
         // ฟังก์ชันค้นหา
         function myFunction() {
             var input, filter, items, i, txtValue;
@@ -216,19 +237,19 @@
                 txtValue = items[i].getElementsByTagName("p")[0].textContent || items[i].getElementsByTagName("p")[0].innerText;
                 if (txtValue.toUpperCase().indexOf(filter) > -1) {
                     items[i].classList.add("show");  // Show matching items
-                    items[i].style.display = "block"; 
+                    items[i].style.display = "block";
                 } else {
                     items[i].classList.remove("show");  // Hide non-matching items
                     items[i].style.display = "none";
                 }
             }
         }
-    
+
         // กำหนดปุ่มให้ active เมื่อกดเลือก
         var filterButton = document.getElementById("filterButton");
         var category = filterButton.getElementsByClassName("category");
         for (var i = 0; i < category.length; i++) {
-            category[i].addEventListener("click", function() {
+            category[i].addEventListener("click", function () {
                 var current = document.getElementsByClassName("active");
                 if (current.length > 0) {
                     current[0].classList.remove("active");
@@ -236,7 +257,17 @@
                 this.classList.add("active");
             });
         }
-    </script>    
+    </script>
+
+    <script>
+        window.onload = function () {
+            // Your function here
+            const urlParams = new URLSearchParams(window.location.search);
+            const filter = urlParams.get('filter');
+            document.getElementById(filter).click();
+        };
+    </script>
 
 </body>
+
 </html>
