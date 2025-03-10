@@ -3,7 +3,7 @@
 # JengaPizza
 Fundamental Webprogramming ITKMITL Project
 
-#How to use?
+# How to use?
 just run auto_install.bat
 
 |ID|Username|Name-Surname|
