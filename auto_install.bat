@@ -1,7 +1,7 @@
 @echo off
 echo Warming up Jenga pizza's oven.......
 
-start powershell.exe -NoExit -Command "cd ./jenga_project; npm i; npm run dev"
+start powershell.exe -NoExit -Command "cd ./jenga_project; npm i; npm run start_oven"
 
 timeout /t 4
 
