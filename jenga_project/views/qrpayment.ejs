@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -47,8 +48,10 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: calc(100vh - 60px); /* Adjust for navbar */
-            padding-top: 60px; /* Ensure content is not hidden behind navbar */
+            min-height: calc(100vh - 60px);
+            /* Adjust for navbar */
+            padding-top: 60px;
+            /* Ensure content is not hidden behind navbar */
         }
 
         .box {
@@ -60,7 +63,8 @@
 
         .box .row {
             display: flex;
-            align-items: center; /* Center items vertically */
+            align-items: center;
+            /* Center items vertically */
         }
 
         .qr-group {
@@ -93,8 +97,10 @@
         }
 
         .upload-box {
-            width: 300px; /* Adjust width */
-            height: 150px; /* Adjust height */
+            width: 300px;
+            /* Adjust width */
+            height: 150px;
+            /* Adjust height */
             border: 2px dashed #ccc;
             display: flex;
             flex-direction: column;
@@ -149,11 +155,11 @@
             background-color: #d0d0d0;
             color: white;
         }
-
     </style>
 </head>
+
 <body>
-    <div class="window" id="load"></div>
+    <!-- <div class="window" id="load"></div> -->
 
     <header>
         <%- include('header') %>
@@ -168,28 +174,31 @@
                         <div class="qr-header">QR Payment</div>
                         <div class="qr-code d-flex">
                             <img src="/images/qrcode.jpg">
-                            
+
                         </div>
                         <p style="text-align: center;">ชื่อ: เจงก้าพิซซ่าคอมปะนี จำกัด<br>
-                        บัญชี: xxx-xxxx-xxxxx</p>
-                        <div class="qr-total">ยอดรวม: 1926 บาท</div>
+                            บัญชี: xxx-xxxx-xxxxx</p>
+                        <div class="qr-total">ยอดรวม: <%= total_price %>.00 บาท</div>
                     </div>
                 </div>
                 <div class="col-md-6 d-flex flex-column align-items-center">
                     <div class="upload-box mb-3" id="uploadBox">
                         <input type="file" id="fileInput" accept="image/*" hidden>
                         <label for="fileInput" class="upload-label" id="uploadLabel">
-                            <img src="https://cdn-icons-png.flaticon.com/512/1829/1829586.png" alt="Upload Icon" class="upload-icon" id="uploadIcon">
+                            <img src="https://cdn-icons-png.flaticon.com/512/1829/1829586.png" alt="Upload Icon"
+                                class="upload-icon" id="uploadIcon">
                             <p class="upload-text">อัปโหลดหลักฐานการโอนเงิน</p>
                         </label>
-                        <img id="previewImage" src="#" alt="Uploaded Image" style="display: none; width: 100%; height: 100%; object-fit: cover; border-radius: 10px;">
+                        <img id="previewImage" src="#" alt="Uploaded Image"
+                            style="display: none; width: 100%; height: 100%; object-fit: cover; border-radius: 10px;">
                     </div>
                     <div class="button-wrapper d-flex" style="justify-content: center;">
                         <div class="mb-3">
-                            <button class="btn btn-red" type="submit" onclick="window.location.href='/tracking';">เสร็จสิ้น</button>
-                            <button class="btn btn-grey" type="button" onclick="window.location.href='/customerinfo';">ยกเลิก</button>
+                            <button id="completeBtn" class="btn btn-red" onclick="completeTrans()">เสร็จสิ้น</button>
+                            <button class="btn btn-grey" type="button"
+                                onclick="window.location.href='/customerinfo';">ยกเลิก</button>
                         </div>
-                    </div>                    
+                    </div>
                 </div>
             </div>
         </div>
@@ -200,17 +209,17 @@
     </footer>
 
     <script>
-        window.onload = function(){
-            setTimeout(function() {
-                document.getElementById("load").style.display = "none";
-            }, 2000);
-        };
+        // window.onload = function(){
+        //     setTimeout(function() {
+        //         document.getElementById("load").style.display = "none";
+        //     }, 2000);
+        // };
 
-        document.getElementById("fileInput").addEventListener("change", function(event) {
+        document.getElementById("fileInput").addEventListener("change", function (event) {
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     document.getElementById("previewImage").src = e.target.result;
                     document.getElementById("previewImage").style.display = "block";
                     document.getElementById("uploadLabel").style.display = "none"; // Hide upload icon & text
@@ -219,10 +228,34 @@
             }
         });
 
-        previewImage.addEventListener("click", function() {
+        previewImage.addEventListener("click", function () {
             fileInput.click();
         });
+
+        function completeTrans() {
+            const input = document.getElementById('fileInput');
+            const target_file = input.files[0];
+
+            if (!target_file) {
+                alert("No file selected");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", target_file);
+
+            fetch("/complete_order", {
+                method: "POST",
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    window.location.href=data.redirect;
+                })
+                .catch(error => console.error("Error:", error));
+        }
     </script>
 
 </body>
+
 </html>

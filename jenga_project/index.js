@@ -1,10 +1,24 @@
 const express = require("express");
+const multer = require("multer");
 const path = require("path");
 const port = 3000;
 const bodyParser = require("body-parser");
 const sqlite3 = require('sqlite3').verbose();
 const session = require('express-session');
 const { log, error } = require("console");
+
+const storage = multer.diskStorage({
+  destination: "uploads/",
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    const ext = path.extname(file.originalname);
+    const newFileName = "order" + "-" + uniqueSuffix + ext;
+
+    cb(null, newFileName);
+  },
+});
+
+const upload = multer({ storage: storage });
 
 // Connect to SQLite database
 let db = new sqlite3.Database("data/pizzeria.db", (err) => {
@@ -50,6 +64,82 @@ app.get("/choose", (req, res) => {
   } else {
     res.redirect('/home?nli=true');
   }
+});
+
+app.post("/complete_order", upload.single("file"), async (req, res) => {
+  // if (!req.file) {
+  //   return res.status(400).json({ message: "No file uploaded" });
+  // }
+
+  try {
+    const pizza_ingredients_amount_query =
+      `SELECT pizza_ingredients.ingredient_id, SUM(quantity * quantity_required) as require, stock_quantity  FROM orders
+      JOIN order_items
+      USING (order_id)
+      JOIN pizza_ingredients
+      ON (item_id = pizza_id)
+      JOIN ingredients
+      ON (pizza_ingredients.ingredient_id = ingredients.ingredient_id)
+      WHERE order_status IS "pending" AND orders.user_id IS "${req.session.user_id}" AND item_type = "pizza" AND pizza_ingredients.ingredient_id > 20 AND pizza_ingredients.ingredient_id IS NOT 25
+      GROUP BY pizza_ingredients.ingredient_id
+      ORDER BY pizza_ingredients.ingredient_id`;
+
+    const etc_amount_query =
+      `SELECT etc_id, quantity, stock_quantity FROM orders
+      JOIN order_items
+      USING (order_id)
+      JOIN etc
+      ON (item_id = etc_id)
+      WHERE order_status IS "pending" AND orders.user_id IS "${req.session.user_id}" AND item_type = "etc"
+      ORDER BY etc_id`;
+
+    const ingredient_decrease_material = await new Promise((resolve, reject) => {
+      db.all(pizza_ingredients_amount_query, (error, rows) => (error ? reject(error) : resolve(rows)));
+    })
+
+    const etc_decrease_material = await new Promise((resolve, reject) => {
+      db.all(etc_amount_query, (error, rows) => (error ? reject(error) : resolve(rows)));
+    })
+
+    let decrease_query = "";
+
+    for (var i = 0; i < ingredient_decrease_material.length; i++) {
+      let new_ing_quan = Math.max(ingredient_decrease_material[i].stock_quantity - ingredient_decrease_material[i].require, 0)
+      decrease_query += `UPDATE ingredients SET stock_quantity = ${new_ing_quan} WHERE ingredient_id = ${ingredient_decrease_material[i].ingredient_id};\n`;
+    }
+
+    for (var i = 0; i < etc_decrease_material.length; i++) {
+      let new_etc_quan = Math.max(etc_decrease_material[i].stock_quantity - etc_decrease_material[i].quantity, 0)
+      decrease_query += `UPDATE etc SET stock_quantity = ${new_etc_quan} WHERE etc_id = ${etc_decrease_material[i].etc_id};\n`;
+    }
+
+    console.log(decrease_query);
+
+    const decreasing = await new Promise((resolve, reject) => {
+      db.exec(decrease_query, (error, rows) => (error ? reject(error) : resolve(rows)));
+    })
+
+    let payment_proof = "/uploads/" + req.file.filename;
+
+    const complete_query =
+      `UPDATE orders
+      SET payment_proof = "${payment_proof}", order_status = "preparing"
+      WHERE order_status IS "pending" AND user_id = "${req.session.user_id}"`;
+
+    const cart_complete = await new Promise((resolve, reject) => {
+      db.all(complete_query, (error, rows) => (error ? reject(error) : resolve(rows)));
+    })
+
+  } catch (error) {
+
+  }
+
+  res.json({
+    message: "File uploaded.",
+    filename: req.file.filename,
+    path: "/uploads/" + req.file.filename,
+    redirect: '/tracking'
+  });
 });
 
 app.get("/category", async (req, res) => {
@@ -460,13 +550,27 @@ app.post("/new_address", async (req, res) => {
     res.redirect("/qrpayment");
   } catch (error) {
     console.log(error)
-    res.redirect("/404");
+    res.redirect('404');
   }
 });
 
-app.get("/qrpayment", (req, res) => {
+app.get("/qrpayment", async (req, res) => {
   if (req.session.loggedin) {
-    res.render('qrpayment', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "" });
+
+    let order_query =
+      `SELECT order_id, total_price FROM orders
+    WHERE order_status IS "pending" AND user_id = "${req.session.user_id}"`
+
+    try {
+      order_results = await new Promise((resolve, reject) => {
+        db.all(order_query, (error, rows) => (error ? reject(error) : resolve(rows)));
+      })
+
+      res.render('qrpayment', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "", order_id: order_results[0].order_id, total_price: order_results[0].total_price });
+    } catch (error) {
+      console.log(error);
+      res.redirect('404');
+    }
   } else {
     res.redirect('/home?nli=true');
   }
