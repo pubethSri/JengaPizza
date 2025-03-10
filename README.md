@@ -1,4 +1,4 @@
-# Welcome to backend branch!
+# Welcome to our small indie project!
 
 # JengaPizza
 Fundamental Webprogramming ITKMITL Project
