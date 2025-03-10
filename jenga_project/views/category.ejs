@@ -159,7 +159,7 @@
                 <% for(var i=0; i < pizza_item.length; i++) { %>
                     <div class="filterDiv flavour col-md-4 ">
                         <div class="card p-3">
-                            <% if(pizza_item[i].pizza_id>= 3 && pizza_item[i].pizza_id <= 9){ %>
+                            <% if(pizza_item[i].pizza_id>= 4 && pizza_item[i].pizza_id <= 9){ %>
                                     <a href="/pizza-<%= pizza_item[i].pizza_id %>"><img
                                             src="images/pizza<%= pizza_item[i].pizza_id %>.png"
                                             alt=<%=pizza_item[i].pizza_name %>></a>

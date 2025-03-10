@@ -342,6 +342,8 @@ app.post("/create", async (req, res) => {
   res.redirect("/category");
 });
 
+app.use('/uploads', express.static('uploads'));
+
 app.get("/orderlist", async (req, res) => {
   if (!req.session.loggedin) {
     return res.redirect('/home?nli=true');
@@ -401,17 +403,51 @@ app.get("/orderlist", async (req, res) => {
 });
 
 
-app.get("/tracking", (req, res) => {
+app.get("/tracking", async (req, res) => {
   if (req.session.loggedin) {
-    res.render('tracking', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "" });
+    let order_results = "";
+    try {
+      let order_query =
+        `SELECT order_id, total_price, order_status, receiver_name, house_no, village_no, street, sub_district, district, province, postal_code, country FROM orders
+        JOIN user_address
+        USING (user_id)
+        WHERE user_id = "${req.session.user_id}" AND order_status IS NOT "pending"
+        ORDER BY order_id DESC`
+
+      order_results = await new Promise((resolve, reject) => {
+        db.all(order_query, (error, rows) => (error ? reject(error) : resolve(rows)));
+      })
+
+    } catch (error) {
+      console.log(error)
+      res.redirect('404');
+    }
+    res.render('tracking', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "", order: order_results });
   } else {
     res.redirect('/home?nli=true');
   }
 });
 
-app.get("/tracking_seller", (req, res) => {
+app.get("/tracking_seller", async (req, res) => {
   if (req.session.loggedin && (req.session.user_privilege == "admin" || req.session.user_privilege == "employee")) {
-    res.render('tracking_seller', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "" });
+    let order_results = "";
+    try {
+      let order_query =
+        `SELECT order_id, user_id, total_price, order_status, payment_proof, receiver_name, house_no, village_no, street, sub_district, district, province, postal_code, country FROM orders
+        JOIN user_address
+        USING (user_id)
+        WHERE order_status IS NOT "pending"
+        ORDER BY order_id DESC`
+
+      order_results = await new Promise((resolve, reject) => {
+        db.all(order_query, (error, rows) => (error ? reject(error) : resolve(rows)));
+      })
+
+    } catch (error) {
+      console.log(error)
+      res.redirect('404');
+    }
+    res.render('tracking_seller', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "", allder: order_results});
   } else {
     res.redirect('/home?nli=true');
   }
@@ -699,6 +735,20 @@ app.post("/remove_orderitem", async (req, res) => {
     res.json({ message: "ส่งมาล้ะแต่", redirect: '/orderlist' });
   } catch (error) {
     res.json({ message: "ส่งมาล้ะแต่ Error", redirect: '/orderlist' });
+  }
+})
+
+app.post("/update_order", async (req, res) => {
+  const { order_id, order_status } = req.body;
+  try {
+    const update =
+      `UPDATE orders
+     SET order_status = "${order_status}"
+     WHERE order_id IS "${order_id}";`
+    db.run(update);
+    res.json({ success: "true", redirect: '/tracking_seller' });
+  } catch (error) {
+    res.json({ success: "false", redirect: '/tracking_seller' });
   }
 })
 
