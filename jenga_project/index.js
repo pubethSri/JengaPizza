@@ -165,7 +165,7 @@ app.get("/category", async (req, res) => {
       `SELECT * FROM etc
     LEFT JOIN (SELECT item_id FROM orders
     JOIN order_items USING (order_id)
-    WHERE item_type IS "etc" AND user_id IS "${req.session.user_id}")
+    WHERE order_status IS "pending" AND item_type IS "etc" AND user_id IS "${req.session.user_id}")
     ON item_id = etc_id
     WHERE stock_quantity > 0 AND item_id IS NULL`
   } else {
