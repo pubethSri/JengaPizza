@@ -51,7 +51,7 @@ app.use(express.static("views"));
 app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
-  res.render('Landing');
+  res.redirect('home');
 });
 
 app.get("/home", (req, res) => {
