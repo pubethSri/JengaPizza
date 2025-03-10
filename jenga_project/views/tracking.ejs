@@ -87,71 +87,57 @@
                 <!-- Order List -->
                 <div class="col-md-12">
                     <div class="order-card">
-                        <div class="row align-items-center p-3 border rounded bg-white shadow-sm mb-3">
-                            <div class="col-2">
-                                <img src="images/prepare-icon.png" class="order-icon">
+
+                        <% for(var i=0; i < order.length; i++) { %>
+
+                            <div class="row align-items-center p-3 border rounded bg-white shadow-sm mb-3">
+                                <div class="col-2">
+                                    <img src="images/<%= order[i].order_status %>.png" class="order-icon">
+                                </div>
+                                <div class="col-6">
+                                    <h5>Order No. <%= order[i].order_id %></h5>
+                                    <p class="text-muted">ราคา : <%= order[i].total_price %>.00 บาท</p>
+                                    <p class="text-muted">รายละเอียด : <%= order[i].receiver_name %>, <%= order[i].house_no %> <%= order[i].village_no %> <%= order[i].street %> <%= order[i].sub_district %> <%= order[i].district %> <%= order[i].province %> <%= order[i].postal_code %> <%= order[i].country %></p>
+                                    <p class="text-muted timestamp">อัพเดทเมื่อ : </p>
+                                </div>
+                                <div class="col-4 text-right">
+                                    <span class="status <%= order[i].order_status %>"> <%= order[i].order_status %> </span>
+                                </div>
                             </div>
-                            <div class="col-6">
-                                <h5>Order No. 100</h5>
-                                <p class="text-muted">รายละเอียดสินค้า :</p>
-                                <p class="text-muted">อัพเดทเมื่อ : DD/MM/YYYY hh:mm</p>
-                            </div>
-                            <div class="col-4 text-right">
-                                <span class="status preparing">เตรียมสินค้า</span>
-                            </div>
-                        </div>
-        
-                        <div class="row align-items-center p-3 border rounded bg-white shadow-sm mb-3">
-                            <div class="col-2">
-                                <img src="images/waiting-icon.png" class="order-icon">
-                            </div>
-                            <div class="col-6">
-                                <h5>Order No. 200</h5>
-                                <p class="text-muted">รายละเอียดสินค้า :</p>
-                                <p class="text-muted">อัพเดทเมื่อ : DD/MM/YYYY hh:mm</p>
-                            </div>
-                            <div class="col-4 text-right">
-                                <span class="status pending">สินค้ารอจัดส่ง</span>
-                            </div>
-                        </div>
-        
-                        <div class="row align-items-center p-3 border rounded bg-white shadow-sm mb-3">
-                            <div class="col-2">
-                                <img src="images/deliver-icon.png" class="order-icon">
-                            </div>
-                            <div class="col-6">
-                                <h5>Order No. 300</h5>
-                                <p class="text-muted">รายละเอียดสินค้า :</p>
-                                <p class="text-muted">อัพเดทเมื่อ : DD/MM/YYYY hh:mm</p>
-                            </div>
-                            <div class="col-4 text-right">
-                                <span class="status delivering">อยู่ระหว่างการจัดส่ง</span>
-                            </div>
-                        </div>
-        
-                        <div class="row align-items-center p-3 border rounded bg-white shadow-sm">
-                            <div class="col-2">
-                                <img src="images/success-icon.png" class="order-icon">
-                            </div>
-                            <div class="col-6">
-                                <h5>Order No. 400</h5>
-                                <p class="text-muted">รายละเอียดสินค้า :</p>
-                                <p class="text-muted">อัพเดทเมื่อ : DD/MM/YYYY hh:mm</p>
-                            </div>
-                            <div class="col-4 text-right">
-                                <span class="status success">จัดส่งสำเร็จ</span>
-                            </div>
-                        </div>
+
+                        <% } %>
+                        
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <script>
-        const dic = {'preparing': 'images/prepare-icon.png', 'pending': 'images/waiting-icon.png',
-            'delivering': 'images/deliver-icon.png', 'success': 'images/success-icon.png'
+        function getCurrentDateTime() {
+            const now = new Date();
+            
+            // Format date as DD/MM/YYYY
+            const day = String(now.getDate()).padStart(2, '0');
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const year = now.getFullYear();
+            
+            // Format time as hh:mm
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            
+            // Return formatted date and time
+            return `${day}/${month}/${year} ${hours}:${minutes}`;
         }
-        // น่าจะต้องเขียน Script เอาไว้สร้างพวก Order ที่เชื่อมกับฐานข้อมูลแต่ละอันของลูกค้า id นั้น ๆ ด้วย
+
+        $(document).ready(function () {
+            $('.timestamp').each(function() {
+                $(this).text('อัพเดทเมื่อ : ' + getCurrentDateTime());
+            });
+            
+            let orderId = $(this).data('order-id');
+            $(`select[data-order-id="${orderId}"]`).closest('.row').find('p.text-muted:last').text('อัพเดทเมื่อ : ' + getCurrentDateTime());
+
+        });
     </script>
     <footer>
         <%- include('footer') %>

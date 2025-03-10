@@ -1,10 +1,24 @@
 const express = require("express");
+const multer = require("multer");
 const path = require("path");
 const port = 3000;
 const bodyParser = require("body-parser");
 const sqlite3 = require('sqlite3').verbose();
 const session = require('express-session');
 const { log, error } = require("console");
+
+const storage = multer.diskStorage({
+  destination: "uploads/",
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    const ext = path.extname(file.originalname);
+    const newFileName = "order" + "-" + uniqueSuffix + ext;
+
+    cb(null, newFileName);
+  },
+});
+
+const upload = multer({ storage: storage });
 
 // Connect to SQLite database
 let db = new sqlite3.Database("data/pizzeria.db", (err) => {
@@ -52,12 +66,88 @@ app.get("/choose", (req, res) => {
   }
 });
 
+app.post("/complete_order", upload.single("file"), async (req, res) => {
+  // if (!req.file) {
+  //   return res.status(400).json({ message: "No file uploaded" });
+  // }
+
+  try {
+    const pizza_ingredients_amount_query =
+      `SELECT pizza_ingredients.ingredient_id, SUM(quantity * quantity_required) as require, stock_quantity  FROM orders
+      JOIN order_items
+      USING (order_id)
+      JOIN pizza_ingredients
+      ON (item_id = pizza_id)
+      JOIN ingredients
+      ON (pizza_ingredients.ingredient_id = ingredients.ingredient_id)
+      WHERE order_status IS "pending" AND orders.user_id IS "${req.session.user_id}" AND item_type = "pizza" AND pizza_ingredients.ingredient_id > 20 AND pizza_ingredients.ingredient_id IS NOT 25
+      GROUP BY pizza_ingredients.ingredient_id
+      ORDER BY pizza_ingredients.ingredient_id`;
+
+    const etc_amount_query =
+      `SELECT etc_id, quantity, stock_quantity FROM orders
+      JOIN order_items
+      USING (order_id)
+      JOIN etc
+      ON (item_id = etc_id)
+      WHERE order_status IS "pending" AND orders.user_id IS "${req.session.user_id}" AND item_type = "etc"
+      ORDER BY etc_id`;
+
+    const ingredient_decrease_material = await new Promise((resolve, reject) => {
+      db.all(pizza_ingredients_amount_query, (error, rows) => (error ? reject(error) : resolve(rows)));
+    })
+
+    const etc_decrease_material = await new Promise((resolve, reject) => {
+      db.all(etc_amount_query, (error, rows) => (error ? reject(error) : resolve(rows)));
+    })
+
+    let decrease_query = "";
+
+    for (var i = 0; i < ingredient_decrease_material.length; i++) {
+      let new_ing_quan = Math.max(ingredient_decrease_material[i].stock_quantity - ingredient_decrease_material[i].require, 0)
+      decrease_query += `UPDATE ingredients SET stock_quantity = ${new_ing_quan} WHERE ingredient_id = ${ingredient_decrease_material[i].ingredient_id};\n`;
+    }
+
+    for (var i = 0; i < etc_decrease_material.length; i++) {
+      let new_etc_quan = Math.max(etc_decrease_material[i].stock_quantity - etc_decrease_material[i].quantity, 0)
+      decrease_query += `UPDATE etc SET stock_quantity = ${new_etc_quan} WHERE etc_id = ${etc_decrease_material[i].etc_id};\n`;
+    }
+
+    console.log(decrease_query);
+
+    const decreasing = await new Promise((resolve, reject) => {
+      db.exec(decrease_query, (error, rows) => (error ? reject(error) : resolve(rows)));
+    })
+
+    let payment_proof = "/uploads/" + req.file.filename;
+
+    const complete_query =
+      `UPDATE orders
+      SET payment_proof = "${payment_proof}", order_status = "preparing"
+      WHERE order_status IS "pending" AND user_id = "${req.session.user_id}"`;
+
+    const cart_complete = await new Promise((resolve, reject) => {
+      db.all(complete_query, (error, rows) => (error ? reject(error) : resolve(rows)));
+    })
+
+  } catch (error) {
+
+  }
+
+  res.json({
+    message: "File uploaded.",
+    filename: req.file.filename,
+    path: "/uploads/" + req.file.filename,
+    redirect: '/tracking'
+  });
+});
+
 app.get("/category", async (req, res) => {
   let sql = "";
   let etc_query = "";
   if (req.session.loggedin) {
-    sql = 
-    `SELECT pizza_id, pizza_name, price FROM pizzas
+    sql =
+      `SELECT pizza_id, pizza_name, price FROM pizzas
     LEFT JOIN (SELECT pizza_id, ingredient_id, SUM(quantity_required) AS require, stock_quantity FROM pizza_ingredients
     JOIN ingredients USING (ingredient_id)
     WHERE ingredient_id >= 21
@@ -72,15 +162,15 @@ app.get("/category", async (req, res) => {
     ORDER BY user_id`
 
     etc_query =
-    `SELECT * FROM etc
+      `SELECT * FROM etc
     LEFT JOIN (SELECT item_id FROM orders
     JOIN order_items USING (order_id)
     WHERE item_type IS "etc" AND user_id IS "${req.session.user_id}")
     ON item_id = etc_id
     WHERE stock_quantity > 0 AND item_id IS NULL`
   } else {
-    sql = 
-    `SELECT pizza_id, pizza_name, price FROM pizzas
+    sql =
+      `SELECT pizza_id, pizza_name, price FROM pizzas
     LEFT JOIN (SELECT pizza_id, ingredient_id, SUM(quantity_required) AS require, stock_quantity FROM pizza_ingredients
     JOIN ingredients USING (ingredient_id)
     WHERE ingredient_id >= 21
@@ -252,6 +342,8 @@ app.post("/create", async (req, res) => {
   res.redirect("/category");
 });
 
+app.use('/uploads', express.static('uploads'));
+
 app.get("/orderlist", async (req, res) => {
   if (!req.session.loggedin) {
     return res.redirect('/home?nli=true');
@@ -263,7 +355,7 @@ app.get("/orderlist", async (req, res) => {
     const results = await new Promise((resolve, reject) => {
       db.all(sql, (error, rows) => (error ? reject(error) : resolve(rows)));
     });
-    
+
 
     const menu_order = await Promise.all(results.map(async (item) => {
       if (item.item_type === 'pizza') {
@@ -311,59 +403,135 @@ app.get("/orderlist", async (req, res) => {
 });
 
 
-app.get("/tracking", (req, res) => {
+app.get("/tracking", async (req, res) => {
   if (req.session.loggedin) {
-    res.render('tracking', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "" });
+    let order_results = "";
+    try {
+      let order_query =
+        `SELECT order_id, total_price, order_status, receiver_name, house_no, village_no, street, sub_district, district, province, postal_code, country FROM orders
+        JOIN user_address
+        USING (user_id)
+        WHERE user_id = "${req.session.user_id}" AND order_status IS NOT "pending"
+        ORDER BY order_id DESC`
+
+      order_results = await new Promise((resolve, reject) => {
+        db.all(order_query, (error, rows) => (error ? reject(error) : resolve(rows)));
+      })
+
+    } catch (error) {
+      console.log(error)
+      res.redirect('404');
+    }
+    res.render('tracking', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "", order: order_results });
   } else {
     res.redirect('/home?nli=true');
   }
 });
 
-app.get("/tracking_seller", (req, res) => {
-  if (req.session.loggedin) {
-    res.render('tracking_seller', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "" });
+app.get("/tracking_seller", async (req, res) => {
+  if (req.session.loggedin && (req.session.user_privilege == "admin" || req.session.user_privilege == "employee")) {
+    let order_results = "";
+    try {
+      let order_query =
+        `SELECT order_id, user_id, total_price, order_status, payment_proof, receiver_name, house_no, village_no, street, sub_district, district, province, postal_code, country FROM orders
+        JOIN user_address
+        USING (user_id)
+        WHERE order_status IS NOT "pending"
+        ORDER BY order_id DESC`
+
+      order_results = await new Promise((resolve, reject) => {
+        db.all(order_query, (error, rows) => (error ? reject(error) : resolve(rows)));
+      })
+
+    } catch (error) {
+      console.log(error)
+      res.redirect('404');
+    }
+    res.render('tracking_seller', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "", allder: order_results});
   } else {
     res.redirect('/home?nli=true');
   }
 });
 
-app.get("/customerinfo", (req, res) => {
+app.get("/customerinfo", async (req, res) => {
   if (req.session.loggedin) {
     const sql = `SELECT * FROM user_address WHERE user_id = ${req.session.user_id};`
-    db.get(sql, (error, result) => {
-      if (error) {
-        console.error("Database error:", error.message);
-        return res.status(500).send("Database error");
-      } else {
-        if (result != undefined) {
-          result.tag = "disabled";
-          res.render('customerinfo', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "", address: result });
-        } else {
-          res.render('customerinfo', {
-            loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "", address: {
-              address_id: "",
-              user_id: "",
-              receiver_name: "",
-              phone_no: "",
-              house_no: "",
-              village_no: "",
-              street: "",
-              sub_district: "",
-              district: "",
-              province: "",
-              postal_code: "",
-              tag: ""
-            }
-          });
-        }
+
+    let pizza_query =
+      `SELECT quantity, pizza_name, order_id, address_id, item_type, item_id, price_per_unit, (price_per_unit * quantity) AS total FROM orders
+    JOIN order_items
+    USING (order_id)
+    JOIN pizzas
+    ON item_id = pizza_id 
+    WHERE order_status IS "pending" AND orders.user_id = "${req.session.user_id}" AND item_type = "pizza"
+    ORDER BY pizza_id`;
+
+    let etc_query =
+      `SELECT quantity, etc_name, order_id, address_id, item_type, item_id, price_per_unit, (price_per_unit * quantity) AS total FROM orders
+    JOIN order_items
+    USING (order_id)
+    JOIN etc
+    ON item_id = etc_id 
+    WHERE order_status IS "pending" AND orders.user_id = "${req.session.user_id}" AND item_type = "etc"
+    ORDER BY etc_id`;
+
+    let sql_results = "";
+    let pizza_results = "";
+    let etc_results = "";
+
+    try {
+      sql_results = await new Promise((resolve, reject) => {
+        db.all(sql, (error, result) => (error ? reject(error) : resolve(result)));
+      })
+
+      pizza_results = await new Promise((resolve, reject) => {
+        db.all(pizza_query, (error, result) => (error ? reject(error) : resolve(result)));
+      })
+
+      etc_results = await new Promise((resolve, reject) => {
+        db.all(etc_query, (error, result) => (error ? reject(error) : resolve(result)));
+      })
+
+      let total_price = 0;
+      for (var i = 0; i < pizza_results.length; i++) {
+        total_price += pizza_results[i].total;
       }
-    });
+      for (var i = 0; i < etc_results.length; i++) {
+        total_price += etc_results[i].total;
+      }
+
+      if (sql_results.length > 0) {
+
+        res.render('customerinfo', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "", address: sql_results[0], tag: "disabled", pizza_item: pizza_results, etc_item: etc_results, grand_price: total_price });
+      } else {
+        res.render('customerinfo', {
+          loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "", address: {
+            address_id: "",
+            user_id: "",
+            receiver_name: "",
+            phone_no: "",
+            house_no: "",
+            village_no: "",
+            street: "",
+            sub_district: "",
+            district: "",
+            province: "",
+            postal_code: "",
+          },
+          tag: "", pizza_item: pizza_results, etc_item: etc_results, grand_price: total_price
+        });
+      }
+    } catch (error) {
+      console.error(error.message);
+      res.redirect('404');
+    }
+
   } else {
     res.redirect('/home?nli=true');
   }
 });
 
-app.post("/new_address", (req, res) => {
+app.post("/new_address", async (req, res) => {
   const { receiver_name,
     phone_no,
     house_no,
@@ -372,8 +540,12 @@ app.post("/new_address", (req, res) => {
     sub_district,
     district,
     province,
-    postal_code } = req.body;
-  const sql = `INSERT INTO user_address (user_id, receiver_name,\
+    postal_code,
+    tag,
+    grand_price } = req.body;
+  try {
+    if (tag != "disabled") {
+      const sql = `INSERT INTO user_address (user_id, receiver_name,\
     phone_no,\
     house_no,\
     village_no,\
@@ -390,19 +562,51 @@ app.post("/new_address", (req, res) => {
   "${district}",
   "${province}",
   "${postal_code}")`
-  db.all(sql, (error, results) => {
-    if (error) {
-      console.log(error.message);
-    } else {
+
+      const insert_address = await new Promise((resolve, reject) => {
+        db.all(sql, (error, rows) => (error ? reject(error) : resolve(rows)));
+      })
       console.log("Address added!");
-      res.redirect("/qrpayment");
     }
-  });
+
+    const testql = await new Promise((resolve, reject) => {
+      db.all(`SELECT address_id FROM user_address WHERE user_id = "${req.session.user_id}"`, (error, rows) => (error ? reject(error) : resolve(rows)));
+    })
+
+    const update_query =
+      `UPDATE orders
+    SET total_price = "${grand_price}", address_id = "${testql[0].address_id}"
+    WHERE order_status IS "pending" AND user_id = "${req.session.user_id}"`;
+
+    const update_total_price = await new Promise((resolve, reject) => {
+      db.all(update_query, (error, rows) => (error ? reject(error) : resolve(rows)));
+    })
+
+
+    res.redirect("/qrpayment");
+  } catch (error) {
+    console.log(error)
+    res.redirect('404');
+  }
 });
 
-app.get("/qrpayment", (req, res) => {
+app.get("/qrpayment", async (req, res) => {
   if (req.session.loggedin) {
-    res.render('qrpayment', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "" });
+
+    let order_query =
+      `SELECT order_id, total_price FROM orders
+    WHERE order_status IS "pending" AND user_id = "${req.session.user_id}"`
+
+    try {
+      order_results = await new Promise((resolve, reject) => {
+        db.all(order_query, (error, rows) => (error ? reject(error) : resolve(rows)));
+      })
+
+      res.render('qrpayment', { loggedin: req.session.loggedin, username: req.session.username || "", user_privilege: req.session.user_privilege || "", order_id: order_results[0].order_id, total_price: order_results[0].total_price });
+    } catch (error) {
+      console.log(error);
+      res.redirect('404');
+    }
   } else {
     res.redirect('/home?nli=true');
   }
@@ -524,8 +728,8 @@ app.post("/update-stock", (req, res) => {
 app.post("/remove_orderitem", async (req, res) => {
   const { order_id, item_id, type, value } = req.body;
   try {
-    const remove = 
-    `DELETE FROM order_items
+    const remove =
+      `DELETE FROM order_items
      WHERE order_id IS "${order_id}" AND item_type IS "${type}" AND item_id IS "${item_id}";`
     db.run(remove);
     res.json({ message: "ส่งมาล้ะแต่", redirect: '/orderlist' });
@@ -534,11 +738,25 @@ app.post("/remove_orderitem", async (req, res) => {
   }
 })
 
+app.post("/update_order", async (req, res) => {
+  const { order_id, order_status } = req.body;
+  try {
+    const update =
+      `UPDATE orders
+     SET order_status = "${order_status}"
+     WHERE order_id IS "${order_id}";`
+    db.run(update);
+    res.json({ success: "true", redirect: '/tracking_seller' });
+  } catch (error) {
+    res.json({ success: "false", redirect: '/tracking_seller' });
+  }
+})
+
 app.post("/update_orderitem", async (req, res) => {
   const { order_id, item_id, type, value } = req.body;
   try {
-    const update = 
-    `UPDATE order_items
+    const update =
+      `UPDATE order_items
      SET quantity = "${value}"
      WHERE order_id IS "${order_id}" AND item_type IS "${type}" AND item_id IS "${item_id}";`
     db.run(update);
